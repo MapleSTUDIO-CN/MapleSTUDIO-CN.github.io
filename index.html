@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>枫叶工作室</title>
+    <style>
+        /* 基础样式 */
+        :root {
+            --background-image: none; /*  预留背景图片接口，填充Base64图像 */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
+            background-image: var(--background-image); /* 使用预留的背景图片 */
+            background-repeat: no-repeat; /* 不重复 */
+            background-size: cover; /* 填充模式 */
+            background-position: center; /* 居中 */
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 顶部白色栏 */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* 顶部标题 */
+        .top-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: rgba(0, 0, 0, 0.75);
+            text-decoration: none;
+        }
+
+        .top-title:hover {
+            text-decoration: underline;
+        }
+
+        /* 菜单按钮 */
+        .menu-button {
+            background: transparent;
+            border: none;
+            color: rgba(0, 0, 0, 0.75); /* 黑色75%透明 */
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .menu-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* 抽拉式菜单 */
+        .menu {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            max-height: 0;
+            overflow: hidden;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 0 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            transition: 
+                max-height 0.3s ease-out,
+                padding 0.3s ease-out;
+        }
+
+        .menu.open {
+            max-height: 200px; /* 根据实际内容高度调整 */
+            padding: 10px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: background 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transition: opacity 0.2s ease-in;
+        }
+
+        .menu.open a {
+            opacity: 1;
+            transition-delay: 0.15s;
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* 3d裸眼效果容器 */
+        .content-container {
+            position: relative;
+            perspective: 500px;
+        }
+
+        /* 底部透明玻璃元素 */
+        .glass-layer {
+            position: absolute;
+            top: 10px; /* 与文字层的距离 */
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+        }
+
+        /* 文字层 */
+        .content {
+            position: relative;
+            text-align: center;
+            font-size: 2em;
+            margin: 20px;
+            padding: 20px;
+            color: rgba(0, 123, 255, 0.8); /* 半透明蔚蓝色 */
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        /* 捐献按钮 */
+        .donate-button {
+            position: fixed;
+            bottom: 120px; /* 介于3D文字与版权信息中间 */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+            backdrop-filter: blur(10px); /* 高斯模糊 */
+            border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9); /* 白色90%透明 */
+            text-decoration: none;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .donate-button:hover {
+            background: rgba(255, 255, 255, 0.2); /* 悬停时更亮 */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* 底部版权信息 */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            text-align: center;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer a {
+            color: rgba(0, 123, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部白色栏 -->
+    <div class="top-bar">
+        <button class="menu-button" onclick="toggleMenu()">☰</button>
+        <!-- 顶部标题 -->
+        <a href="#" class="top-title">枫叶工作室</a>
+    </div>
+
+    <!-- 抽拉式菜单 -->
+    <div class="menu" id="menu">
+        <a href="/mirror/mirror.html">镜像站</a>
+        <a href="/mcsever/main.html">MC服务器</a>
+        <a href="/mcapks.html">MC版本库(🚫)</a>
+        <a href="/others">预留(🚫)</a>
+    </div>
+
+    <!-- 3d裸眼效果容器 -->
+    <div class="content-container">
+        <!-- 底部透明玻璃元素 -->
+        <div class="glass-layer" id="glass-layer"></div>
+        <!-- 文字层 -->
+        <div class="content" id="content">
+            欢迎来到枫叶工作室的索引站台，请点击左上方菜单开始
+        </div>
+    </div>
+
+    <!-- 捐献按钮 -->
+    <a href="/rec/rec.html" class="donate-button">为我捐献</a>
+
+    <!-- 底部版权信息 -->
+    <div class="footer">
+        <p><a href="readme.html">MapleSTUDIO 版权所有</a></p>
+        <p>此站点由 <a href="https://github.com" target="_blank">Github</a> 驱动</p>
+    </div>
+
+    <script>
+        // 抽拉式菜单逻辑
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('open');
+            
+            // 自动高度计算
+            if (menu.classList.contains('open')) {
+                menu.style.display = 'flex';
+                const fullHeight = menu.scrollHeight + 'px';
+                menu.style.maxHeight = fullHeight;
+            } else {
+                menu.style.maxHeight = '0';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300); // 等待过渡完成
+            }
+        }
+
+        // 裸眼3d效果逻辑
+        const content = document.getElementById('content');
+        const glassLayer = document.getElementById('glass-layer');
+
+        // 阻力系数和动画参数
+        const resistance = 0.1; // 阻力系数
+        const maxTilt = 20; // 最大倾斜角度
+        let isDragging = false;
+        let offsetX = 0, offsetY = 0;
+
+        // 手机版：拖动效果
+        if (matchMedia('(pointer: coarse)').matches) {
+            let startX, startY;
+
+            content.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX - offsetX;
+                startY = e.touches[0].clientY - offsetY;
+            });
+
+            content.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    offsetX = (e.touches[0].clientX - startX) * resistance;
+                    offsetY = (e.touches[0].clientY - startY) * resistance;
+
+                    // 限制倾斜角度
+                    offsetX = Math.max(-maxTilt, Math.min(maxTilt, offsetX));
+                    offsetY = Math.max(-maxTilt, Math.min(maxTilt, offsetY));
+
+                    applyTilt();
+                }
+            });
+
+            content.addEventListener('touchend', () => {
+                isDragging = false;
+                resetPosition();
+            });
+        }
+
+        // 电脑版：鼠标悬停效果
+        if (matchMedia('(pointer: fine)').matches) {
+            content.addEventListener('mousemove', (e) => {
+                const rect = content.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                // 增加阻力感
+                offsetX = x * maxTilt * resistance;
+                offsetY = -y * maxTilt * resistance;
+
+                applyTilt();
+            });
+
+            content.addEventListener('mouseleave', () => {
+                resetPosition();
+            });
+        }
+
+        // 应用倾斜效果
+        function applyTilt() {
+            content.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
+            glassLayer.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
+        }
+
+        // 复位函数
+        function resetPosition() {
+            content.style.transition = 'transform 0.5s ease-out';
+            glassLayer.style.transition = 'transform 0.5s ease-out';
+            content.style.transform = 'perspective(500px) rotateX(0) rotateY(0)';
+            glassLayer.style.transform = 'perspective(500px) rotateX(0) rotateY(0) translateZ(-20px)';
+            setTimeout(() => {
+                content.style.transition = 'none';
+                glassLayer.style.transition = 'none';
+            }, 500); // 动画结束后移除过渡效果
+        }
+    </script>
+</body>
+</html>

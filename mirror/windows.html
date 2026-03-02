@@ -31,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* 背景遮罩 - 轻度模糊看清细节 */
+        /* 背景遮罩 - 仅保留高斯模糊，去除黑色背景 (满足需求：黑色去除，模糊不变) */
         body::before {
             content: '';
             position: fixed;
@@ -39,7 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(13, 17, 23, 0.4);
+            background: transparent;  /* 原为 rgba(13,17,23,0.4) 黑色遮罩，现改为透明，只保留模糊 */
             backdrop-filter: blur(var(--bg-blur));
             -webkit-backdrop-filter: blur(var(--bg-blur));
             z-index: -1;
@@ -307,7 +307,7 @@
 
         .download-option {
             font-size: 0.85em;
-            color: #ffffff;
+            color: #ffffff;  /* 原白色，稍后覆盖为灰色 */
             padding: 10px 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -417,6 +417,18 @@
                 right: 20px;
             }
         }
+
+        /* ---------- 需求修改：下载选项模块上的文字改为灰色，透明度不变 ---------- */
+        .module .download-menu .download-summary,
+        .module .download-menu .download-option {
+            color: #cccccc;  /* 灰色文字，覆盖原有白色，透明度不变（无额外alpha） */
+        }
+
+        /* 保持hover效果不变（仅背景变化，文字颜色保持灰色，无需额外调整） */
+        /* 若希望hover时更亮可取消下一行注释，但需求未要求，故保留原样以符合“其他不变” */
+        /* .module .download-menu .download-option:hover {
+            color: #f0f0f0;
+        } */
     </style>
 </head>
 <body>

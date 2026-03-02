@@ -3,255 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--如果需要发布此网页的另外版，请勿使用以上链接，详情见"me.html"的限制-->
-<!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
     <title>Windows版本镜像（维护中）</title>
     <style>
-        /* 背景 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-blur: 2px;
+            --menu-blur: 12px;
+            --module-blur: 16px;
+            --glass-white: rgba(255, 255, 255, 0.08);
+            --glass-white-hover: rgba(255, 255, 255, 0.15);
+            --glass-menu: rgba(255, 255, 255, 0.75);
+            --accent-blue: rgba(0, 123, 255, 0.6);
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
+            min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0d1117; /* 深色背景 */
-            color: #ffffff; /* 文字颜色 */
+            background: url('../Picture/background.webp') center/cover fixed no-repeat;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
-        /* 顶部栏样式 */
+        /* 背景遮罩 - 轻度模糊看清细节 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.4);
+            backdrop-filter: blur(var(--bg-blur));
+            -webkit-backdrop-filter: blur(var(--bg-blur));
+            z-index: -1;
+        }
+
+        /* 顶部栏 - 高通透度轻模糊 */
         .top-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 60px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            background: var(--glass-menu);
+            backdrop-filter: blur(var(--menu-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--menu-blur)) saturate(180%);
             display: flex;
             align-items: center;
             padding-left: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* 顶部标题 */
         .top-title {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.2em;
-            color: rgba(0, 0, 0, 0.75);
+            color: rgba(0, 0, 0, 0.85);
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .top-title:hover {
             text-decoration: underline;
+            transform: translateX(-50%) scale(1.02);
         }
 
         /* 菜单按钮 */
         .menu-button {
             background: transparent;
             border: none;
-            color: rgba(0, 0, 0, 0.75); /* 黑色75%透明 */
+            color: rgba(0, 0, 0, 0.85);
             font-size: 1.5em;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .menu-button:hover {
-            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.05);
+            transform: scale(1.1) rotate(90deg);
         }
 
-        /* 抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式抽拉式.菜单凑注释率甭看 */
+        .menu-button.active {
+            transform: rotate(180deg);
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        /* 抽拉式菜单 - 高通透度 */
         .menu {
             position: fixed;
             top: 70px;
             left: 20px;
-            max-height: 0;
-            overflow: hidden;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 0 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 220px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(var(--menu-blur)) saturate(200%);
+            -webkit-backdrop-filter: blur(var(--menu-blur)) saturate(200%);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             z-index: 999;
+            overflow: hidden;
+            transform-origin: top left;
+            transform: scale(0.8) translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
             transition: 
-                max-height 0.3s ease-out,
-                padding 0.3s ease-out;
+                transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .menu.open {
-            max-height: 200px; /* 根据实际内容高度调整 */
-            padding: 10px;
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu.dragging {
+            transition: none;
         }
 
         .menu a {
-            color: white;
+            display: block;
+            color: rgba(0, 0, 0, 0.8);
             text-decoration: none;
-            padding: 10px 20px;
-            margin: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            transition: background 0.3s, box-shadow 0.3s;
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
-            transition: opacity 0.2s ease-in;
+            transform: translateX(-20px);
+            font-weight: 500;
+            font-size: 0.95em;
         }
 
         .menu.open a {
             opacity: 1;
-            transition-delay: 0.15s;
+            transform: translateX(0);
         }
 
+        .menu a:nth-child(1) { transition-delay: 0.05s; }
+        .menu a:nth-child(2) { transition-delay: 0.1s; }
+        .menu a:nth-child(3) { transition-delay: 0.15s; }
+        .menu a:nth-child(4) { transition-delay: 0.2s; }
+        .menu a:nth-child(5) { transition-delay: 0.25s; }
+        .menu a:nth-child(6) { transition-delay: 0.3s; }
+
         .menu a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            background: rgba(0, 123, 255, 0.1);
+            transform: translateX(8px);
+            color: rgba(0, 123, 255, 0.9);
         }
 
         /* 模块容器 */
         .module-container {
             position: absolute;
-            top: 80px; /* 避免与菜单栏重叠 */
+            top: 80px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
             max-width: 1200px;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 24px;
             justify-content: center;
-            padding-bottom: 100px; /* 为底部栏预留空间 */
+            padding-bottom: 120px;
+            padding-top: 20px;
         }
 
-        /* 单个模块 - 半透明高斯模糊 */
+        /* 模块 - 混浊毛玻璃效果 */
         .module {
-            width: 300px;
-            height: auto;
-            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
-            backdrop-filter: blur(10px); /* 高斯模糊 */
-            border-radius: 10px; /* 圆角 */
+            width: 320px;
+            background: var(--glass-white);
+            backdrop-filter: blur(var(--module-blur)) saturate(150%);
+            -webkit-backdrop-filter: blur(var(--module-blur)) saturate(150%);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            color: #ffffff; /* 文字颜色 */
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 24px;
+            box-shadow: 
+                0 4px 24px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(30px) scale(0.95);
+            transition: 
+                opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
         }
 
         .module.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .module:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            background: var(--glass-white-hover);
+        }
+
+        .module-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
         }
 
         /* 下载菜单 */
         .download-menu {
             width: 100%;
-            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .download-menu summary {
-            font-size: 1em;
-            color: #ffffff; /* 文字颜色 */
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
-            border-radius: 10px;
+        .download-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .download-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .download-summary {
+            padding: 14px 18px;
             cursor: pointer;
-            transition: background 0.2s ease;
-            list-style: none; /* 去除默认箭头 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            position: relative;
         }
 
-        .download-menu summary:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .download-summary::after {
+            content: '▼';
+            font-size: 0.8em;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0.7;
         }
 
-        .download-menu .download-options {
-            margin-top: 5px;
-            padding-left: 20px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; /* 链接之间的间距 */
+        .download-item.open .download-summary::after {
+            transform: rotate(180deg);
+        }
+
+        .download-summary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 下载选项容器 */
+        .download-options {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
             opacity: 0;
+            transform: translateY(-10px);
+            transition: 
+                max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 0 12px;
         }
 
-        .download-menu details[open] .download-options {
-            max-height: 500px; 
+        .download-item.open .download-options {
+            max-height: 400px;
             opacity: 1;
+            transform: translateY(0);
+            padding: 12px;
+            padding-top: 0;
         }
 
         .download-option {
-            font-size: 0.9em;
-            color: #ffffff; /* 文字颜色 */
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.1); /* 半透个屁的背景 */
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.2s ease;
+            font-size: 0.85em;
+            color: #ffffff;
+            padding: 10px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
             text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
         }
+
+        .download-item.open .download-option {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 选项交错动画 */
+        .download-item.open .download-option:nth-child(1) { transition-delay: 0.05s; }
+        .download-item.open .download-option:nth-child(2) { transition-delay: 0.1s; }
+        .download-item.open .download-option:nth-child(3) { transition-delay: 0.15s; }
+        .download-item.open .download-option:nth-child(4) { transition-delay: 0.2s; }
+        .download-item.open .download-option:nth-child(5) { transition-delay: 0.25s; }
+        .download-item.open .download-option:nth-child(6) { transition-delay: 0.3s; }
+        .download-item.open .download-option:nth-child(7) { transition-delay: 0.35s; }
+        .download-item.open .download-option:nth-child(8) { transition-delay: 0.4s; }
 
         .download-option:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 123, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            border-color: rgba(0, 123, 255, 0.5);
         }
 
-        /* 调整下载选项间隔 */
-        .module.windows-泥嚎 .download-menu details,
-        .module.windows-7 .download-menu details,
-        .module.windows-8-1 .download-menu details,
-        .module.windows-10 .download-menu details {
-            margin-bottom: 20px; /* 增加间隔 */
-        }
-
-        /* 新增11模块样式 */
-        .module.windows-崽建 .download-menu details,
-        .module.windows ARM .download-menu details,
-        .module.windows-11 .download-menu details {
-            margin-bottom: 20px; /* 增加间隔 */
-        }
-
-        /* 底部栏样式 */
+        /* 底部栏 */
         .footer {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
             width: 100%;
-            z-index: 1; /* 确保底部栏在模块之上 */
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer p {
+            margin: 4px 0;
         }
 
         .footer a {
-            color: rgba(0, 123, 255, 0.7);
+            color: rgba(100, 180, 255, 0.9);
             text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .footer a:hover {
+            color: rgba(150, 200, 255, 1);
             text-decoration: underline;
+        }
+
+        /* 物理阻力动画关键帧 */
+        @keyframes resistance-open {
+            0% { transform: scale(1) translateY(0); }
+            20% { transform: scale(0.98) translateY(-5px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        @keyframes resistance-close {
+            0% { transform: scale(1) translateY(0); }
+            30% { transform: scale(0.97) translateY(3px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.03); }
+            60% { transform: scale(0.98); }
+            80% { transform: scale(1.01); }
+        }
+
+        .resistance-open {
+            animation: resistance-open 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .resistance-close {
+            animation: resistance-close 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bounce-effect {
+            animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .module {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .menu {
+                width: calc(100% - 40px);
+                left: 20px;
+                right: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部栏 -->
     <div class="top-bar">
-        <button class="menu-button" onclick="toggleMenu()">☰</button>
+        <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
         <a href="mirror.html" class="top-title">枫叶镜像源</a>
     </div>
 
-    <!-- 抽拉式菜单 -->
     <div class="menu" id="menu">
         <a href="windows.html">Windows源（维护中）</a>
         <a href="linux.html">Linux源（不可用）</a>
@@ -261,33 +434,32 @@
         <a href="../main/bulletin_board.html">公告板</a>
     </div>
 
-    <!-- 模块容器 -->
     <div class="module-container">
-        <!-- 特殊版与尝鲜版 -->
         <div class="module">
-            <div>特殊版与尝鲜版</div>
+            <div class="module-title">特殊版与尝鲜版</div>
             <div class="download-menu">
-                <details>
-                    <summary>前往和乐果存储下载选项</summary>
-                     <div class="download-options">
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储下载选项</div>
+                    <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/rrkfk">WindowsServer</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/JjJC5">Windows12</a>
-                </details>
-                <details>
-                    <summary>前往和乐果存储下载选项</summary>
-                     <div class="download-options">
+                    </div>
+                </div>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储下载选项</div>
+                    <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/rrkfk">WindowsServer</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/JjJC5">Windows12</a>
-                  </details>
-             </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Windows 11 -->
-        <div class="module windows-11">
-            <div>Windows 11（维护中）</div>
+        <div class="module">
+            <div class="module-title">Windows 11（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>下载选项</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://pan.huang1111.cn/s/E7nzWUb">23H2</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/8QBYDSQ">22H2</a>
@@ -295,16 +467,15 @@
                         <a class="download-option" href="https://pan.huang1111.cn/s/Lxowmt6">2022</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/K93ROuY">2021</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Windows 10 -->
-        <div class="module windows-10">
-            <div>Windows 10（维护中）</div>
+        <div class="module">
+            <div class="module-title">Windows 10（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>x86构架</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x86构架</div>
                     <div class="download-options">
                         <a class="download-option" href="https://pan.huang1111.cn/s/laXjwsL">V22H2</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/VLR8ncd">V21H2</a>
@@ -312,15 +483,15 @@
                         <a class="download-option" href="https://pan.huang1111.cn/s/Xq3LXCl">V20H2</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/6exn6FN">V2004</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/DVn85H4">V1909</a>
-                        <a class="download-option" href="https://pan.huang1111.cn/s/oXnMkF8">V1709.</a>
-                        <a class="download-option" href="https://pan.huang1111.cn/s/nq9M7im">V1703.</a>
+                        <a class="download-option" href="https://pan.huang1111.cn/s/oXnMkF8">V1709</a>
+                        <a class="download-option" href="https://pan.huang1111.cn/s/nq9M7im">V1703</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/K936OCY">V1607</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/G8QvBTW">V1511</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/E7nGWib">V1507</a>
                     </div>
-                </details>
-                <details>
-                    <summary>x64架构</summary>
+                </div>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x64架构</div>
                     <div class="download-options">
                         <a class="download-option" href="https://pan.huang1111.cn/s/1Qd2xTv">V22H2</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/y5dWjt6">V21H2</a>
@@ -336,285 +507,406 @@
                         <a class="download-option" href="https://pan.huang1111.cn/s/qgNBkH3">V1511</a>
                         <a class="download-option" href="https://pan.huang1111.cn/s/O83jGHL">V1507</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Windows 8.1 -->
-        <div class="module windows-8-1">
-            <div>Windows 8.1（维护中）</div>
-            <div class="download-menu">
-                <details>
-                    <summary>x86架构</summary>
-                    <div class="download-options">
-                        <a class="download-option" href="A">Pro</a>
-                        <a class="download-option" href="A">Enterprise</a>
-                        <a class="download-option" href="A">updata</a>
-                    </div>
-                </details>
-                <details>
-                    <summary>x64 下载选项</summary>
-                    <div class="download-options">
-                        <a class="download-option" href="A">Pro</a>
-                        <a class="download-option" href="A">Enterprise</a>
-                        <a class="download-option" href="A">updata</a>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <!-- Windows 8 -->
-        <div class="module windows-8">
-            <div>Windows 8（维护中）</div>
-            <div class="download-menu">
-                <details>
-                    <summary>全部版本</summary>
-                    <div class="download-options">
-                        <a class="download-option" href="A">全部版本</a>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <!-- Windows 7 -->
-        <div class="module windows-7">
-            <div>Windows 7（维护中）</div>
-            <div class="download-menu">
-                <details>
-                    <summary>x64下载选项</summary>
-                    <div class="download-options">
-                        <a class="download-option" href="A">终极版</a>
-                        <a class="download-option" href="A">专业版</a>
-                        <a class="download-option" href="A">企业版</a>
-                        <a class="download-option" href="A">家庭版</a>
-                    </div>
-                </details>
-                <details>
-                    <summary>x86下载选项</summary>
-                    <div class="download-options">
-                        <a class="download-option" href="A">专业版</a>
-                        <a class="download-option" href="A">旗舰版</a>
-                        <a class="download-option" href="A">家庭版</a>
-                        <a class="download-option" href="A">企业版</a>
-                        <a class="download-option" href="A">基础版</a>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <!-- Windows Vista -->
         <div class="module">
-            <div>Windows Vista（维护中）</div>
+            <div class="module-title">Windows 8.1（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>下载选项</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x86架构</div>
                     <div class="download-options">
-                        <a class="download-option" href="A">1. 下载选项 1</a>
-                        <a class="download-option" href="A">2. 下载选项 2</a>
-                        <a class="download-option" href="A">3. 下载选项 3</a>
-                        <a class="download-option" href="A">4. 下载选项 4</a>
+                        <a class="download-option" href="#">Pro</a>
+                        <a class="download-option" href="#">Enterprise</a>
+                        <a class="download-option" href="#">Update</a>
                     </div>
-                </details>
+                </div>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x64架构</div>
+                    <div class="download-options">
+                        <a class="download-option" href="#">Pro</a>
+                        <a class="download-option" href="#">Enterprise</a>
+                        <a class="download-option" href="#">Update</a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Windows XP -->
         <div class="module">
-            <div>Windows XP</div>
+            <div class="module-title">Windows 8（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>下载选项</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">全部版本</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/89Dtk">前往</a>
+                        <a class="download-option" href="#">全部版本</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Windows ME -->
         <div class="module">
-            <div>Windows ME（维护中）</div>
+            <div class="module-title">Windows 7（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>前往和乐果存储</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x64下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="A">1. 下载选项 1</a>
-                        <a class="download-option" href="A">2. 下载选项 2</a>
+                        <a class="download-option" href="#">终极版</a>
+                        <a class="download-option" href="#">专业版</a>
+                        <a class="download-option" href="#">企业版</a>
+                        <a class="download-option" href="#">家庭版</a>
                     </div>
-                </details>
+                </div>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">x86下载选项</div>
+                    <div class="download-options">
+                        <a class="download-option" href="#">专业版</a>
+                        <a class="download-option" href="#">旗舰版</a>
+                        <a class="download-option" href="#">家庭版</a>
+                        <a class="download-option" href="#">企业版</a>
+                        <a class="download-option" href="#">基础版</a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Windows 98 -->
         <div class="module">
-            <div>Windows 98（维护中）</div>
+            <div class="module-title">Windows Vista（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>下载选项</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-options">
+                        <a class="download-option" href="#">下载选项 1</a>
+                        <a class="download-option" href="#">下载选项 2</a>
+                        <a class="download-option" href="#">下载选项 3</a>
+                        <a class="download-option" href="#">下载选项 4</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="module">
+            <div class="module-title">Windows XP</div>
+            <div class="download-menu">
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-options">
+                        <a class="download-option" href="https://yun.heleguo.cn/s/89Dtk">前往和乐果存储</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="module">
+            <div class="module-title">Windows ME（维护中）</div>
+            <div class="download-menu">
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
+                    <div class="download-options">
+                        <a class="download-option" href="#">下载选项 1</a>
+                        <a class="download-option" href="#">下载选项 2</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="module">
+            <div class="module-title">Windows 98（维护中）</div>
+            <div class="download-menu">
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/895hk">前往和乐果存储</a>
-                        <a class="download-option" href="A">预留</a>
+                        <a class="download-option" href="#">预留</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Windows 95 -->
         <div class="module">
-            <div>Windows 95（维护中）</div>
+            <div class="module-title">Windows 95（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>下载选项</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/lxOuR">前往和乐果存储</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Windows ARM -->
-        <div class="module ARM">
-            <div>Windows ARM</div>
+        <div class="module">
+            <div class="module-title">Windows ARM</div>
             <div class="download-menu">
-                <details>
-                    <summary>Windows11</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">Windows11</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/kQof0">前往和乐果存储</a>
                     </div>
-                </details>
-                <details>
-                    <summary>Windows10</summary>
+                </div>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">Windows10</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/D9Jc5">前往和乐果存储</a>
-
                     </div>
-                </details>
+                </div>
             </div>
         </div>
-        
-        <!-- LTSC/LTSB官方优化 -->
+
         <div class="module">
-            <div>LTSC/LTSB官方优化</div>
+            <div class="module-title">LTSC/LTSB官方优化</div>
             <div class="download-menu">
-                <details>
-                    <summary>前往和乐果存储</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/qkQI1">Windows11</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/jokua">Windows10</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
 
-        <!-- Old -->
         <div class="module">
-            <div>远古版（维护中）</div>
+            <div class="module-title">远古版（维护中）</div>
             <div class="download-menu">
-                <details>
-                    <summary>前往和乐果存储</summary>
+                <div class="download-item">
+                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/y68Iv">Windows3.1</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/exlHD">Windows3</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/Q8NCL">MSDOS</a>
                     </div>
-                </details>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 底部栏 -->
     <div class="footer">
         <p><a href="../readme.html">MapleSTUDIO 版权所有</a></p>
         <p>此站点由 <a href="https://github.com" target="_blank">Github</a> 驱动</p>
         <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank">萌ICP备20250732号</a></p>
     </div>
-<!--如果需要发布此网页的另外版，请勿使用以上链接，详情见"me.html"的限制-->
-<!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
 
     <script>
-    // 抽拉式菜单逻辑
-    function toggleMenu() {
-        const menu = document.getElementById('menu');
-        menu.classList.toggle('open');
-        
-        // 自动高度计算
-        if (menu.classList.contains('open')) {
-            menu.style.display = 'flex';
-            const fullHeight = menu.scrollHeight + 'px';
-            menu.style.maxHeight = fullHeight;
-        } else {
-            menu.style.maxHeight = '0';
-            setTimeout(() => {
-                menu.style.display = 'none';
-            }, 300);
-        }
-    }
+        // 动画状态管理
+        const AnimationState = {
+            menu: { isAnimating: false, startTime: 0, direction: 'closed' },
+            downloads: new Map()
+        };
 
-    // 模块动画逻辑
-    const modules = document.querySelectorAll('.module');
-    modules.forEach((module, index) => {
-        setTimeout(() => {
-            module.classList.add('visible');
-        }, index * 150);
-    });
+        // 缓动函数 - 非线性变速
+        const Easing = {
+            // 先快后慢 - 用于展开
+            easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
+            // 先慢后快再慢 - 用于关闭
+            easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+            // 弹性缓出 - 用于反弹
+            easeOutElastic: t => {
+                const c4 = (2 * Math.PI) / 3;
+                return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+            },
+            // 平滑减速 - 0.75倍速效果
+            smoothDecel: t => 1 - Math.pow(1 - t, 3) * 0.75,
+            // 物理阻力曲线
+            resistance: t => {
+                if (t < 0.2) return t * 0.5; // 初始阻力
+                return 0.1 + (t - 0.2) * 1.125; // 后续加速
+            }
+        };
 
-    // 关闭没效果
-    const downloadDetails = document.querySelectorAll('.download-menu details');
-    downloadDetails.forEach(detail => {
-        const options = detail.querySelector('.download-options');
-        
-        // 初始状态设置
-        if (!detail.open) {
-            options.style.maxHeight = '0';
-            options.style.opacity = '0';
-            options.style.overflow = 'hidden';
-            options.style.transition = 'none'; 
-        }
-        
-        detail.addEventListener('toggle', () => {
-            if (detail.open) {
-                // 展开动画 - 德芙的曲线
-                options.style.transition = `
-                    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.1s
-                `;
-                options.style.maxHeight = options.scrollHeight + 'px';
-                options.style.opacity = '1';
-            } else {
-                // 关闭无动画 - 石块的顿挫减速曲线[老板干的]
-                options.style.transition = `
-                    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)
-                `;
-                options.style.maxHeight = '0';
-                options.style.opacity = '0';
+        // 菜单切换 - 支持打断动画
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const btn = document.getElementById('menuBtn');
+            const isOpen = menu.classList.contains('open');
+            
+            // 移除之前的动画类
+            menu.classList.remove('resistance-open', 'resistance-close', 'bounce-effect');
+            void menu.offsetHeight; // 强制重绘
+            
+            if (isOpen) {
+                // 关闭动画
+                menu.classList.remove('open');
+                btn.classList.remove('active');
+                menu.classList.add('resistance-close');
                 
-                // 确保动画完成后保持看不见状态
+                // 越界反弹检测
                 setTimeout(() => {
-                    if (!detail.open) {
-                        options.style.transition = 'none';
+                    menu.classList.remove('resistance-close');
+                    menu.classList.add('bounce-effect');
+                    setTimeout(() => menu.classList.remove('bounce-effect'), 600);
+                }, 400);
+            } else {
+                // 打开动画 - 物理阻力感
+                menu.style.transform = 'scale(0.9) translateY(-10px)';
+                menu.classList.add('open');
+                btn.classList.add('active');
+                
+                // 先向后微移再展开
+                requestAnimationFrame(() => {
+                    menu.style.transition = 'transform 0.1s ease';
+                    menu.style.transform = 'scale(0.85) translateY(-5px)';
+                    
+                    setTimeout(() => {
+                        menu.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                        menu.style.transform = 'scale(1) translateY(0)';
+                    }, 100);
+                });
+                
+                // 反弹效果
+                setTimeout(() => {
+                    menu.classList.add('bounce-effect');
+                    setTimeout(() => menu.classList.remove('bounce-effect'), 600);
+                }, 500);
+            }
+        }
+
+        // 下载选项切换 - 完全独立的动画系统
+        function toggleDownload(element) {
+            const item = element.parentElement;
+            const options = item.querySelector('.download-options');
+            const isOpen = item.classList.contains('open');
+            const itemId = item.dataset.id || (item.dataset.id = Math.random().toString(36).substr(2, 9));
+            
+            // 获取或创建动画状态
+            let state = AnimationState.downloads.get(itemId);
+            if (!state) {
+                state = { isAnimating: false, currentHeight: 0, targetHeight: 0 };
+                AnimationState.downloads.set(itemId, state);
+            }
+            
+            // 打断当前动画
+            if (state.isAnimating) {
+                state.isAnimating = false;
+                const currentHeight = options.scrollHeight;
+                options.style.maxHeight = currentHeight + 'px';
+                state.currentHeight = currentHeight;
+                
+                // 强制重绘
+                void options.offsetHeight;
+            }
+            
+            if (isOpen) {
+                // 关闭动画 - 0.75倍速优雅关闭
+                item.classList.remove('open');
+                const startHeight = options.scrollHeight;
+                const duration = 600 * 0.75; // 0.75倍速
+                const startTime = performance.now();
+                
+                state.isAnimating = true;
+                state.targetHeight = 0;
+                
+                function animateClose(currentTime) {
+                    if (!state.isAnimating) return;
+                    
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = Easing.easeInOutCubic(progress);
+                    
+                    const currentHeight = startHeight * (1 - eased);
+                    options.style.maxHeight = Math.max(0, currentHeight) + 'px';
+                    options.style.opacity = 1 - eased;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateClose);
+                    } else {
+                        state.isAnimating = false;
+                        options.style.maxHeight = '0';
+                        // 越界反弹
+                        item.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            item.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
                     }
-                }, 300);
-            }
-        });
-        
-        // 处理窗口大小变化时的高度调整
-        window.addEventListener('resize', () => {
-            if (detail.open) {
-                options.style.transition = 'none';
-                options.style.maxHeight = 'auto';
-                const newHeight = options.scrollHeight;
-                options.style.maxHeight = newHeight + 'px';
+                }
+                
+                requestAnimationFrame(animateClose);
+                
+            } else {
+                // 打开动画 - 带物理阻力
+                item.classList.add('open');
+                
+                // 先向后微移（阻力感）
+                item.style.transform = 'scale(0.98) translateY(2px)';
                 setTimeout(() => {
-                    options.style.transition = `
-                        max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                        opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.1s
-                    `;
-                }, 10);
+                    item.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    item.style.transform = 'scale(1) translateY(0)';
+                }, 50);
+                
+                // 计算实际高度
+                options.style.maxHeight = 'none';
+                const targetHeight = options.scrollHeight;
+                options.style.maxHeight = '0';
+                void options.offsetHeight; // 强制重绘
+                
+                const duration = 500 * 0.75; // 0.75倍速
+                const startTime = performance.now();
+                
+                state.isAnimating = true;
+                state.targetHeight = targetHeight;
+                
+                function animateOpen(currentTime) {
+                    if (!state.isAnimating) return;
+                    
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // 使用先快后慢的曲线
+                    const eased = Easing.easeOutExpo(progress);
+                    
+                    const currentHeight = targetHeight * eased;
+                    options.style.maxHeight = currentHeight + 'px';
+                    options.style.opacity = Math.min(progress * 1.5, 1); // 加速淡入
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateOpen);
+                    } else {
+                        state.isAnimating = false;
+                        options.style.maxHeight = targetHeight + 'px';
+                        // 反弹效果
+                        item.classList.add('bounce-effect');
+                        setTimeout(() => item.classList.remove('bounce-effect'), 600);
+                    }
+                }
+                
+                requestAnimationFrame(animateOpen);
+            }
+        }
+
+        // 模块入场动画 - 交错延迟
+        function initModules() {
+            const modules = document.querySelectorAll('.module');
+            modules.forEach((module, index) => {
+                setTimeout(() => {
+                    module.classList.add('visible');
+                }, index * 120); // 交错延迟
+            });
+        }
+
+        // 点击外部关闭菜单
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('menu');
+            const btn = document.getElementById('menuBtn');
+            
+            if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
+                toggleMenu();
             }
         });
-    });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', initModules);
+
+        // 窗口大小变化处理
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // 重新计算打开的面板高度
+                document.querySelectorAll('.download-item.open .download-options').forEach(options => {
+                    options.style.maxHeight = options.scrollHeight + 'px';
+                });
+            }, 250);
+        });
     </script>
 </body>
 </html>
-// 我是全自动闯祸机，啦啦啦啦

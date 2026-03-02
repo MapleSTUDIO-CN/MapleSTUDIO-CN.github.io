@@ -307,7 +307,7 @@
 
         .download-option {
             font-size: 0.85em;
-            color: #ffffff;  /* 原白色，稍后覆盖为灰色 */
+            color: #ffffff;  /* 原白色，稍后覆盖为黑色 */
             padding: 10px 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -418,17 +418,16 @@
             }
         }
 
-        /* ---------- 需求修改：下载选项模块上的文字改为灰色，透明度不变 ---------- */
+        /* ---------- 最新需求：下载选项模块上的文字改为黑色，其他不变 ---------- */
         .module .download-menu .download-summary,
         .module .download-menu .download-option {
-            color: #cccccc;  /* 灰色文字，覆盖原有白色，透明度不变（无额外alpha） */
+            color: #000000;  /* 黑色文字，覆盖原有灰色/白色，透明度不变 */
         }
 
-        /* 保持hover效果不变（仅背景变化，文字颜色保持灰色，无需额外调整） */
-        /* 若希望hover时更亮可取消下一行注释，但需求未要求，故保留原样以符合“其他不变” */
-        /* .module .download-menu .download-option:hover {
-            color: #f0f0f0;
-        } */
+        /* hover效果保留原有风格（不影响颜色） */
+        .module .download-menu .download-option:hover {
+            /* 颜色默认继承 #000000，可保持黑色不变；若想高亮可单独设置，但需求要求其他不变，故不做改动 */
+        }
     </style>
 </head>
 <body>

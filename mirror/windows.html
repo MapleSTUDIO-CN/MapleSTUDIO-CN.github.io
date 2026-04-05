@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows版本镜像（维护中）</title>
+    <!-- 页面logo -->
+    <link rel="icon" href="../Pictures/logo.jpg">
     <style>
         * {
             margin: 0;
@@ -31,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* 背景遮罩 - 仅保留高斯模糊，去除黑色背景 */
+        /* 背景遮罩 */
         body::before {
             content: '';
             position: fixed;
@@ -45,7 +47,7 @@
             z-index: -1;
         }
 
-        /* 顶部栏 - 高通透度轻模糊 */
+        /* 顶部栏 */
         .top-bar {
             position: fixed;
             top: 0;
@@ -105,7 +107,7 @@
             background: rgba(0, 123, 255, 0.1);
         }
 
-        /* 抽拉式菜单 - 高通透度 */
+        /* 菜单 */
         .menu {
             position: fixed;
             top: 70px;
@@ -183,7 +185,7 @@
             padding-top: 20px;
         }
 
-        /* 模块 - 混浊毛玻璃效果 */
+        /* 模块 */
         .module {
             width: 320px;
             background: var(--glass-white);
@@ -303,7 +305,7 @@
 
         .download-option {
             font-size: 0.85em;
-            color: #ffffff;  /* 原白色，稍后覆盖为黑色 */
+            color: #ffffff;  
             padding: 10px 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -368,31 +370,6 @@
             text-decoration: underline;
         }
 
-        /* 物理阻力动画关键帧（保留，但不再用于菜单和下载模块） */
-        @keyframes resistance-open {
-            0% { transform: scale(1) translateY(0); }
-            20% { transform: scale(0.98) translateY(-5px); }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        @keyframes resistance-close {
-            0% { transform: scale(1) translateY(0); }
-            30% { transform: scale(0.97) translateY(3px); }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            40% { transform: scale(1.03); }
-            60% { transform: scale(0.98); }
-            80% { transform: scale(1.01); }
-        }
-
-        .resistance-open,
-        .resistance-close,
-        .bounce-effect {
-            /* 这些类不再被使用，保留定义以防其他元素误用，但菜单和下载模块已移除 */
-        }
 
         /* 响应式优化 */
         @media (max-width: 768px) {
@@ -431,8 +408,7 @@
         <a href="linux.html">Linux源（不可用）</a>
         <a href="macos.html">MacOS源（不可用）</a>
         <a href="others.html">杂项（不可用）</a>
-        <a href="text.html">留言板（不可用）</a>
-        <a href="../main/bulletin_board.html">公告板</a>
+        <a href="board.html">公告板</a>
     </div>
 
     <div class="module-container">

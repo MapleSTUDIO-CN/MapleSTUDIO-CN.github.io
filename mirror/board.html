@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>公告 · 枫叶镜像源</title>
-    <!-- 页面logo -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📅%3C/text%3E%3C/svg%3E">
     <style>
-        /* ----- 全局变量 & 重置 ----- */
+        /* 全局重置 */
         * {
             margin: 0;
             padding: 0;
@@ -15,6 +13,7 @@
         }
 
         :root {
+            /* 黑夜主题（默认） */
             --bg-color: #0a0c10;
             --glass-white: rgba(255, 255, 255, 0.07);
             --glass-white-hover: rgba(255, 255, 255, 0.12);
@@ -23,6 +22,38 @@
             --border-light: rgba(255, 255, 255, 0.08);
             --card-bg: rgba(20, 24, 32, 0.65);
             --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f4fa;
+            --text-secondary: rgba(220, 235, 255, 0.85);
+            --text-muted: rgba(180, 210, 255, 0.7);
+            --gradient-start: #1a1f2a;
+            --gradient-end: #0a0c10;
+            --topbar-bg: rgba(255, 255, 255, 0.82);
+            --topbar-text: rgba(0, 0, 0, 0.85);
+            --topbar-border: rgba(255, 255, 255, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --sticky-border: #ffb347;
+        }
+
+        /* 白天主题变量 */
+        [data-theme="light"] {
+            --bg-color: #f5f7fa;
+            --glass-white: rgba(255, 255, 255, 0.6);
+            --glass-white-hover: rgba(255, 255, 255, 0.8);
+            --glass-menu: rgba(240, 242, 250, 0.9);
+            --accent-blue: rgba(0, 120, 255, 0.8);
+            --border-light: rgba(0, 0, 0, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --text-primary: #1a1d29;
+            --text-secondary: rgba(30, 35, 50, 0.85);
+            --text-muted: rgba(60, 70, 90, 0.7);
+            --gradient-start: #e8ecf5;
+            --gradient-end: #f0f4f8;
+            --topbar-bg: rgba(255, 255, 255, 0.9);
+            --topbar-text: rgba(30, 35, 50, 0.9);
+            --topbar-border: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --sticky-border: #ff8c00;
         }
 
         body {
@@ -31,32 +62,35 @@
             min-height: 100vh;
             font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, 'BlinkMacSystemFont', sans-serif;
             background: var(--bg-color);
-            color: #f0f4fa;
+            color: var(--text-primary);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;  
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 30% 40%, #1a1f2a 0%, #0a0c10 90%);
+            background-image: radial-gradient(circle at 30% 40%, var(--gradient-start) 0%, var(--gradient-end) 90%);
             background-attachment: fixed;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* ----- 顶部栏----- */
+        /* 顶部栏 */
         .top-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 64px;
-            background: rgba(255, 255, 255, 0.82);
+            background: var(--topbar-bg);
             backdrop-filter: blur(18px) saturate(200%);
             -webkit-backdrop-filter: blur(18px) saturate(200%);
             display: flex;
             align-items: center;
             padding-left: 24px;
-            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+            padding-right: 24px;
+            box-shadow: 0 6px 22px var(--shadow-color);
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid var(--topbar-border);
+            transition: all 0.4s ease;
         }
 
         .top-title {
@@ -65,7 +99,7 @@
             transform: translateX(-50%);
             font-size: 1.25rem;
             font-weight: 600;
-            color: rgba(0, 0, 0, 0.85);
+            color: var(--topbar-text);
             text-decoration: none;
             letter-spacing: 0.3px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -75,14 +109,36 @@
         .top-title:hover {
             text-decoration: underline;
             transform: translateX(-50%) scale(1.02);
-            color: #000;
+            opacity: 1;
         }
 
-        /* 菜单按钮*/
+        /* 主题切换按钮 */
+        .theme-toggle {
+            margin-left: auto;
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            font-size: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 菜单按钮 */
         .menu-button {
             background: transparent;
             border: none;
-            color: rgba(0, 0, 0, 0.8);
+            color: var(--topbar-text);
             font-size: 1.9rem;
             line-height: 1;
             cursor: pointer;
@@ -97,7 +153,7 @@
         }
 
         .menu-button:hover {
-            background: rgba(0, 0, 0, 0.06);
+            background: rgba(128, 128, 128, 0.1);
             transform: scale(1.08) rotate(90deg);
         }
 
@@ -106,26 +162,27 @@
             background: rgba(0, 160, 255, 0.15);
         }
 
-        /* ----- 菜单 ----- */
+        /* 菜单面板 */
         .menu {
             position: fixed;
             top: 80px;
             left: 24px;
             width: 260px;
-            background: rgba(35, 35, 48, 0.75);
+            background: var(--glass-menu);
             backdrop-filter: blur(26px) saturate(200%);
             -webkit-backdrop-filter: blur(26px) saturate(200%);
             border-radius: 28px;
             padding: 10px 0;
-            box-shadow: 0 20px 42px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 42px var(--shadow-color);
             z-index: 999;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-light);
             transform-origin: top left;
             transform: scale(0.7) translateY(-30px);
             opacity: 0;
             pointer-events: none;
             transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.35s ease;
+                        opacity 0.35s ease,
+                        background-color 0.4s ease;
         }
 
         .menu.open {
@@ -136,7 +193,7 @@
 
         .menu a {
             display: block;
-            color: rgba(255, 255, 255, 0.92);
+            color: var(--text-primary);
             text-decoration: none;
             padding: 12px 26px;
             margin: 6px 12px;
@@ -154,7 +211,7 @@
             transform: translateX(0);
         }
 
-        /* 菜单项交错延迟 */
+        /* 菜单项动画延迟 */
         .menu a:nth-child(1) { transition-delay: 0.04s; }
         .menu a:nth-child(2) { transition-delay: 0.08s; }
         .menu a:nth-child(3) { transition-delay: 0.12s; }
@@ -162,13 +219,13 @@
         .menu a:nth-child(5) { transition-delay: 0.2s; }
 
         .menu a:hover {
-            background: rgba(0, 160, 255, 0.25);
+            background: var(--accent-blue);
             transform: translateX(6px);
-            color: #ffffff;
+            color: var(--text-primary);
             box-shadow: 0 0 12px rgba(0, 160, 255, 0.3);
         }
 
-        /* ----- 主区域----- */
+        /* 主区域 */
         .announcement-wrapper {
             width: 100%;
             max-width: 1280px;
@@ -185,26 +242,28 @@
         .announcement-header h1 {
             font-size: 2.8rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #E8F0FF 0%, #9DC8FF 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             letter-spacing: -0.3px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 5px var(--shadow-color);
             margin-bottom: 12px;
+            transition: all 0.4s ease;
         }
 
         .announcement-header p {
             font-size: 1.1rem;
-            color: rgba(220, 235, 255, 0.75);
+            color: var(--text-muted);
             backdrop-filter: blur(4px);
             display: inline-block;
             padding: 6px 18px;
             border-radius: 40px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--glass-white);
+            transition: all 0.4s ease;
         }
 
-        /* 公告列表网格 */
+        /* 公告列表 */
         .announcement-list {
             display: flex;
             flex-direction: column;
@@ -220,7 +279,7 @@
             border: 1px solid var(--card-border);
             padding: 28px 32px;
             transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 28px -8px var(--shadow-color);
             position: relative;
             overflow: hidden;
         }
@@ -232,15 +291,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.03), transparent 70%);
+            background: radial-gradient(circle at 20% 30%, rgba(128, 128, 128, 0.05), transparent 70%);
             pointer-events: none;
         }
 
         .announcement-card:hover {
             transform: translateY(-6px);
-            background: rgba(30, 36, 48, 0.75);
-            border-color: rgba(0, 160, 255, 0.5);
-            box-shadow: 0 24px 40px -12px rgba(0, 0, 0, 0.6);
+            background: var(--glass-white-hover);
+            border-color: var(--accent-blue);
+            box-shadow: 0 24px 40px -12px var(--shadow-color);
         }
 
         /* 新公告标记 */
@@ -261,19 +320,21 @@
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 12px;
-            color: #eef4ff;
+            color: var(--text-primary);
             letter-spacing: -0.2px;
+            transition: color 0.4s ease;
         }
 
         .card-date {
             font-size: 0.85rem;
-            color: rgba(180, 210, 255, 0.7);
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 20px;
-            border-left: 2px solid rgba(0, 160, 255, 0.6);
+            border-left: 2px solid var(--accent-blue);
             padding-left: 12px;
+            transition: all 0.4s ease;
         }
 
         .card-date::before {
@@ -285,34 +346,34 @@
         .announcement-card p {
             font-size: 1rem;
             line-height: 1.55;
-            color: rgba(220, 235, 255, 0.85);
+            color: var(--text-secondary);
             margin-bottom: 24px;
+            transition: color 0.4s ease;
         }
 
         .readmore {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #7bc3ff;
+            color: var(--accent-blue);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
             transition: all 0.2s ease;
-            border-bottom: 1px dashed rgba(100, 180, 255, 0.4);
+            border-bottom: 1px dashed var(--accent-blue);
             padding-bottom: 2px;
         }
 
         .readmore:hover {
-            color: #c0e1ff;
+            opacity: 0.8;
             gap: 12px;
-            border-bottom-color: #7bc3ff;
         }
 
-        /* 置顶卡片装饰 */
+        /* 置顶卡片 */
         .announcement-card.sticky {
-            background: rgba(30, 45, 65, 0.7);
-            border-left: 3px solid #ffb347;
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+            background: var(--glass-white-hover);
+            border-left: 3px solid var(--sticky-border);
+            box-shadow: 0 15px 30px -10px var(--shadow-color);
         }
 
         .sticky .card-badge {
@@ -325,15 +386,16 @@
             width: 100%;
             text-align: center;
             font-size: 0.85rem;
-            color: rgba(220, 230, 240, 0.7);
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+            color: var(--text-muted);
+            text-shadow: 0 1px 4px var(--shadow-color);
             z-index: 500;
-            background: rgba(10, 15, 20, 0.4);
+            background: var(--glass-white);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 18px 0 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--border-light);
             margin-top: 30px;
+            transition: all 0.4s ease;
         }
 
         .footer p {
@@ -341,13 +403,13 @@
         }
 
         .footer a {
-            color: rgba(100, 180, 255, 0.95);
+            color: var(--accent-blue);
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .footer a:hover {
-            color: #c0e0ff;
+            opacity: 0.8;
             text-decoration: underline;
         }
 
@@ -402,9 +464,10 @@
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" aria-label="菜单">☰</button>
         <a href="mirror.html" class="top-title"> 枫叶工作室</a>
+        <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
     </div>
 
-    <!-- 抽拉菜单 -->
+    <!-- 侧边菜单 -->
     <div class="menu" id="menu">
         <a href="windows.html">Windows源（维护中）</a>
         <a href="linux.html">Linux源（维护中）</a>
@@ -413,7 +476,7 @@
         <a href="javascript:void(0)" style="background: rgba(0,160,255,0.1);">📢 公告栏（当前）</a>
     </div>
 
-    <!-- 公告区域-->
+    <!-- 公告区域 -->
     <div class="announcement-wrapper">
         <div class="announcement-header">
             <h1>📢 枫叶公告板</h1>
@@ -428,10 +491,10 @@
                   <div class="content-block">
                    <p>📌 更新：存储策略切换为和乐果存储<p>
                    <p>⚙️ 维护：即日 MacOS、Linux 全面下线，预计1年内不再开放下载<p>
-                   <p>🔧 优化：调整了页面显示结构，更新了域名地址 (https://mlms.qzz.io)，废弃原有地址，包括聚合页面，此后所有更新将全部在此呈现<p>
+                   <p>🔧 优化：调整了页面显示结构，更新了域名地址 (https://mlms.qzz.io )，废弃原有地址，包括聚合页面，此后所有更新将全部在此呈现<p>
                    <p>📢 资讯：暂无其他动态，请关注后续公告<p>
                 </div>
-              <a href="https://yun.heleguo.cn" class="readmore">和乐果存储？</a>
+              <a href="https://yun.heleguo.cn " class="readmore">和乐果存储？</a>
             </div>
 
             <!-- 历史公告 -->
@@ -448,12 +511,12 @@
     <!-- 底部信息 -->
     <div class="footer">
         <p><a href="javascript:void(0)">MapleSTUDIO 版权所有</a></p>
-        <p>此站点由 <a href="https://github.com" target="_blank" rel="noopener noreferrer">Github 驱动</a></p>
-        <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" rel="noopener noreferrer">萌ICP备20250732号</a></p>
+        <p>此站点由 <a href="https://github.com " target="_blank" rel="noopener noreferrer">Github 驱动</a></p>
+        <p><a href="https://icp.gov.moe/?keyword=20250732 " target="_blank" rel="noopener noreferrer">萌ICP备20250732号</a></p>
     </div>
 
     <script>
-        // ---------- 菜单交互  ----------
+        // 菜单控制
         function toggleMenu() {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
@@ -468,7 +531,7 @@
             }
         }
 
-        // 绑定菜单按钮事件
+        // 绑定菜单按钮
         const menuBtn = document.getElementById('menuBtn');
         if (menuBtn) {
             menuBtn.removeAttribute('onclick');
@@ -478,7 +541,7 @@
             });
         }
 
-        // 点击页面其他区域关闭菜单
+        // 点击外部关闭菜单
         document.addEventListener('click', (e) => {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
@@ -487,17 +550,49 @@
             }
         });
 
-        // 阻止菜单内部冒泡导致意外关闭
+        // 阻止菜单冒泡
         const menuElement = document.getElementById('menu');
         if (menuElement) {
             menuElement.addEventListener('click', (e) => e.stopPropagation());
         }
 
+        // 主题切换功能
+        const themeBtn = document.getElementById('themeBtn');
+        const html = document.documentElement;
+        
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        // 更新图标
+        function updateThemeIcon(theme) {
+            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
+        }
+
+        // 切换主题
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        // 绑定主题按钮
+        if (themeBtn) {
+            themeBtn.addEventListener('click', toggleTheme);
+        }
+
+        // 阅读更多提示
         const readmoreLinks = document.querySelectorAll('.readmore');
         readmoreLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                // 轻提示效果
+                // 创建提示
                 const toast = document.createElement('div');
                 toast.innerText = '呜呜呜┭┮﹏┭┮不要戳我';
                 toast.style.position = 'fixed';
@@ -520,14 +615,19 @@
                 }, 2000);
             });
         });
+
+        // 页面加载完成
         window.addEventListener('load', () => {
-            // 确保菜单初始关闭
+            // 确保菜单关闭
             const menu = document.getElementById('menu');
             if (menu) menu.classList.remove('open');
             const btn = document.getElementById('menuBtn');
             if (btn) btn.classList.remove('active');
             
-            // 入场渐显动画
+            // 初始化主题
+            initTheme();
+            
+            // 入场动画
             const wrapper = document.querySelector('.announcement-wrapper');
             if (wrapper) {
                 wrapper.style.opacity = '0';

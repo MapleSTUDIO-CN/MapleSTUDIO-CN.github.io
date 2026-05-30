@@ -103,9 +103,44 @@
             opacity: 1;
         }
 
-        /* 主题切换 */
-        .theme-toggle {
+        /* 右侧按钮组（翻译 + 主题） */
+        .right-actions {
+            display: flex;
+            align-items: center;
             margin-left: auto;
+            gap: 8px;
+            position: relative;
+        }
+
+        /* 翻译按钮 - 动画完全匹配主题切换按钮 */
+        .translate-btn {
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 0;
+        }
+
+        .translate-btn img {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        .translate-btn:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
             background: transparent;
             border: none;
             color: var(--topbar-text);
@@ -123,6 +158,48 @@
         .theme-toggle:hover {
             background: rgba(128, 128, 128, 0.15);
             transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 语言选择下拉菜单 */
+        .translate-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--glass-menu);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border-radius: 16px;
+            padding: 8px 0;
+            min-width: 150px;
+            box-shadow: 0 18px 40px var(--shadow-color);
+            border: 1px solid var(--border-light);
+            z-index: 1001;
+            opacity: 0;
+            transform: scale(0.9) translateY(-8px);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            transform-origin: top right;
+        }
+
+        .translate-dropdown.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .translate-dropdown a {
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .translate-dropdown a:hover {
+            background: var(--accent-blue);
         }
 
         /* 菜单按钮 */
@@ -352,6 +429,9 @@
                 padding: 12px 30px;
                 font-size: 1rem;
             }
+            .right-actions {
+                gap: 4px;
+            }
         }
 
         @media (max-width: 450px) {
@@ -366,40 +446,163 @@
     <!-- 顶部栏 -->
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
-        <a href="#" class="top-title">枫叶•总览</a>
-        <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+        <a href="#" class="top-title" data-translate-key="top-title">枫叶•总览</a>
+        <div class="right-actions">
+            <button class="translate-btn" id="translateBtn" aria-label="翻译">
+                <img src="/Pictures/icon_translate.webp" alt="翻译">
+            </button>
+            <div class="translate-dropdown" id="translateDropdown">
+                <a href="#" data-lang="zh-CN">简体中文</a>
+                <a href="#" data-lang="zh-TW">繁體中文</a>
+                <a href="#" data-lang="en">English</a>
+                <a href="#" data-lang="ja">日本語</a>
+                <a href="#" data-lang="ko">한국어</a>
+            </div>
+            <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+        </div>
     </div>
 
     <!-- 侧边菜单 -->
     <div class="menu" id="menu">
-        <a href="/mirror/mirror.html">镜像站(🚧)</a>
-        <a href="/mcserver/main.html">MC服务器</a>
-        <a href="/mcapks.html">MC版本库(🚫)</a>
-        <a href="/software/main.html">软件库(🚫)</a>
-        <a href="/tools/main.html">小工具(🚫)</a>
-        <a href="../main/bulletin_board.html">公告栏</a>
+        <a href="/mirror/mirror.html" data-translate-key="menu-mirror">镜像站(🚧)</a>
+        <a href="/mcserver/main.html" data-translate-key="menu-mcserver">MC服务器</a>
+        <a href="/mcapks.html" data-translate-key="menu-mcapks">MC版本库(🚫)</a>
+        <a href="/software/main.html" data-translate-key="menu-software">软件库(🚫)</a>
+        <a href="/tools/main.html" data-translate-key="menu-tools">小工具(🚫)</a>
+        <a href="../main/bulletin_board.html" data-translate-key="menu-bulletin">公告栏</a>
     </div>
 
     <!-- 3D区域 -->
     <div class="content-container">
         <div class="glass-layer" id="glass-layer"></div>
-        <div class="content" id="content">
+        <div class="content" id="content" data-translate-key="content-welcome">
             欢迎来到枫叶工作室的索引站台，请点击左上方菜单开始
         </div>
     </div>
 
     <!-- 捐献按钮 -->
-    <a href="/rec/rec.html" class="donate-button">为我捐献</a>
+    <a href="/rec/rec.html" class="donate-button" data-translate-key="donate">为我捐献</a>
 
     <!-- 底部信息 -->
     <div class="footer">
-        <p><a href="readme.html">MapleSTUDIO 版权所有</a></p>
-        <p>此站点由 <a href="https://github.com" target="_blank">Github</a> 驱动</p>
-        <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank">萌ICP备20250732号</a></p>
+        <p><a href="readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
+        <p>
+            <span data-translate-key="footer-powered-prefix">此站点由 </span>
+            <a href="https://github.com" target="_blank">Github</a>
+            <span data-translate-key="footer-powered-suffix"> 驱动</span>
+        </p>
+        <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" data-translate-key="footer-icp">萌ICP备20250732号</a></p>
     </div>
 
     <script>
-        // 3D效果逻辑
+        // ========================
+        // 多语言本地化数据
+        // ========================
+        const translations = {
+            'zh-TW': {
+                'top-title': '楓葉•總覽',
+                'menu-mirror': '鏡像站(🚧)',
+                'menu-mcserver': 'MC伺服器',
+                'menu-mcapks': 'MC版本庫(🚫)',
+                'menu-software': '軟體庫(🚫)',
+                'menu-tools': '小工具(🚫)',
+                'menu-bulletin': '公告欄',
+                'content-welcome': '歡迎來到楓葉工作室的索引站台，請點擊左上方選單開始',
+                'donate': '為我捐獻',
+                'footer-copyright': 'MapleSTUDIO 版權所有',
+                'footer-powered-prefix': '此站點由 ',
+                'footer-powered-suffix': ' 驅動',
+                'footer-icp': '萌ICP備20250732號'
+            },
+            'en': {
+                'top-title': 'Maple Leaf • Overview',
+                'menu-mirror': 'Mirror (🚧)',
+                'menu-mcserver': 'MC Server',
+                'menu-mcapks': 'MC Versions (🚫)',
+                'menu-software': 'Software (🚫)',
+                'menu-tools': 'Tools (🚫)',
+                'menu-bulletin': 'Bulletin',
+                'content-welcome': 'Welcome to Maple Studio\'s index platform. Please click the menu at the top left to start.',
+                'donate': 'Donate',
+                'footer-copyright': 'MapleSTUDIO All Rights Reserved',
+                'footer-powered-prefix': 'Powered by ',
+                'footer-powered-suffix': '',
+                'footer-icp': 'MoeICP Bei 20250732'
+            },
+            'ja': {
+                'top-title': 'メープルリーフ • 概要',
+                'menu-mirror': 'ミラーサイト(🚧)',
+                'menu-mcserver': 'MCサーバー',
+                'menu-mcapks': 'MCバージョンライブラリ(🚫)',
+                'menu-software': 'ソフトウェア(🚫)',
+                'menu-tools': 'ツール(🚫)',
+                'menu-bulletin': '掲示板',
+                'content-welcome': 'Maple Studioのインデックスプラットフォームへようこそ。左上のメニューをクリックして開始してください。',
+                'donate': '寄付する',
+                'footer-copyright': 'MapleSTUDIO 著作権所有',
+                'footer-powered-prefix': 'このサイトは ',
+                'footer-powered-suffix': ' によって運営されています',
+                'footer-icp': '萌ICP備20250732号'
+            },
+            'ko': {
+                'top-title': '메이플 리프 • 개요',
+                'menu-mirror': '미러 사이트(🚧)',
+                'menu-mcserver': 'MC 서버',
+                'menu-mcapks': 'MC 버전 라이브러리(🚫)',
+                'menu-software': '소프트웨어(🚫)',
+                'menu-tools': '도구(🚫)',
+                'menu-bulletin': '게시판',
+                'content-welcome': 'Maple Studio의 색인 플랫폼에 오신 것을 환영합니다. 왼쪽 상단 메뉴를 클릭하여 시작하세요.',
+                'donate': '기부하기',
+                'footer-copyright': 'MapleSTUDIO 저작권 소유',
+                'footer-powered-prefix': '이 사이트는 ',
+                'footer-powered-suffix': ' 에 의해 구동됩니다',
+                'footer-icp': '萌ICP备20250732号'
+            }
+        };
+
+        // 存储所有元素的默认文本（简体中文）
+        const defaultTexts = new Map();
+
+        // 初始化：记录所有 data-translate-key 元素的当前文本
+        function cacheDefaultTexts() {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (key && !defaultTexts.has(key)) {
+                    // 对于 span 元素直接取 textContent，对于链接也取 textContent
+                    defaultTexts.set(key, el.textContent);
+                }
+            });
+        }
+
+        // 应用指定语言
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (!key) return;
+
+                if (lang === 'zh-CN') {
+                    // 恢复默认简体中文
+                    const defaultText = defaultTexts.get(key);
+                    if (defaultText !== undefined) {
+                        el.textContent = defaultText;
+                    }
+                } else {
+                    // 从翻译映射中获取
+                    const langPack = translations[lang];
+                    if (langPack && langPack[key] !== undefined) {
+                        el.textContent = langPack[key];
+                    }
+                }
+            });
+
+            // 保存当前语言选择
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // ========================
+        // 3D效果逻辑（保持不变）
+        // ========================
         const content = document.getElementById('content');
         const glassLayer = document.getElementById('glass-layer');
         const resistance = 0.1; 
@@ -407,7 +610,6 @@
         let isDragging = false;
         let offsetX = 0, offsetY = 0;
 
-        // 移动端触摸
         if (matchMedia('(pointer: coarse)').matches) {
             let startX, startY;
             content.addEventListener('touchstart', (e) => {
@@ -432,7 +634,6 @@
             });
         }
 
-        // 桌面端鼠标
         if (matchMedia('(pointer: fine)').matches) {
             document.addEventListener('mousemove', (e) => {
                 const centerX = window.innerWidth / 2;
@@ -465,7 +666,9 @@
             }, 500);
         }
 
-        // 菜单控制
+        // ========================
+        // 菜单控制（保持不变）
+        // ========================
         function toggleMenu() {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
@@ -490,19 +693,52 @@
             }
         }
 
-        // 点击外部关闭
+        // ========================
+        // 翻译按钮逻辑（下拉菜单 + 语言切换）
+        // ========================
+        const translateBtn = document.getElementById('translateBtn');
+        const translateDropdown = document.getElementById('translateDropdown');
+
+        translateBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            translateDropdown.classList.toggle('open');
+            this.classList.add('bounce-effect');
+            setTimeout(() => this.classList.remove('bounce-effect'), 500);
+        });
+
+        // 语言选择处理
+        translateDropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                applyLanguage(lang);
+                translateDropdown.classList.remove('open');
+            });
+        });
+
+        // 点击外部关闭（侧边菜单 + 翻译下拉）
         document.addEventListener('click', (e) => {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
+            const dropdown = document.getElementById('translateDropdown');
+            const transBtn = document.getElementById('translateBtn');
+
             if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
                 toggleMenu();
+            }
+
+            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
+                dropdown.classList.remove('open');
             }
         });
 
         // 阻止冒泡
         document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
+        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
 
-        // 主题切换
+        // ========================
+        // 主题切换（保持不变）
+        // ========================
         const themeBtn = document.getElementById('themeBtn');
         const html = document.documentElement;
         
@@ -529,10 +765,22 @@
             themeBtn.addEventListener('click', toggleTheme);
         }
 
-        // 初始关闭
+        // ========================
+        // 初始化
+        // ========================
         window.addEventListener('load', () => {
-            document.getElementById('menu').classList.remove('open');
+            // 缓存默认文本（必须在任何语言应用之前）
+            cacheDefaultTexts();
+
+            // 初始化主题
             initTheme();
+
+            // 菜单初始关闭
+            document.getElementById('menu').classList.remove('open');
+
+            // 读取并应用保存的语言设置
+            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
+            applyLanguage(savedLang);
         });
     </script>
 </body>

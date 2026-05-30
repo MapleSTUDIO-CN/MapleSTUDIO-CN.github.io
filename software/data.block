@@ -36,14 +36,3 @@
     "downloadUrl": "#download-edge"
   }
 ]
-
-// id : 数字，唯一标识
-//name : 软件名称
-// icon : emoji 图标字符
-// category : 分类字符串（如 browser、dev、design、system、media、office 等）
-// version : 版本号
-// desc : 简要描述
-// size : 文件大小字符串
-// platform : 数组，可包含 "windows", "mac", "linux", "web" 等
-// badges : 数组，可选值 "hot", "new", "rec"（热门、新版、推荐）
-// downloadUrl : 下载链接（当前仅作演示用）

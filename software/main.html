@@ -91,7 +91,6 @@
       flex-direction: column;
       align-items: center;
       overflow-x: hidden;
-      /* 保留渐变背景，并加入半透明遮罩 */
       background-image: radial-gradient(circle at 20% 30%, var(--gradient-start) 0%, var(--gradient-end) 80%);
       background-attachment: fixed;
       transition: background-color 0.4s ease, color 0.4s ease;
@@ -113,13 +112,12 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      opacity: 0.18; /* 柔和透明度，不干扰阅读 */
+      opacity: 0.18;
       z-index: -1;
       pointer-events: none;
       transition: opacity 0.4s ease;
     }
 
-    /* 暗色模式下稍微增强背景可见度（可选） */
     [data-theme="dark"] body::before {
       opacity: 0.22;
     }
@@ -234,10 +232,27 @@
     .list-item:hover { background: var(--list-hover); transform: translateX(4px); }
     .list-item:nth-child(even) { background: var(--list-stripe); }
     .list-item:nth-child(even):hover { background: var(--list-hover); }
+
+    /* 图标容器（适配图片） */
     .item-icon {
-      width: 44px; height: 44px; border-radius: 12px; background: var(--platform-bg);
-      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
-      flex-shrink: 0; border: 1px solid var(--border-light); transition: transform 0.3s;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--platform-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      border: 1px solid var(--border-light);
+      transition: transform 0.3s;
+      overflow: hidden;
+    }
+    .item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .list-item:hover .item-icon { transform: scale(1.08); box-shadow: 0 0 16px var(--accent-glow); }
     .item-info { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 4px; }
@@ -383,11 +398,32 @@
         toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
       }
 
+      /**
+       * 检测字符串是否为图片路径（简单判断）
+       */
+      function isImagePath(str) {
+        if (!str || typeof str !== 'string') return false;
+        return /\.(jpe?g|png|gif|webp|svg|bmp|ico)(\?.*)?$/i.test(str.trim());
+      }
+
+      /**
+       * 生成图标HTML：如果是图片路径则用img标签，否则保持emoji
+       */
+      function getIconHTML(icon) {
+        if (isImagePath(icon)) {
+          return `<img src="${icon}" alt="icon" loading="lazy">`;
+        }
+        return icon || '📦';
+      }
+
       async function loadData() {
         try {
           const response = await fetch('data.block');
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const rawData = await response.json();
+          let text = await response.text();
+          // 移除单行注释 // 和多行注释 /* */
+          text = text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+          const rawData = JSON.parse(text);
           if (!Array.isArray(rawData)) throw new Error('数据格式错误');
           softwareData = rawData.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
           renderList(softwareData);
@@ -427,8 +463,10 @@
             `<span title="${platformLabel[p]||p}">${platformEmoji[p]||'💻'}</span>`
           ).join('');
 
+          const iconHTML = getIconHTML(sw.icon);
+
           item.innerHTML = `
-            <div class="item-icon">${sw.icon || '📦'}</div>
+            <div class="item-icon">${iconHTML}</div>
             <div class="item-info">
               <div class="item-name-row">
                 <span class="item-name">${sw.name || '未知软件'}</span>
@@ -446,12 +484,24 @@
           softwareListEl.appendChild(item);
         });
 
+        // 下载按钮：支持站内跳转、外部链接、演示提示
         softwareListEl.querySelectorAll('.item-download').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            showToast(`✅ 正在准备下载：${btn.dataset.name}（演示页面）`);
-            btn.style.transform = 'scale(0.92)';
-            setTimeout(() => { btn.style.transform = ''; }, 180);
+            const url = btn.dataset.url;
+            const name = btn.dataset.name;
+            
+            if (url && url !== '#') {
+              if (url.startsWith('http://') || url.startsWith('https://')) {
+                window.open(url, '_blank');
+              } else {
+                window.location.href = url;
+              }
+            } else {
+              showToast(`✅ 正在准备下载：${name}（演示页面）`);
+              btn.style.transform = 'scale(0.92)';
+              setTimeout(() => { btn.style.transform = ''; }, 180);
+            }
           });
         });
 

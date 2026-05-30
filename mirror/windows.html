@@ -14,13 +14,39 @@
         }
 
         :root {
+            /* 暗色主题（默认） */
             --bg-blur: 2px;
             --menu-blur: 12px;
             --module-blur: 16px;
-            --glass-white: rgba(255, 255, 255, 0.08);
-            --glass-white-hover: rgba(255, 255, 255, 0.15);
-            --glass-menu: rgba(255, 255, 255, 0.75);
-            --accent-blue: rgba(0, 123, 255, 0.6);
+            --glass-white: rgba(0, 0, 0, 0.2);
+            --glass-white-hover: rgba(0, 0, 0, 0.35);
+            --glass-menu: rgba(0, 0, 0, 0.65);
+            --accent-blue: rgba(0, 160, 255, 0.7);
+            --text-primary: #ffffff;
+            --topbar-text: #ffffff;
+            --menu-text: #ffffff;
+            --module-title-color: #ffffff;
+            --footer-color: rgba(255, 255, 255, 0.8);
+            --border-light: rgba(255, 255, 255, 0.12);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --download-text-color: #000000; /* 下载选项强制黑色 */
+            --theme-icon: '🌙';
+        }
+
+        [data-theme="light"] {
+            --glass-white: rgba(255, 255, 255, 0.25);
+            --glass-white-hover: rgba(255, 255, 255, 0.4);
+            --glass-menu: rgba(255, 255, 255, 0.8);
+            --accent-blue: rgba(0, 123, 255, 0.8);
+            --text-primary: #000000;
+            --topbar-text: rgba(0, 0, 0, 0.85);
+            --menu-text: rgba(0, 0, 0, 0.8);
+            --module-title-color: #000000;
+            --footer-color: rgba(0, 0, 0, 0.7);
+            --border-light: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --download-text-color: #000000;
+            --theme-icon: '☀️';
         }
 
         body, html {
@@ -29,8 +55,9 @@
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: url('../Pictures/background.webp') center/cover fixed no-repeat;
-            color: #ffffff;
+            color: var(--text-primary);
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         /* 背景遮罩 */
@@ -60,9 +87,12 @@
             display: flex;
             align-items: center;
             padding-left: 20px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+            padding-right: 20px;
+            box-shadow: 0 2px 20px var(--shadow-color);
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.4s ease;
+            position: relative; /* 为绝对定位标题提供锚点 */
         }
 
         .top-title {
@@ -70,10 +100,11 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.2em;
-            color: rgba(0, 0, 0, 0.85);
+            color: var(--topbar-text);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
         }
 
         .top-title:hover {
@@ -81,11 +112,110 @@
             transform: translateX(-50%) scale(1.02);
         }
 
+        /* 右侧按钮组 */
+        .right-actions {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 8px;
+            position: relative;
+        }
+
+        /* 翻译按钮 */
+        .translate-btn {
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 0;
+        }
+
+        .translate-btn img {
+            width: 22px;
+            height: 22px;
+            display: block;
+        }
+
+        .translate-btn:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            font-size: 1.3rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 翻译下拉菜单 */
+        .translate-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--glass-menu);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border-radius: 16px;
+            padding: 8px 0;
+            min-width: 150px;
+            box-shadow: 0 18px 40px var(--shadow-color);
+            border: 1px solid var(--border-light);
+            z-index: 1001;
+            opacity: 0;
+            transform: scale(0.9) translateY(-8px);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            transform-origin: top right;
+        }
+
+        .translate-dropdown.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .translate-dropdown a {
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .translate-dropdown a:hover {
+            background: var(--accent-blue);
+        }
+
         /* 菜单按钮 */
         .menu-button {
             background: transparent;
             border: none;
-            color: rgba(0, 0, 0, 0.85);
+            color: var(--topbar-text);
             font-size: 1.5em;
             cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -98,13 +228,14 @@
         }
 
         .menu-button:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(128, 128, 128, 0.1);
             transform: scale(1.1) rotate(90deg);
         }
 
         .menu-button.active {
             transform: rotate(180deg);
-            background: rgba(0, 123, 255, 0.1);
+            background: var(--accent-blue);
+            color: white;
         }
 
         /* 菜单 */
@@ -113,12 +244,12 @@
             top: 70px;
             left: 20px;
             width: 220px;
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--glass-menu);
             backdrop-filter: blur(var(--menu-blur)) saturate(200%);
             -webkit-backdrop-filter: blur(var(--menu-blur)) saturate(200%);
             border-radius: 16px;
             padding: 0;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px var(--shadow-color);
             z-index: 999;
             overflow: hidden;
             transform-origin: top left;
@@ -128,7 +259,7 @@
             transition: 
                 transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
                 opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--border-light);
         }
 
         .menu.open {
@@ -139,7 +270,7 @@
 
         .menu a {
             display: block;
-            color: rgba(0, 0, 0, 0.8);
+            color: var(--menu-text);
             text-decoration: none;
             padding: 12px 20px;
             margin: 4px 8px;
@@ -164,9 +295,9 @@
         .menu a:nth-child(6) { transition-delay: 0.3s; }
 
         .menu a:hover {
-            background: rgba(0, 123, 255, 0.1);
+            background: var(--accent-blue);
             transform: translateX(8px);
-            color: rgba(0, 123, 255, 0.9);
+            color: white;
         }
 
         /* 模块容器 */
@@ -197,9 +328,9 @@
             align-items: center;
             padding: 24px;
             box-shadow: 
-                0 4px 24px rgba(0, 0, 0, 0.2),
+                0 4px 24px var(--shadow-color),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-light);
             opacity: 0;
             transform: translateY(30px) scale(0.95);
             transition: 
@@ -216,7 +347,7 @@
         .module:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.3),
+                0 12px 40px var(--shadow-color),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
             background: var(--glass-white-hover);
         }
@@ -228,6 +359,7 @@
             text-align: center;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             letter-spacing: 0.5px;
+            color: var(--module-title-color);
         }
 
         /* 下载菜单 */
@@ -242,13 +374,13 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-light);
             transition: all 0.3s ease;
         }
 
         .download-item:hover {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .download-summary {
@@ -262,6 +394,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
             position: relative;
+            color: var(--download-text-color); /* 下载摘要文字黑色 */
         }
 
         .download-summary::after {
@@ -305,7 +438,7 @@
 
         .download-option {
             font-size: 0.85em;
-            color: #ffffff;  
+            color: var(--download-text-color); /* 选项文字黑色 */
             padding: 10px 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -323,7 +456,6 @@
             transform: translateY(0);
         }
 
-        /* 选项交错动画 */
         .download-item.open .download-option:nth-child(1) { transition-delay: 0.05s; }
         .download-item.open .download-option:nth-child(2) { transition-delay: 0.1s; }
         .download-item.open .download-option:nth-child(3) { transition-delay: 0.15s; }
@@ -334,10 +466,11 @@
         .download-item.open .download-option:nth-child(8) { transition-delay: 0.4s; }
 
         .download-option:hover {
-            background: rgba(0, 123, 255, 0.3);
+            background: var(--accent-blue);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-            border-color: rgba(0, 123, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 160, 255, 0.3);
+            border-color: rgba(0, 160, 255, 0.5);
+            color: white;
         }
 
         /* 底部栏 */
@@ -348,7 +481,7 @@
             transform: translateX(-50%);
             text-align: center;
             font-size: 0.85em;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--footer-color);
             width: 100%;
             z-index: 1;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -359,10 +492,9 @@
         }
 
         .footer a {
-            color: rgba(100, 180, 255, 0.9);
+            color: var(--accent-blue);
             text-decoration: none;
             transition: all 0.3s ease;
-            position: relative;
         }
 
         .footer a:hover {
@@ -370,6 +502,18 @@
             text-decoration: underline;
         }
 
+        /* 弹跳动画 */
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.04); }
+            60% { transform: scale(0.98); }
+            85% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .bounce-effect {
+            animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
         /* 响应式优化 */
         @media (max-width: 768px) {
@@ -383,47 +527,59 @@
                 left: 20px;
                 right: 20px;
             }
-        }
 
-        /* 最新需求：下载选项模块上的文字改为黑色，其他不变 */
-        .module .download-menu .download-summary,
-        .module .download-menu .download-option {
-            color: #000000;  /* 黑色文字，覆盖原有灰色/白色，透明度不变 */
-        }
+            .right-actions {
+                gap: 4px;
+            }
 
-        /* hover效果保留原有风格（不影响颜色） */
-        .module .download-menu .download-option:hover {
-            /* 颜色默认继承 */
+            .translate-btn, .theme-toggle {
+                width: 36px;
+                height: 36px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
-        <a href="mirror.html" class="top-title">枫叶镜像源</a>
+        <a href="mirror.html" class="top-title" data-translate-key="top-title">枫叶镜像源</a>
+        <div class="right-actions">
+            <button class="translate-btn" id="translateBtn" aria-label="翻译">
+                <img src="/Pictures/icon_translate.webp" alt="翻译">
+            </button>
+            <div class="translate-dropdown" id="translateDropdown">
+                <a href="#" data-lang="zh-CN">简体中文</a>
+                <a href="#" data-lang="zh-TW">繁體中文</a>
+                <a href="#" data-lang="en">English</a>
+                <a href="#" data-lang="ja">日本語</a>
+                <a href="#" data-lang="ko">한국어</a>
+            </div>
+            <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+        </div>
     </div>
 
     <div class="menu" id="menu">
-        <a href="windows.html">Windows源（维护中）</a>
-        <a href="linux.html">Linux源（不可用）</a>
-        <a href="macos.html">MacOS源（不可用）</a>
-        <a href="others.html">杂项（不可用）</a>
-        <a href="board.html">公告板</a>
+        <a href="windows.html" data-translate-key="menu-windows">Windows源（维护中）</a>
+        <a href="linux.html" data-translate-key="menu-linux">Linux源（不可用）</a>
+        <a href="macos.html" data-translate-key="menu-macos">MacOS源（不可用）</a>
+        <a href="others.html" data-translate-key="menu-others">杂项（不可用）</a>
+        <a href="board.html" data-translate-key="menu-board">公告板</a>
     </div>
 
     <div class="module-container">
+        <!-- 特殊版与尝鲜版 -->
         <div class="module">
-            <div class="module-title">特殊版与尝鲜版</div>
+            <div class="module-title" data-translate-key="module-special">特殊版与尝鲜版</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-heleguo-storage">前往和乐果存储下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/rrkfk">WindowsServer</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/JjJC5">Windows12</a>
                     </div>
                 </div>
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-heleguo-storage">前往和乐果存储下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/rrkfk">WindowsServer</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/JjJC5">Windows12</a>
@@ -432,11 +588,12 @@
             </div>
         </div>
 
+        <!-- Windows 11 -->
         <div class="module">
-            <div class="module-title">Windows 11</div>
+            <div class="module-title" data-translate-key="module-win11">Windows 11</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/p4gT0">25H2</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/G78hN">24H2</a>
@@ -450,11 +607,12 @@
             </div>
         </div>
 
+        <!-- Windows 10 -->
         <div class="module">
-            <div class="module-title">Windows 10（部分维护中）</div>
+            <div class="module-title" data-translate-key="module-win10">Windows 10（部分维护中）</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x86构架(✅)</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x86">x86构架(✅)</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/oRkuK">V22H2</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/58ZTj">V21H2</a>
@@ -470,7 +628,7 @@
                     </div>
                 </div>
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x64架构（部分🚧）</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x64">x64架构（部分🚧）</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/xjdfd">V22H2</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/QeNhL">V21H2</a>
@@ -491,11 +649,12 @@
             </div>
         </div>
 
+        <!-- Windows 8.1 -->
         <div class="module">
-            <div class="module-title">Windows 8.1</div>
+            <div class="module-title" data-translate-key="module-win81">Windows 8.1</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x86架构</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x86">x86架构</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/dKKs8">Pro</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/09Df7">Enterprise</a>
@@ -503,9 +662,9 @@
                     </div>
                 </div>
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x64架构</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x64">x64架构</div>
                     <div class="download-options">
-                        <a class="download-option" href="#">Pro（暂不可用）</a>
+                        <a class="download-option" href="#" data-translate-key="pro-unavailable">Pro（暂不可用）</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/Plpsw">Enterprise</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/ZAvIe">Update</a>
                     </div>
@@ -513,50 +672,53 @@
             </div>
         </div>
 
+        <!-- Windows 8 -->
         <div class="module">
-            <div class="module-title">Windows 8</div>
+            <div class="module-title" data-translate-key="module-win8">Windows 8</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">全部版本</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-all">全部版本</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/A9ycX">全部版本</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/A9ycX" data-translate-key="download-all">全部版本</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows 7 -->
         <div class="module">
-            <div class="module-title">Windows 7（临时运作中）</div>
+            <div class="module-title" data-translate-key="module-win7">Windows 7（临时运作中）</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x64下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x64-options">x64下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/LDpfz">临时通道</a>
-                        <a class="download-option" href="#">终极版</a>
-                        <a class="download-option" href="#">专业版</a>
-                        <a class="download-option" href="#">企业版</a>
-                        <a class="download-option" href="#">家庭版</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/LDpfz" data-translate-key="temp-channel">临时通道</a>
+                        <a class="download-option" href="#" data-translate-key="ultimate">终极版</a>
+                        <a class="download-option" href="#" data-translate-key="professional">专业版</a>
+                        <a class="download-option" href="#" data-translate-key="enterprise">企业版</a>
+                        <a class="download-option" href="#" data-translate-key="home">家庭版</a>
                     </div>
                 </div>
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">x86下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-x86-options">x86下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/nj3h8">临时通道</a>
-                        <a class="download-option" href="#">专业版</a>
-                        <a class="download-option" href="#">旗舰版</a>
-                        <a class="download-option" href="#">家庭版</a>
-                        <a class="download-option" href="#">企业版</a>
-                        <a class="download-option" href="#">基础版</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/nj3h8" data-translate-key="temp-channel">临时通道</a>
+                        <a class="download-option" href="#" data-translate-key="professional">专业版</a>
+                        <a class="download-option" href="#" data-translate-key="ultimate">旗舰版</a>
+                        <a class="download-option" href="#" data-translate-key="home">家庭版</a>
+                        <a class="download-option" href="#" data-translate-key="enterprise">企业版</a>
+                        <a class="download-option" href="#" data-translate-key="basic">基础版</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows Vista -->
         <div class="module">
-            <div class="module-title">Windows Vista</div>
+            <div class="module-title" data-translate-key="module-vista">Windows Vista</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/vNPHn">X86</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/69yCZ">X64</a>
@@ -565,23 +727,25 @@
             </div>
         </div>
 
+        <!-- Windows XP -->
         <div class="module">
-            <div class="module-title">Windows XP</div>
+            <div class="module-title" data-translate-key="module-xp">Windows XP</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/89Dtk">前往和乐果存储</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/89Dtk" data-translate-key="go-heleguo">前往和乐果存储</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows ME -->
         <div class="module">
-            <div class="module-title">Windows ME</div>
+            <div class="module-title" data-translate-key="module-me">Windows ME</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="go-heleguo">前往和乐果存储</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/wzDHv">Windows Me (111 - MSDN)</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/zvAIP">Windows Me (115 - OEM Full)</a>
@@ -590,80 +754,86 @@
             </div>
         </div>
 
+        <!-- Windows 2000 -->
         <div class="module">
-            <div class="module-title">Windows 2000</div>
+            <div class="module-title" data-translate-key="module-2000">Windows 2000</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/Vv9ik">前往和乐果存储</a>
-                        <a class="download-option" href="#">预留</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/Vv9ik" data-translate-key="go-heleguo">前往和乐果存储</a>
+                        <a class="download-option" href="#" data-translate-key="reserved">预留</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows 98 -->
         <div class="module">
-            <div class="module-title">Windows 98</div>
+            <div class="module-title" data-translate-key="module-98">Windows 98</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/895hk">前往和乐果存储</a>
-                        <a class="download-option" href="#">预留</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/895hk" data-translate-key="go-heleguo">前往和乐果存储</a>
+                        <a class="download-option" href="#" data-translate-key="reserved">预留</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows 95 -->
         <div class="module">
-            <div class="module-title">Windows 95</div>
+            <div class="module-title" data-translate-key="module-95">Windows 95</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">下载选项</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="download-options">下载选项</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/lxOuR">前往和乐果存储</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/lxOuR" data-translate-key="go-heleguo">前往和乐果存储</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Windows ARM -->
         <div class="module">
-            <div class="module-title">Windows ARM</div>
+            <div class="module-title" data-translate-key="module-arm">Windows ARM</div>
             <div class="download-menu">
                 <div class="download-item">
                     <div class="download-summary" onclick="toggleDownload(this)">Windows11</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/kQof0">前往和乐果存储</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/kQof0" data-translate-key="go-heleguo">前往和乐果存储</a>
                     </div>
                 </div>
                 <div class="download-item">
                     <div class="download-summary" onclick="toggleDownload(this)">Windows10</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/D9Jc5">前往和乐果存储</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/D9Jc5" data-translate-key="go-heleguo">前往和乐果存储</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- LTSC/LTSB -->
         <div class="module">
-            <div class="module-title">LTSC/LTSB官方优化</div>
+            <div class="module-title" data-translate-key="module-ltsc">LTSC/LTSB官方优化</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="go-heleguo">前往和乐果存储</div>
                     <div class="download-options">
-                        <a class="download-option" href="https://yun.heleguo.cn/s/qkQI1">Windows11（维护中）</a>
+                        <a class="download-option" href="https://yun.heleguo.cn/s/qkQI1" data-translate-key="win11-maintain">Windows11（维护中）</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/jokua">Windows10</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- 远古版 -->
         <div class="module">
-            <div class="module-title">远古版</div>
+            <div class="module-title" data-translate-key="module-ancient">远古版</div>
             <div class="download-menu">
                 <div class="download-item">
-                    <div class="download-summary" onclick="toggleDownload(this)">前往和乐果存储</div>
+                    <div class="download-summary" onclick="toggleDownload(this)" data-translate-key="go-heleguo">前往和乐果存储</div>
                     <div class="download-options">
                         <a class="download-option" href="https://yun.heleguo.cn/s/y68Iv">Windows3.1</a>
                         <a class="download-option" href="https://yun.heleguo.cn/s/exlHD">Windows3</a>
@@ -675,39 +845,242 @@
     </div>
 
     <div class="footer">
-        <p><a href="../readme.html">MapleSTUDIO 版权所有</a></p>
-        <p>此站点由 <a href="https://github.com" target="_blank">Github</a> 驱动</p>
-        <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank">萌ICP备20250732号</a></p>
+        <p><a href="../readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
+        <p>
+            <span data-translate-key="footer-powered-prefix">此站点由 </span>
+            <a href="https://github.com" target="_blank">Github</a>
+            <span data-translate-key="footer-powered-suffix"> 驱动</span>
+        </p>
+        <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" data-translate-key="footer-icp">萌ICP备20250732号</a></p>
     </div>
 
     <script>
-        // 动画状态管理
-        const AnimationState = {
-            menu: { isAnimating: false, startTime: 0, direction: 'closed' },
-            downloads: new Map()
-        };
-
-        // 缓动函数 - 非线性变速
-        const Easing = {
-            // 先快后慢 - 用于展开
-            easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
-            // 先慢后快再慢 - 用于关闭
-            easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
-            // 弹性缓出 - 用于反弹 (但下载模块不再使用)
-            easeOutElastic: t => {
-                const c4 = (2 * Math.PI) / 3;
-                return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+        // ========================
+        // 多语言本地化数据
+        // ========================
+        const translations = {
+            'zh-TW': {
+                'top-title': '楓葉鏡像源',
+                'menu-windows': 'Windows源（維護中）',
+                'menu-linux': 'Linux源（不可用）',
+                'menu-macos': 'MacOS源（不可用）',
+                'menu-others': '雜項（不可用）',
+                'menu-board': '公告板',
+                'module-special': '特殊版與嘗鮮版',
+                'module-win11': 'Windows 11',
+                'module-win10': 'Windows 10（部分維護中）',
+                'module-win81': 'Windows 8.1',
+                'module-win8': 'Windows 8',
+                'module-win7': 'Windows 7（臨時運作中）',
+                'module-vista': 'Windows Vista',
+                'module-xp': 'Windows XP',
+                'module-me': 'Windows ME',
+                'module-2000': 'Windows 2000',
+                'module-98': 'Windows 98',
+                'module-95': 'Windows 95',
+                'module-arm': 'Windows ARM',
+                'module-ltsc': 'LTSC/LTSB官方優化',
+                'module-ancient': '遠古版',
+                'download-heleguo-storage': '前往HeLeguo存儲下載選項',
+                'download-options': '下載選項',
+                'download-x86': 'x86架構(✅)',
+                'download-x64': 'x64架構（部分🚧）',
+                'download-all': '全部版本',
+                'download-x64-options': 'x64下載選項',
+                'download-x86-options': 'x86下載選項',
+                'go-heleguo': '前往HeLeguo存儲',
+                'reserved': '預留',
+                'temp-channel': '臨時通道',
+                'ultimate': '終極版',
+                'professional': '專業版',
+                'enterprise': '企業版',
+                'home': '家庭版',
+                'basic': '基礎版',
+                'pro-unavailable': 'Pro（暫不可用）',
+                'win11-maintain': 'Windows11（維護中）',
+                'footer-copyright': 'MapleSTUDIO 版權所有',
+                'footer-powered-prefix': '此站點由 ',
+                'footer-powered-suffix': ' 驅動',
+                'footer-icp': '萌ICP備20250732號'
             },
-            // 平滑减速 - 0.75倍速效果
-            smoothDecel: t => 1 - Math.pow(1 - t, 3) * 0.75,
-            // 物理阻力曲线 (不再使用)
-            resistance: t => {
-                if (t < 0.2) return t * 0.5;
-                return 0.1 + (t - 0.2) * 1.125;
+            'en': {
+                'top-title': 'Maple Leaf Mirror',
+                'menu-windows': 'Windows (Maintenance)',
+                'menu-linux': 'Linux (Unavailable)',
+                'menu-macos': 'MacOS (Unavailable)',
+                'menu-others': 'Others (Unavailable)',
+                'menu-board': 'Bulletin',
+                'module-special': 'Special & Insider',
+                'module-win11': 'Windows 11',
+                'module-win10': 'Windows 10 (Partial Maintenance)',
+                'module-win81': 'Windows 8.1',
+                'module-win8': 'Windows 8',
+                'module-win7': 'Windows 7 (Temporary)',
+                'module-vista': 'Windows Vista',
+                'module-xp': 'Windows XP',
+                'module-me': 'Windows ME',
+                'module-2000': 'Windows 2000',
+                'module-98': 'Windows 98',
+                'module-95': 'Windows 95',
+                'module-arm': 'Windows ARM',
+                'module-ltsc': 'LTSC/LTSB Official',
+                'module-ancient': 'Ancient Versions',
+                'download-heleguo-storage': 'Go to HeLeguo Storage',
+                'download-options': 'Download Options',
+                'download-x86': 'x86 Architecture (✅)',
+                'download-x64': 'x64 Architecture (Partial 🚧)',
+                'download-all': 'All Versions',
+                'download-x64-options': 'x64 Download Options',
+                'download-x86-options': 'x86 Download Options',
+                'go-heleguo': 'Go to HeLeguo Storage',
+                'reserved': 'Reserved',
+                'temp-channel': 'Temp Channel',
+                'ultimate': 'Ultimate',
+                'professional': 'Professional',
+                'enterprise': 'Enterprise',
+                'home': 'Home',
+                'basic': 'Basic',
+                'pro-unavailable': 'Pro (Unavailable)',
+                'win11-maintain': 'Windows 11 (Maintenance)',
+                'footer-copyright': 'MapleSTUDIO All Rights Reserved',
+                'footer-powered-prefix': 'Powered by ',
+                'footer-powered-suffix': '',
+                'footer-icp': 'MoeICP Bei 20250732'
+            },
+            'ja': {
+                'top-title': 'メープルミラー',
+                'menu-windows': 'Windows（メンテナンス中）',
+                'menu-linux': 'Linux（利用不可）',
+                'menu-macos': 'MacOS（利用不可）',
+                'menu-others': 'その他（利用不可）',
+                'menu-board': '掲示板',
+                'module-special': '特別版 & インサイダー',
+                'module-win11': 'Windows 11',
+                'module-win10': 'Windows 10（一部メンテナンス中）',
+                'module-win81': 'Windows 8.1',
+                'module-win8': 'Windows 8',
+                'module-win7': 'Windows 7（一時運用中）',
+                'module-vista': 'Windows Vista',
+                'module-xp': 'Windows XP',
+                'module-me': 'Windows ME',
+                'module-2000': 'Windows 2000',
+                'module-98': 'Windows 98',
+                'module-95': 'Windows 95',
+                'module-arm': 'Windows ARM',
+                'module-ltsc': 'LTSC/LTSB公式最適化',
+                'module-ancient': '古代版',
+                'download-heleguo-storage': 'HeLeguoストレージへ',
+                'download-options': 'ダウンロードオプション',
+                'download-x86': 'x86アーキテクチャ(✅)',
+                'download-x64': 'x64アーキテクチャ（一部🚧）',
+                'download-all': 'すべてのバージョン',
+                'download-x64-options': 'x64ダウンロードオプション',
+                'download-x86-options': 'x86ダウンロードオプション',
+                'go-heleguo': 'HeLeguoストレージへ',
+                'reserved': '予約',
+                'temp-channel': '臨時チャンネル',
+                'ultimate': 'Ultimate',
+                'professional': 'Professional',
+                'enterprise': 'Enterprise',
+                'home': 'Home',
+                'basic': 'Basic',
+                'pro-unavailable': 'Pro（利用不可）',
+                'win11-maintain': 'Windows11（メンテナンス中）',
+                'footer-copyright': 'MapleSTUDIO 著作権所有',
+                'footer-powered-prefix': 'このサイトは ',
+                'footer-powered-suffix': ' によって運営',
+                'footer-icp': '萌ICP備20250732号'
+            },
+            'ko': {
+                'top-title': '메이플 미러',
+                'menu-windows': 'Windows (유지보수 중)',
+                'menu-linux': 'Linux (사용 불가)',
+                'menu-macos': 'MacOS (사용 불가)',
+                'menu-others': '기타 (사용 불가)',
+                'menu-board': '게시판',
+                'module-special': '특별판 & 인사이더',
+                'module-win11': 'Windows 11',
+                'module-win10': 'Windows 10 (일부 유지보수 중)',
+                'module-win81': 'Windows 8.1',
+                'module-win8': 'Windows 8',
+                'module-win7': 'Windows 7 (임시 운영 중)',
+                'module-vista': 'Windows Vista',
+                'module-xp': 'Windows XP',
+                'module-me': 'Windows ME',
+                'module-2000': 'Windows 2000',
+                'module-98': 'Windows 98',
+                'module-95': 'Windows 95',
+                'module-arm': 'Windows ARM',
+                'module-ltsc': 'LTSC/LTSB 공식 최적화',
+                'module-ancient': '고대 버전',
+                'download-heleguo-storage': 'HeLeguo 스토리지로 이동',
+                'download-options': '다운로드 옵션',
+                'download-x86': 'x86 아키텍처(✅)',
+                'download-x64': 'x64 아키텍처 (일부 🚧)',
+                'download-all': '모든 버전',
+                'download-x64-options': 'x64 다운로드 옵션',
+                'download-x86-options': 'x86 다운로드 옵션',
+                'go-heleguo': 'HeLeguo 스토리지로 이동',
+                'reserved': '예약됨',
+                'temp-channel': '임시 채널',
+                'ultimate': 'Ultimate',
+                'professional': 'Professional',
+                'enterprise': 'Enterprise',
+                'home': 'Home',
+                'basic': 'Basic',
+                'pro-unavailable': 'Pro (사용 불가)',
+                'win11-maintain': 'Windows11 (유지보수 중)',
+                'footer-copyright': 'MapleSTUDIO 저작권 소유',
+                'footer-powered-prefix': '이 사이트는 ',
+                'footer-powered-suffix': ' 에 의해 구동',
+                'footer-icp': '萌ICP备20250732号'
             }
         };
 
-        // 菜单切换 - 简化：移除所有越界回弹，与按钮旋转完全同步
+        const defaultTexts = new Map();
+
+        function cacheDefaultTexts() {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (key && !defaultTexts.has(key)) {
+                    defaultTexts.set(key, el.textContent);
+                }
+            });
+        }
+
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (!key) return;
+
+                if (lang === 'zh-CN') {
+                    const defaultText = defaultTexts.get(key);
+                    if (defaultText !== undefined) {
+                        el.textContent = defaultText;
+                    }
+                } else {
+                    const langPack = translations[lang];
+                    if (langPack && langPack[key] !== undefined) {
+                        el.textContent = langPack[key];
+                    }
+                }
+            });
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // ========================
+        // 原有功能：菜单、下载动画等
+        // ========================
+        const AnimationState = {
+            menu: { isAnimating: false },
+            downloads: new Map()
+        };
+
+        const Easing = {
+            easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
+            easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+        };
+
         function toggleMenu() {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
@@ -722,33 +1095,27 @@
             }
         }
 
-        // 下载选项切换 - 完全独立的动画系统，与三角旋转同步
         function toggleDownload(element) {
             const item = element.parentElement;
             const options = item.querySelector('.download-options');
             const isOpen = item.classList.contains('open');
             const itemId = item.dataset.id || (item.dataset.id = Math.random().toString(36).substr(2, 9));
             
-            // 获取或创建动画状态
             let state = AnimationState.downloads.get(itemId);
             if (!state) {
                 state = { isAnimating: false, currentHeight: 0, targetHeight: 0 };
                 AnimationState.downloads.set(itemId, state);
             }
             
-            // 打断当前动画
             if (state.isAnimating) {
                 state.isAnimating = false;
                 const currentHeight = options.scrollHeight;
                 options.style.maxHeight = currentHeight + 'px';
                 state.currentHeight = currentHeight;
-                
-                // 强制重绘
                 void options.offsetHeight;
             }
             
             if (isOpen) {
-                // 关闭动画 - 0.75倍速优雅关闭，立即移除open类使三角开始旋转
                 item.classList.remove('open');
                 const startHeight = options.scrollHeight;
                 const duration = 600 * 0.75;
@@ -759,15 +1126,12 @@
                 
                 function animateClose(currentTime) {
                     if (!state.isAnimating) return;
-                    
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
                     const eased = Easing.easeInOutCubic(progress);
-                    
                     const currentHeight = startHeight * (1 - eased);
                     options.style.maxHeight = Math.max(0, currentHeight) + 'px';
                     options.style.opacity = 1 - eased;
-                    
                     if (progress < 1) {
                         requestAnimationFrame(animateClose);
                     } else {
@@ -775,14 +1139,9 @@
                         options.style.maxHeight = '0';
                     }
                 }
-                
                 requestAnimationFrame(animateClose);
-                
             } else {
-                // 打开动画 - 立即添加open类使三角旋转，同时开始高度动画
                 item.classList.add('open');
-                
-                // 计算实际高度
                 options.style.maxHeight = 'none';
                 const targetHeight = options.scrollHeight;
                 options.style.maxHeight = '0';
@@ -790,21 +1149,17 @@
                 
                 const duration = 500 * 0.75;
                 const startTime = performance.now();
-                
                 state.isAnimating = true;
                 state.targetHeight = targetHeight;
                 
                 function animateOpen(currentTime) {
                     if (!state.isAnimating) return;
-                    
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
                     const eased = Easing.easeOutExpo(progress);
-                    
                     const currentHeight = targetHeight * eased;
                     options.style.maxHeight = currentHeight + 'px';
-                    options.style.opacity = Math.min(progress * 1.5, 1); // 加速淡入
-                    
+                    options.style.opacity = Math.min(progress * 1.5, 1);
                     if (progress < 1) {
                         requestAnimationFrame(animateOpen);
                     } else {
@@ -812,12 +1167,10 @@
                         options.style.maxHeight = targetHeight + 'px';
                     }
                 }
-                
                 requestAnimationFrame(animateOpen);
             }
         }
 
-        // 模块入场动画 - 交错延迟
         function initModules() {
             const modules = document.querySelectorAll('.module');
             modules.forEach((module, index) => {
@@ -827,18 +1180,67 @@
             });
         }
 
-        // 点击外部关闭菜单
+        // ========================
+        // 翻译下拉和主题切换
+        // ========================
+        const translateBtn = document.getElementById('translateBtn');
+        const translateDropdown = document.getElementById('translateDropdown');
+
+        translateBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            translateDropdown.classList.toggle('open');
+            this.classList.add('bounce-effect');
+            setTimeout(() => this.classList.remove('bounce-effect'), 500);
+        });
+
+        translateDropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                applyLanguage(lang);
+                translateDropdown.classList.remove('open');
+            });
+        });
+
+        // 主题切换
+        const themeBtn = document.getElementById('themeBtn');
+        const html = document.documentElement;
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        // 点击外部关闭
         document.addEventListener('click', (e) => {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
-            
+            const dropdown = document.getElementById('translateDropdown');
+            const transBtn = document.getElementById('translateBtn');
+
             if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
                 toggleMenu();
             }
+            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
         });
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', initModules);
+        document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
+        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
 
         // 窗口大小变化处理
         let resizeTimeout;
@@ -849,6 +1251,16 @@
                     options.style.maxHeight = options.scrollHeight + 'px';
                 });
             }, 250);
+        });
+
+        // 初始化
+        window.addEventListener('load', () => {
+            cacheDefaultTexts();
+            initTheme();
+            initModules();
+            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
+            applyLanguage(savedLang);
+            document.getElementById('menu').classList.remove('open');
         });
     </script>
 </body>

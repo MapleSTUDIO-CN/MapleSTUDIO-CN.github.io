@@ -1,38 +1,13 @@
 [
   {
     "id": 1,
-    "name": "Google Chrome",
-    "icon": "🌐",
-    "category": "browser",
+    "name": "Adobe合集",
+    "icon": "/pages/Adobe(all)/adobe.icon",
+    "category": "办公",
     "version": "v125.0.6422.141",
-    "desc": "全球最流行的网页浏览器，快速、安全、支持丰富的扩展插件生态。",
-    "size": "98 MB",
-    "platform": ["windows", "mac", "linux"],
-    "badges": ["hot"],
-    "downloadUrl": "#download-chrome"
-  },
-  {
-    "id": 2,
-    "name": "Mozilla Firefox",
-    "icon": "🦊",
-    "category": "browser",
-    "version": "v126.0.1",
-    "desc": "开源浏览器，注重隐私保护，拥有强大的开发者工具。",
-    "size": "55 MB",
-    "platform": ["windows", "mac", "linux"],
-    "badges": ["rec"],
-    "downloadUrl": "#download-firefox"
-  },
-  {
-    "id": 3,
-    "name": "Microsoft Edge",
-    "icon": "🌊",
-    "category": "browser",
-    "version": "v125.0.2535.67",
-    "desc": "基于Chromium的新一代Edge浏览器，集成AI助手Copilot。",
-    "size": "105 MB",
-    "platform": ["windows", "mac"],
-    "badges": [],
-    "downloadUrl": "#download-edge"
+    "desc": "最强办公软件集合页面",
+    "size": "若干GiB",
+    "platform": ["windows"],
+    "downloadUrl": "/pages/Adobe(all)/adobe.html"
   }
 ]

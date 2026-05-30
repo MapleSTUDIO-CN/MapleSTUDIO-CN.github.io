@@ -4,230 +4,651 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--如果需要发布此网页的衍生版，请勿使用以上链接，详情见"readme.html"的限制-->
-<!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
-    <title>请我喝杯冰阔落，显示故障多刷新几遍</title>
+    <!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
+    <title data-translate-key="page-title">请我喝杯冰阔落，显示故障多刷新几遍</title>
+    <link rel="icon" href="../Pictures/logo.jpg">
     <style>
-        /* Hub1 风格背景 */
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 黑夜变量 */
+            --bg-color: #0a0c10;
+            --glass-white: rgba(0, 0, 0, 0.2);
+            --glass-white-hover: rgba(0, 0, 0, 0.35);
+            --glass-menu: rgba(30, 30, 40, 0.7);
+            --accent-blue: rgba(0, 160, 255, 0.6);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --text-primary: #f0f4fa;
+            --text-secondary: rgba(180, 230, 255, 0.95);
+            --topbar-bg: rgba(255, 255, 255, 0.75);
+            --topbar-text: rgba(0, 0, 0, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --gradient-start: #1a1f2a;
+            --gradient-end: #0a0c10;
+            --footer-bg: rgba(10, 15, 20, 0.3);
+        }
+
+        /* 白天变量 */
+        [data-theme="light"] {
+            --bg-color: #f0f4f8;
+            --glass-white: rgba(255, 255, 255, 0.6);
+            --glass-white-hover: rgba(255, 255, 255, 0.8);
+            --glass-menu: rgba(240, 242, 250, 0.9);
+            --accent-blue: rgba(0, 120, 255, 0.8);
+            --border-light: rgba(0, 0, 0, 0.08);
+            --text-primary: #1a1d29;
+            --text-secondary: rgba(30, 35, 50, 0.9);
+            --topbar-bg: rgba(255, 255, 255, 0.9);
+            --topbar-text: rgba(30, 35, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --gradient-start: #e8ecf5;
+            --gradient-end: #f5f7fa;
+            --footer-bg: rgba(255, 255, 255, 0.5);
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0d1117; /* 深色背景 */
-            color: #ffffff; /* 文字颜色 */
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 30% 40%, var(--gradient-start) 0%, var(--gradient-end) 70%);
+            background-attachment: fixed;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* Hub2 顶部栏样式 */
+        /* 顶部栏 */
         .top-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            height: 64px;
+            background: var(--topbar-bg);
+            backdrop-filter: blur(16px) saturate(200%);
+            -webkit-backdrop-filter: blur(16px) saturate(200%);
             display: flex;
             align-items: center;
-            padding-left: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding-left: 24px;
+            padding-right: 24px;
+            box-shadow: 0 4px 20px var(--shadow-color);
             z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.4s ease;
         }
 
-        /* 顶部标题 */
         .top-title {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.2em;
-            color: rgba(0, 0, 0, 0.75);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--topbar-text);
             text-decoration: none;
+            letter-spacing: 0.3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
         }
 
         .top-title:hover {
             text-decoration: underline;
+            transform: translateX(-50%) scale(1.02);
+            opacity: 1;
+        }
+
+        /* 右侧按钮组（翻译 + 主题） */
+        .right-actions {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 8px;
+            position: relative;
+        }
+
+        /* 翻译按钮 */
+        .translate-btn {
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 0;
+        }
+
+        .translate-btn img {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        .translate-btn:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--topbar-text);
+            font-size: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(128, 128, 128, 0.15);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 翻译下拉菜单 */
+        .translate-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--glass-menu);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border-radius: 16px;
+            padding: 8px 0;
+            min-width: 150px;
+            box-shadow: 0 18px 40px var(--shadow-color);
+            border: 1px solid var(--border-light);
+            z-index: 1001;
+            opacity: 0;
+            transform: scale(0.9) translateY(-8px);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            transform-origin: top right;
+        }
+
+        .translate-dropdown.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .translate-dropdown a {
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .translate-dropdown a:hover {
+            background: var(--accent-blue);
         }
 
         /* 菜单按钮 */
         .menu-button {
             background: transparent;
             border: none;
-            color: rgba(0, 0, 0, 0.75); /* 黑色75%透明 */
-            font-size: 1.5em;
+            color: var(--topbar-text);
+            font-size: 1.9rem;
+            line-height: 1;
             cursor: pointer;
-            transition: transform 0.3s;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background 0.2s;
         }
 
         .menu-button:hover {
-            transform: scale(1.1);
+            background: rgba(128, 128, 128, 0.1);
+            transform: scale(1.1) rotate(90deg);
         }
 
-        /* Hub2 抽拉式菜单 */
+        .menu-button.active {
+            transform: rotate(180deg);
+            background: rgba(0, 160, 255, 0.1);
+        }
+
+        /* 侧边菜单（毛玻璃弹出式） */
         .menu {
             position: fixed;
-            top: 70px;
-            left: 20px;
-            max-height: 0;
-            overflow: hidden;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 0 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            top: 80px;
+            left: 24px;
+            width: 240px;
+            background: var(--glass-menu);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border-radius: 24px;
+            padding: 8px 0;
+            box-shadow: 0 18px 40px var(--shadow-color);
             z-index: 999;
-            transition: 
-                max-height 0.3s ease-out,
-                padding 0.3s ease-out;
+            border: 1px solid var(--border-light);
+            transform-origin: top left;
+            transform: scale(0.7) translateY(-30px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        background-color 0.4s ease;
         }
 
         .menu.open {
-            max-height: 200px; /* 根据实际内容高度调整 */
-            padding: 10px;
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: all;
         }
 
         .menu a {
-            color: white;
+            display: block;
+            color: var(--text-primary);
             text-decoration: none;
-            padding: 10px 20px;
-            margin: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            transition: background 0.3s, box-shadow 0.3s;
+            padding: 14px 24px;
+            margin: 6px 12px;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 1rem;
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
-            transition: opacity 0.2s ease-in;
+            transform: translateX(-16px);
         }
 
         .menu.open a {
             opacity: 1;
-            transition-delay: 0.15s;
+            transform: translateX(0);
         }
 
+        /* 菜单项延迟 - 现在有6项 */
+        .menu a:nth-child(1) { transition-delay: 0.05s; }
+        .menu a:nth-child(2) { transition-delay: 0.1s; }
+        .menu a:nth-child(3) { transition-delay: 0.15s; }
+        .menu a:nth-child(4) { transition-delay: 0.2s; }
+        .menu a:nth-child(5) { transition-delay: 0.25s; }
+        .menu a:nth-child(6) { transition-delay: 0.3s; }
+
         .menu a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            background: var(--accent-blue);
+            transform: translateX(6px);
+            color: var(--text-primary);
+            box-shadow: 0 0 12px var(--accent-blue);
         }
 
         /* 图片容器 */
         .image-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
             width: 70%;
             max-width: 800px;
-            height: auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            margin: 100px auto 0;
+            background: var(--glass-white);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px var(--shadow-color),
+                        inset 0 1px 1px rgba(128, 128, 128, 0.1);
+            border: 1px solid var(--border-light);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         .image-container:hover {
-            transform: translate(-50%, -50%) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            background: var(--glass-white-hover);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 40px var(--shadow-color),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .image-container img {
             width: 100%;
             height: auto;
-            border-radius: 10px;
+            border-radius: 12px;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
 
         .image-container:hover img {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
-        /* Hub2 底部栏样式 */
+        /* 底部信息 */
         .footer {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.7);
+            bottom: 25px;
+            left: 0;
             width: 100%;
-            z-index: 1; /* 确保底部栏在模块之上 */
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            opacity: 0.7;
+            text-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 500;
+            background: var(--footer-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 12px 0 8px;
+            border-top: 1px solid var(--border-light);
+            transition: all 0.4s ease;
+        }
+
+        .footer p {
+            margin: 4px 0;
         }
 
         .footer a {
-            color: rgba(0, 123, 255, 0.7);
+            color: var(--accent-blue);
             text-decoration: none;
+            transition: color 0.2s;
         }
 
         .footer a:hover {
+            opacity: 0.8;
             text-decoration: underline;
+        }
+
+        /* 弹跳动画 */
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.04); }
+            60% { transform: scale(0.98); }
+            85% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .bounce-effect {
+            animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 响应式 */
+        @media (max-width: 700px) {
+            .image-container {
+                width: 90%;
+                margin-top: 80px;
+            }
+            .menu {
+                width: calc(100% - 48px);
+                left: 24px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 顶部栏 -->
     <div class="top-bar">
-        <button class="menu-button" onclick="toggleMenu()">☰</button>
-        <a href="../index.html" class="top-title">枫叶工作室</a>
+        <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
+        <a href="../index.html" class="top-title" data-translate-key="top-title">返回总览</a>
+        <div class="right-actions">
+            <button class="translate-btn" id="translateBtn" aria-label="翻译">
+                <img src="/Pictures/icon_translate.webp" alt="翻译">
+            </button>
+            <div class="translate-dropdown" id="translateDropdown">
+                <a href="#" data-lang="zh-CN">简体中文</a>
+                <a href="#" data-lang="zh-TW">繁體中文</a>
+                <a href="#" data-lang="en">English</a>
+                <a href="#" data-lang="ja">日本語</a>
+                <a href="#" data-lang="ko">한국어</a>
+            </div>
+            <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+        </div>
     </div>
 
-    <!-- 抽拉式菜单 -->
+    <!-- 侧边菜单（完整6项） -->
     <div class="menu" id="menu">
-        <a href="../mirror/mirror.html">镜像站(🚧)</a>
-        <a href="../mcsever/main.html">MC服务器(🚫)</a>
-        <a href="../mcapks.html">MC版本库(🚫)</a>
-        <a href="../tools/main.html">小工具(🚫)</a>
+        <a href="../mirror/mirror.html" data-translate-key="menu-mirror">镜像站(🚧)</a>
+        <a href="../mcsever/main.html" data-translate-key="menu-mcserver">MC服务器(🚫)</a>
+        <a href="../mcapks.html" data-translate-key="menu-mcapks">MC版本库(🚫)</a>
+        <a href="../software/main.html" data-translate-key="menu-software">软件库(🚫)</a>
+        <a href="../tools/main.html" data-translate-key="menu-tools">小工具(🚫)</a>
+        <a href="../main/bulletin_board.html" data-translate-key="menu-bulletin">公告栏</a>
     </div>
 
     <!-- 图片展示区域 -->
     <div class="image-container">
-        <img src="../Pictures/juanzeng.jpg" alt="展示图片">
+        <img src="../Pictures/juanzeng.jpg" alt="捐赠二维码">
     </div>
 
-    <!-- 底部栏 -->
+    <!-- 底部信息 -->
     <div class="footer">
-        <p><a href="../readme.html">MapleSTUDIO 版权所有</a></p>
-        <p>此站点由 <a href="https://github.com" target="_blank">Github</a> 驱动</p>
+        <p><a href="../readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
+        <p>
+            <span data-translate-key="footer-powered-prefix">此站点由 </span>
+            <a href="https://github.com" target="_blank">Github</a>
+            <span data-translate-key="footer-powered-suffix"> 驱动</span>
+        </p>
     </div>
-<!--如果需要发布此网页的衍生版，请勿使用以上链接，详情见"readme.html"的限制-->
-<!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
+
+    <!--如果需要发布此网页的衍生版，请勿使用以上链接，详情见"readme.html"的限制-->
+    <!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
 
     <script>
-        // 抽拉式菜单逻辑
+        // ========================
+        // 多语言本地化数据
+        // ========================
+        const translations = {
+            'zh-TW': {
+                'page-title': '請我喝杯冰闊落，顯示故障多刷新幾遍',
+                'top-title': '返回總覽',
+                'menu-mirror': '鏡像站(🚧)',
+                'menu-mcserver': 'MC伺服器(🚫)',
+                'menu-mcapks': 'MC版本庫(🚫)',
+                'menu-software': '軟體庫(🚫)',
+                'menu-tools': '小工具(🚫)',
+                'menu-bulletin': '公告欄',
+                'footer-copyright': 'MapleSTUDIO 版權所有',
+                'footer-powered-prefix': '此站點由 ',
+                'footer-powered-suffix': ' 驅動'
+            },
+            'en': {
+                'page-title': 'Buy me a Coke, refresh if display fails',
+                'top-title': 'Back to Overview',
+                'menu-mirror': 'Mirror (🚧)',
+                'menu-mcserver': 'MC Server (🚫)',
+                'menu-mcapks': 'MC Versions (🚫)',
+                'menu-software': 'Software (🚫)',
+                'menu-tools': 'Tools (🚫)',
+                'menu-bulletin': 'Bulletin',
+                'footer-copyright': 'MapleSTUDIO All Rights Reserved',
+                'footer-powered-prefix': 'Powered by ',
+                'footer-powered-suffix': ''
+            },
+            'ja': {
+                'page-title': 'アイスコーラをおごって、表示不具合は何度か更新してね',
+                'top-title': '概要に戻る',
+                'menu-mirror': 'ミラーサイト(🚧)',
+                'menu-mcserver': 'MCサーバー(🚫)',
+                'menu-mcapks': 'MCバージョンライブラリ(🚫)',
+                'menu-software': 'ソフトウェア(🚫)',
+                'menu-tools': 'ツール(🚫)',
+                'menu-bulletin': '掲示板',
+                'footer-copyright': 'MapleSTUDIO 著作権所有',
+                'footer-powered-prefix': 'このサイトは ',
+                'footer-powered-suffix': ' によって運営されています'
+            },
+            'ko': {
+                'page-title': '얼음 콜라 한 잔 사주세요, 표시 오류는 여러 번 새로고침',
+                'top-title': '개요로 돌아가기',
+                'menu-mirror': '미러 사이트(🚧)',
+                'menu-mcserver': 'MC 서버(🚫)',
+                'menu-mcapks': 'MC 버전 라이브러리(🚫)',
+                'menu-software': '소프트웨어(🚫)',
+                'menu-tools': '도구(🚫)',
+                'menu-bulletin': '게시판',
+                'footer-copyright': 'MapleSTUDIO 저작권 소유',
+                'footer-powered-prefix': '이 사이트는 ',
+                'footer-powered-suffix': ' 에 의해 구동됩니다'
+            }
+        };
+
+        const defaultTexts = new Map();
+
+        function cacheDefaultTexts() {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (key && !defaultTexts.has(key)) {
+                    defaultTexts.set(key, el.textContent);
+                }
+            });
+        }
+
+        function applyLanguage(lang) {
+            // 更新页面标题
+            const titleEl = document.querySelector('title[data-translate-key]');
+            if (titleEl) {
+                const key = titleEl.getAttribute('data-translate-key');
+                if (lang === 'zh-CN') {
+                    titleEl.textContent = defaultTexts.get(key) || '请我喝杯冰阔落，显示故障多刷新几遍';
+                } else {
+                    const langPack = translations[lang];
+                    if (langPack && langPack[key]) {
+                        titleEl.textContent = langPack[key];
+                    }
+                }
+            }
+
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                if (el.tagName === 'TITLE') return;
+                const key = el.getAttribute('data-translate-key');
+                if (!key) return;
+
+                if (lang === 'zh-CN') {
+                    const defaultText = defaultTexts.get(key);
+                    if (defaultText !== undefined) {
+                        el.textContent = defaultText;
+                    }
+                } else {
+                    const langPack = translations[lang];
+                    if (langPack && langPack[key] !== undefined) {
+                        el.textContent = langPack[key];
+                    }
+                }
+            });
+
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // 菜单控制
         function toggleMenu() {
             const menu = document.getElementById('menu');
-            menu.classList.toggle('open');
+            const btn = document.getElementById('menuBtn');
+            const isOpen = menu.classList.contains('open');
             
-            // 自动高度计算
-            if (menu.classList.contains('open')) {
-                menu.style.display = 'flex';
-                const fullHeight = menu.scrollHeight + 'px';
-                menu.style.maxHeight = fullHeight;
+            if (isOpen) {
+                menu.classList.remove('open');
+                btn.classList.remove('active');
             } else {
-                menu.style.maxHeight = '0';
-                setTimeout(() => {
-                    menu.style.display = 'none';
-                }, 300);
+                menu.classList.add('open');
+                btn.classList.add('active');
             }
         }
 
-        // 图片加载动画
+        // 翻译下拉
+        const translateBtn = document.getElementById('translateBtn');
+        const translateDropdown = document.getElementById('translateDropdown');
+
+        translateBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            translateDropdown.classList.toggle('open');
+            this.classList.add('bounce-effect');
+            setTimeout(() => this.classList.remove('bounce-effect'), 500);
+        });
+
+        translateDropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                applyLanguage(lang);
+                translateDropdown.classList.remove('open');
+            });
+        });
+
+        // 点击外部关闭
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('menu');
+            const btn = document.getElementById('menuBtn');
+            const dropdown = document.getElementById('translateDropdown');
+            const transBtn = document.getElementById('translateBtn');
+
+            if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
+                toggleMenu();
+            }
+            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
+        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
+
+        // 主题切换
+        const themeBtn = document.getElementById('themeBtn');
+        const html = document.documentElement;
+        
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        // 图片入场动画
         document.addEventListener('DOMContentLoaded', () => {
             const imageContainer = document.querySelector('.image-container');
             imageContainer.style.opacity = '0';
-            imageContainer.style.transform = 'translate(-50%, -40%)';
+            imageContainer.style.transform = 'translateY(20px)';
             
             setTimeout(() => {
-                imageContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                imageContainer.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 imageContainer.style.opacity = '1';
-                imageContainer.style.transform = 'translate(-50%, -50%)';
-            }, 100);
+                imageContainer.style.transform = 'translateY(0)';
+            }, 200);
+        });
+
+        // 初始化
+        window.addEventListener('load', () => {
+            cacheDefaultTexts();
+            initTheme();
+            document.getElementById('menu').classList.remove('open');
+            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
+            applyLanguage(savedLang);
         });
     </script>
 </body>
 </html>
-//你好呀，你竟然看到了这里ψ(｀∇´)ψ

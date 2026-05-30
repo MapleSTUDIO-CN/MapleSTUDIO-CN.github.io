@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Adobe合集",
-    "icon": "/pages/Adobe(all)/adobe.icon",
+    "icon": "/pages/Adobe(all)/adobe_icon.png",
     "category": "办公",
     "version": "v125.0.6422.141",
     "desc": "最强办公软件集合页面",

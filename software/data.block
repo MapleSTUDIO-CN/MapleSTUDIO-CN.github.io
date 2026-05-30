@@ -1,0 +1,48 @@
+ // id : 数字，唯一标识
+  //name : 软件名称
+   // icon : emoji 图标字符
+    // category : 分类字符串（如 browser、dev、design、system、media、office 等）
+     // version : 版本号
+      // desc : 简要描述
+       // size : 文件大小字符串
+        // platform : 数组，可包含 "windows", "mac", "linux", "web" 等
+         // badges : 数组，可选值 "hot", "new", "rec"（热门、新版、推荐）
+          // downloadUrl : 下载链接（当前仅作演示用）
+[
+  {
+    "id": 1,
+    "name": "Google Chrome",
+    "icon": "🌐",
+    "category": "browser",
+    "version": "v125.0.6422.141",
+    "desc": "全球最流行的网页浏览器，快速、安全、支持丰富的扩展插件生态。",
+    "size": "98 MB",
+    "platform": ["windows", "mac", "linux"],
+    "badges": ["hot"],
+    "downloadUrl": "#download-chrome"
+  },
+  {
+    "id": 2,
+    "name": "Mozilla Firefox",
+    "icon": "🦊",
+    "category": "browser",
+    "version": "v126.0.1",
+    "desc": "开源浏览器，注重隐私保护，拥有强大的开发者工具。",
+    "size": "55 MB",
+    "platform": ["windows", "mac", "linux"],
+    "badges": ["rec"],
+    "downloadUrl": "#download-firefox"
+  },
+  {
+    "id": 3,
+    "name": "Microsoft Edge",
+    "icon": "🌊",
+    "category": "browser",
+    "version": "v125.0.2535.67",
+    "desc": "基于Chromium的新一代Edge浏览器，集成AI助手Copilot。",
+    "size": "105 MB",
+    "platform": ["windows", "mac"],
+    "badges": [],
+    "downloadUrl": "#download-edge"
+  }
+]

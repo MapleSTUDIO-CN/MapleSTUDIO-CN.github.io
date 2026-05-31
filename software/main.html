@@ -34,8 +34,6 @@
       --text-tertiary: rgba(170, 184, 210, 0.7);
       --shadow-color: rgba(0, 0, 0, 0.4);
       --shadow-card: rgba(0, 0, 0, 0.3);
-      --gradient-start: #171d2a;
-      --gradient-end: #0a0c12;
       --platform-bg: rgba(255, 255, 255, 0.06);
       --badge-hot: rgba(255, 80, 50, 0.9);
       --badge-new: rgba(0, 200, 120, 0.9);
@@ -65,8 +63,6 @@
       --text-tertiary: rgba(50, 58, 78, 0.7);
       --shadow-color: rgba(0, 0, 0, 0.08);
       --shadow-card: rgba(0, 0, 0, 0.06);
-      --gradient-start: #e9edf5;
-      --gradient-end: #f4f7fc;
       --platform-bg: rgba(0, 0, 0, 0.03);
       --badge-hot: rgba(210, 50, 20, 0.85);
       --badge-new: rgba(0, 160, 90, 0.85);
@@ -96,7 +92,7 @@
       padding-bottom: 110px;
     }
 
-    /* 背景图 - 直接显示不遮挡 */
+    /* 背景图 - 默认移动端 */
     body::before {
       content: '';
       position: fixed;
@@ -104,13 +100,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('../Pictures/background_software1.webp');
+      background-image: url('../Pictures/background_software1_mobie.webp');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       opacity: 1;
       z-index: -1;
       pointer-events: none;
+      transition: background-image 0.5s ease;
+    }
+
+    /* 平板及以上设备使用PC背景 */
+    @media (min-width: 768px) {
+      body::before {
+        background-image: url('../Pictures/background_software1_PC.webp');
+      }
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }

@@ -1,2 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe 软件集合</title>
+    <style>
+        :root {
+            --bg: #f0f1f3;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b6b7b;
+            --text-tertiary: #8e8e9a;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06), 0 16px 40px rgba(0, 0, 0, 0.08);
+            --radius-xs: 8px;
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-11111111111111111111111111
+            /* Adobe 软件主题色 */
+            --ae-color: #7B2FBE;
+            --ae-color-light: #f5edfc;
+            --ae-gradient: linear-gradient(135deg, #6a1fb8 0%, #9b4de0 50%, #b36bf0 100%);
+            --an-color: #E85D2C;
+            --an-color-light: #fff3ee;
+            --an-gradient: linear-gradient(135deg, #d1481a 0%, #f06d3e 50%, #f5845c 100%);
+            --ch-color: #E09200;
+            --ch-color-light: #fffaf0;
+            --ch-gradient: linear-gradient(135deg, #c47e00 0%, #e8a520 50%, #f0b840 100%);
+            --pr-color: #8A5CF5;
+            --pr-color-light: #f7f4ff;
+            --pr-gradient: linear-gradient(135deg, #7048e0 0%, #9b72f8 50%, #b390ff 100%);
+            --ps-color: #2680EB;
+            --ps-color-light: #f0f7ff;
+            --ps-gradient: linear-gradient(135deg, #1a6dd4 0%, #3d94f0 50%, #5aa8f8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            padding-bottom: env(safe-area-inset-bottom, 40px);
+        }
+
+        /* ========== 顶部导航栏 - 毛玻璃效果 ========== */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .nav-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+        }
+
+        .back-btn {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            flex-shrink: 0;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            transform: scale(1.04);
+        }
+        .back-btn:active {
+            background: rgba(0, 0, 0, 0.12);
+            transform: scale(0.95);
+            transition: 0.1s ease;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-title {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-badge {
+            position: relative;
+            z-index: 1;
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+            letter-spacing: 0.02em;
+        }
+
+        /* ========== 主容器 ========== */
+        .main-container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 16px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ========== 软件区域大卡片 ========== */
+        .software-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .software-section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-1px);
+        }
+
+        /* 软件头部 */
+        .software-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 14px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s ease;
+            position: relative;
+        }
+
+        .software-header:active {
+            background: rgba(0, 0, 0, 0.015);
+        }
+
+        /* 软件图标 */
+        .software-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 700;
+            font-size: 17px;
+            color: #fff;
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+        }
+
+        .software-icon.ae {
+            background: var(--ae-gradient);
+            box-shadow: 0 4px 14px rgba(123, 47, 190, 0.35);
+        }
+        .software-icon.an {
+            background: var(--an-gradient);
+            box-shadow: 0 4px 14px rgba(232, 93, 44, 0.35);
+        }
+        .software-icon.ch {
+            background: var(--ch-gradient);
+            box-shadow: 0 4px 14px rgba(224, 146, 0, 0.35);
+        }
+        .software-icon.pr {
+            background: var(--pr-gradient);
+            box-shadow: 0 4px 14px rgba(138, 92, 245, 0.35);
+        }
+        .software-icon.ps {
+            background: var(--ps-gradient);
+            box-shadow: 0 4px 14px rgba(38, 128, 235, 0.35);
+        }
+
+        .software-icon::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -30%;
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+            pointer-events: none;
+        }
+
+        .software-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .software-name {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        .software-full-name {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 折叠箭头 */
+        .collapse-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            color: var(--text-tertiary);
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .collapse-arrow svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .software-section.collapsed .collapse-arrow svg {
+            transform: rotate(-90deg);
+        }
+        .software-section.collapsed .collapse-arrow {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        /* 选项卡网格容器 */
+        .download-grid-wrapper {
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 2000px;
+            opacity: 1;
+            padding: 0 16px 18px;
+        }
+        .software-section.collapsed .download-grid-wrapper {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            pointer-events: none;
+        }
+
+        /* 3x3 网格 */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        /* 下载选项卡卡片 - 简化为仅按钮居中 */
+        .download-card {
+            background: #fafafb;
+            border-radius: var(--radius-sm);
+            padding: 16px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            min-height: 72px;
+        }
+        .download-card:hover {
+            background: #f5f5f7;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+        .download-card:active {
+            transform: scale(0.97);
+            transition: 0.1s ease;
+        }
+
+        /* 下载按钮 */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 28px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            min-width: 70px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        .download-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0);
+            transition: background 0.2s ease;
+            border-radius: 24px;
+        }
+        .download-btn:hover::after {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .download-btn:active {
+            transform: scale(0.93);
+            transition: 0.1s ease;
+        }
+
+        .btn-ae {
+            background: var(--ae-gradient);
+            box-shadow: 0 4px 14px rgba(123, 47, 190, 0.4);
+        }
+        .btn-an {
+            background: var(--an-gradient);
+            box-shadow: 0 4px 14px rgba(232, 93, 44, 0.4);
+        }
+        .btn-ch {
+            background: var(--ch-gradient);
+            box-shadow: 0 4px 14px rgba(224, 146, 0, 0.4);
+        }
+        .btn-pr {
+            background: var(--pr-gradient);
+            box-shadow: 0 4px 14px rgba(138, 92, 245, 0.4);
+        }
+        .btn-ps {
+            background: var(--ps-gradient);
+            box-shadow: 0 4px 14px rgba(38, 128, 235, 0.4);
+        }
+
+        .download-btn:hover {
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* ========== 页脚 ========== */
+        .page-footer {
+            text-align: center;
+            padding: 20px 16px;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        /* ========== 响应式设计 ========== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 12px 10px 32px;
+                gap: 14px;
+            }
+            .download-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .download-card {
+                padding: 14px 10px;
+                min-height: 64px;
+            }
+            .download-btn {
+                padding: 8px 22px;
+                font-size: 14px;
+                border-radius: 20px;
+                min-width: 60px;
+            }
+            .software-header {
+                padding: 14px 16px;
+                gap: 10px;
+            }
+            .software-icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 10px;
+                font-size: 15px;
+            }
+            .software-name {
+                font-size: 15px;
+            }
+            .software-full-name {
+                font-size: 11px;
+            }
+            .download-grid-wrapper {
+                padding: 0 12px 14px;
+            }
+            .nav-bar {
+                padding: 10px 12px;
+            }
+            .nav-title {
+                font-size: 16px;
+            }
+            .back-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .back-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .download-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .download-card {
+                padding: 12px 8px;
+                min-height: 56px;
+                border-radius: 10px;
+            }
+            .download-btn {
+                padding: 7px 18px;
+                font-size: 13px;
+                border-radius: 18px;
+                min-width: 54px;
+            }
+            .software-header {
+                padding: 12px 12px;
+                gap: 8px;
+            }
+            .software-icon {
+                width: 38px;
+                height: 38px;
+                border-radius: 9px;
+                font-size: 14px;
+            }
+            .software-name {
+                font-size: 14px;
+            }
+            .download-grid-wrapper {
+                padding: 0 8px 10px;
+            }
+            .main-container {
+                padding: 10px 6px 28px;
+                gap: 10px;
+            }
+            .software-section {
+                border-radius: var(--radius-md);
+            }
+        }
+
+        /* ========== 入场动画 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .software-section {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        .software-section:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .software-section:nth-child(2) {
+            animation-delay: 0.12s;
+        }
+        .software-section:nth-child(3) {
+            animation-delay: 0.19s;
+        }
+        .software-section:nth-child(4) {
+            animation-delay: 0.26s;
+        }
+        .software-section:nth-child(5) {
+            animation-delay: 0.33s;
+        }
+
+        /* ========== 滚动条美化 ========== */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 顶部导航栏 ==================== -->
+    <nav class="nav-bar">
+        <button class="back-btn" onclick="window.history.back()" title="返回上一页" aria-label="返回上一页">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <span class="nav-title">Adobe 软件集合</span>
+    </nav>
+
+    <!-- ==================== 主内容区 ==================== -->
+    <main class="main-container">
+
+        <!-- ========== AE - Adobe After Effects ========== -->
+        <section class="software-section" id="section-ae">
+            <div class="software-header" onclick="toggleSection('section-ae')" title="点击展开/折叠">
+                <div class="software-icon ae">AE</div>
+                <div class="software-info">
+                    <div class="software-name">Adobe After Effects</div>
+                    <div class="software-full-name">动态图形与视觉特效合成</div>
+                </div>
+                <div class="collapse-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="download-grid-wrapper">
+                <div class="download-grid">
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/pngt0" class="download-btn btn-ae">2017</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/Gv8UN" class="download-btn btn-ae">2018</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/OPDty" class="download-btn btn-ae">2019</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/3XmfL" class="download-btn btn-ae">2020</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/9exiX" class="download-btn btn-ae">2022</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/glrcy" class="download-btn btn-ae">2023</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/M0gSY" class="download-btn btn-ae">2024</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/xadTd" class="download-btn btn-ae">2025 v25.2.0.131</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/QbNIL" class="download-btn btn-ae">2025 v25.6</a>
+                    </div>
+                    <div class="download-card">
+                        <a href="https://yun.heleguo.cn/s/erlcD
+" class="download-btn btn-ae">2026 v26.0.0.67</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== AN - Adobe Animate ========== -->
+        <section class="software-section" id="section-an">
+            <div class="software-header" onclick="toggleSection('section-an')" title="点击展开/折叠">
+                <div class="software-icon an">AN</div>
+                <div class="software-info">
+                    <div class="software-name">Adobe Animate</div>
+                    <div class="software-full-name">2D 动画与交互设计</div>
+                </div>
+                <div class="collapse-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="download-grid-wrapper">
+                <div class="download-grid">
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-an">111</a></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CH - Adobe Character Animator ========== -->
+        <section class="software-section" id="section-ch">
+            <div class="software-header" onclick="toggleSection('section-ch')" title="点击展开/折叠">
+                <div class="software-icon ch">CH</div>
+                <div class="software-info">
+                    <div class="software-name">Adobe Character Animator</div>
+                    <div class="software-full-name">实时角色动画与面部捕捉</div>
+                </div>
+                <div class="collapse-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="download-grid-wrapper">
+                <div class="download-grid">
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ch">111</a></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PR - Adobe Premiere Pro ========== -->
+        <section class="software-section" id="section-pr">
+            <div class="software-header" onclick="toggleSection('section-pr')" title="点击展开/折叠">
+                <div class="software-icon pr">PR</div>
+                <div class="software-info">
+                    <div class="software-name">Adobe Premiere Pro</div>
+                    <div class="software-full-name">专业视频编辑与后期制作</div>
+                </div>
+                <div class="collapse-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="download-grid-wrapper">
+                <div class="download-grid">
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-pr">111</a></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PS - Adobe Photoshop ========== -->
+        <section class="software-section" id="section-ps">
+            <div class="software-header" onclick="toggleSection('section-ps')" title="点击展开/折叠">
+                <div class="software-icon ps">PS</div>
+                <div class="software-info">
+                    <div class="software-name">Adobe Photoshop</div>
+                    <div class="software-full-name">图像编辑与数字艺术创作</div>
+                </div>
+                <div class="collapse-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="download-grid-wrapper">
+                <div class="download-grid">
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                    <div class="download-card"><a href="@@@" class="download-btn btn-ps">111</a></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="page-footer">
+        Adobe 软件集合 · 资源下载中心 · 持续更新中
+    </footer>
+
+    <!-- ==================== 折叠/展开脚本 ==================== -->
+    <script>
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+            section.classList.toggle('collapsed');
+        }
+
+        document.querySelectorAll('.software-header').forEach(header => {
+            header.addEventListener('click', function(e) {
+                if (e.target.closest('.download-btn')) {
+                    return;
+                }
+                const section = this.closest('.software-section');
+                if (section) {
+                    toggleSection(section.id);
+                }
+            });
+        });
+
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const href = this.getAttribute('href');
+                if (href === '@@@') {
+                    e.preventDefault();
+                    console.log('下载链接暂未配置 (@@@)');
+                }
+            });
+        });
+
+        console.log('✨ Adobe 软件集合页面已就绪');
+    </script>
+</body>
+</html>

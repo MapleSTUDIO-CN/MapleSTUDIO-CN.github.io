@@ -17,6 +17,8 @@
             --bg-color: #0a0c10;
             --glass-white: rgba(255, 255, 255, 0.07);
             --glass-menu: rgba(30, 30, 40, 0.7);
+            --menu-bg: rgba(35, 35, 45, 0.7);
+            --menu-text: rgba(255, 255, 255, 0.9);
             --accent-blue: rgba(0, 160, 255, 0.6);
             --border-light: rgba(255, 255, 255, 0.08);
             --text-primary: #f0f4fa;
@@ -35,6 +37,8 @@
             --bg-color: #f0f4f8;
             --glass-white: rgba(255, 255, 255, 0.6);
             --glass-menu: rgba(240, 242, 250, 0.9);
+            --menu-bg: rgba(245, 245, 250, 0.85);
+            --menu-text: #1e2a3a;
             --accent-blue: rgba(0, 120, 255, 0.8);
             --border-light: rgba(0, 0, 0, 0.08);
             --text-primary: #1a1d29;
@@ -177,7 +181,7 @@
             opacity: 0;
             transform: scale(0.9) translateY(-8px);
             transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
             transform-origin: top right;
         }
@@ -217,11 +221,11 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        background 0.2s;
+                background 0.2s;
         }
 
         .menu-button:hover {
-            background: rgba(128, 128, 128, 0.1);
+            background: rgba(0, 0, 0, 0.05);
             transform: scale(1.1) rotate(90deg);
         }
 
@@ -236,7 +240,7 @@
             top: 80px;
             left: 24px;
             width: 240px;
-            background: var(--glass-menu);
+            background: var(--menu-bg);
             backdrop-filter: blur(24px) saturate(200%);
             -webkit-backdrop-filter: blur(24px) saturate(200%);
             border-radius: 24px;
@@ -249,8 +253,7 @@
             opacity: 0;
             pointer-events: none;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        background-color 0.4s ease;
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .menu.open {
@@ -261,7 +264,7 @@
 
         .menu a {
             display: block;
-            color: var(--text-primary);
+            color: var(--menu-text);
             text-decoration: none;
             padding: 14px 24px;
             margin: 6px 12px;
@@ -280,16 +283,29 @@
         }
 
         /* 菜单项延迟 */
-        .menu a:nth-child(1) { transition-delay: 0.05s; }
-        .menu a:nth-child(2) { transition-delay: 0.1s; }
-        .menu a:nth-child(3) { transition-delay: 0.15s; }
-        .menu a:nth-child(4) { transition-delay: 0.2s; }
-        .menu a:nth-child(5) { transition-delay: 0.25s; }
+        .menu a:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .menu a:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        .menu a:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+        .menu a:nth-child(4) {
+            transition-delay: 0.2s;
+        }
+        .menu a:nth-child(5) {
+            transition-delay: 0.25s;
+        }
+        .menu a:nth-child(6) {
+            transition-delay: 0.3s;
+        }
 
         .menu a:hover {
-            background: var(--accent-blue);
+            background: rgba(0, 160, 255, 0.2);
             transform: translateX(6px);
-            color: var(--text-primary);
+            color: #fff;
             box-shadow: 0 0 12px var(--accent-blue);
         }
 
@@ -313,7 +329,7 @@
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border-radius: 16px;
             box-shadow: 0 20px 40px var(--shadow-color),
-                        inset 0 1px 1px rgba(128, 128, 128, 0.1);
+                inset 0 1px 1px rgba(128, 128, 128, 0.1);
             border: 1px solid var(--border-light);
             transform-style: preserve-3d;
             transition: all 0.4s ease;
@@ -398,19 +414,6 @@
         .footer a:hover {
             opacity: 0.8;
             text-decoration: underline;
-        }
-
-        /* 弹跳动画 */
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.04); }
-            60% { transform: scale(0.98); }
-            85% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-
-        .bounce-effect {
-            animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         /* 响应式 */
@@ -569,7 +572,6 @@
             document.querySelectorAll('[data-translate-key]').forEach(el => {
                 const key = el.getAttribute('data-translate-key');
                 if (key && !defaultTexts.has(key)) {
-                    // 对于 span 元素直接取 textContent，对于链接也取 textContent
                     defaultTexts.set(key, el.textContent);
                 }
             });
@@ -582,13 +584,11 @@
                 if (!key) return;
 
                 if (lang === 'zh-CN') {
-                    // 恢复默认简体中文
                     const defaultText = defaultTexts.get(key);
                     if (defaultText !== undefined) {
                         el.textContent = defaultText;
                     }
                 } else {
-                    // 从翻译映射中获取
                     const langPack = translations[lang];
                     if (langPack && langPack[key] !== undefined) {
                         el.textContent = langPack[key];
@@ -596,19 +596,19 @@
                 }
             });
 
-            // 保存当前语言选择
             localStorage.setItem('preferredLanguage', lang);
         }
 
         // ========================
-        // 3D效果逻辑（保持不变）
+        // 3D效果逻辑
         // ========================
         const content = document.getElementById('content');
         const glassLayer = document.getElementById('glass-layer');
-        const resistance = 0.1; 
-        const maxTilt = 20; 
+        const resistance = 0.1;
+        const maxTilt = 20;
         let isDragging = false;
-        let offsetX = 0, offsetY = 0;
+        let offsetX = 0,
+            offsetY = 0;
 
         if (matchMedia('(pointer: coarse)').matches) {
             let startX, startY;
@@ -652,7 +652,8 @@
 
         function applyTilt() {
             content.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
-            glassLayer.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
+            glassLayer.style.transform =
+                `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
         }
 
         function resetPosition() {
@@ -667,29 +668,19 @@
         }
 
         // ========================
-        // 菜单控制（保持不变）
+        // 菜单控制
         // ========================
         function toggleMenu() {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
             const isOpen = menu.classList.contains('open');
 
-            menu.classList.remove('bounce-effect');
-            btn.classList.remove('active');
-
             if (isOpen) {
                 menu.classList.remove('open');
-                setTimeout(() => {
-                    menu.classList.add('bounce-effect');
-                    setTimeout(() => menu.classList.remove('bounce-effect'), 500);
-                }, 200);
+                btn.classList.remove('active');
             } else {
                 menu.classList.add('open');
                 btn.classList.add('active');
-                setTimeout(() => {
-                    menu.classList.add('bounce-effect');
-                    setTimeout(() => menu.classList.remove('bounce-effect'), 500);
-                }, 300);
             }
         }
 
@@ -702,8 +693,6 @@
         translateBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             translateDropdown.classList.toggle('open');
-            this.classList.add('bounce-effect');
-            setTimeout(() => this.classList.remove('bounce-effect'), 500);
         });
 
         // 语言选择处理
@@ -737,11 +726,11 @@
         document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
 
         // ========================
-        // 主题切换（保持不变）
+        // 主题切换
         // ========================
         const themeBtn = document.getElementById('themeBtn');
         const html = document.documentElement;
-        
+
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             html.setAttribute('data-theme', savedTheme);
@@ -755,7 +744,7 @@
         function toggleTheme() {
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
@@ -769,16 +758,10 @@
         // 初始化
         // ========================
         window.addEventListener('load', () => {
-            // 缓存默认文本（必须在任何语言应用之前）
             cacheDefaultTexts();
-
-            // 初始化主题
             initTheme();
-
-            // 菜单初始关闭
             document.getElementById('menu').classList.remove('open');
 
-            // 读取并应用保存的语言设置
             const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
             applyLanguage(savedLang);
         });

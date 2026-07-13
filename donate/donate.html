@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--如果需要发布此网页的衍生版，请勿使用以上链接，详情见"readme.html"的限制-->
-    <!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
     <title data-translate-key="page-title">支持枫树 · 扫码捐赠 & 广告支持</title>
     <link rel="icon" href="../Pictures/logo.jpg">
 
-    <!-- 主题防闪烁脚本：在页面渲染前立即应用保存的主题 -->
+    <!-- 主题防闪烁脚本 -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
@@ -24,25 +22,18 @@
     </script>
 
     <style>
-        /* 全局重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* 黑夜变量（默认） */
         :root {
             --bg-color: #0a0c10;
-            --glass-white: rgba(0, 0, 0, 0.2);
-            --glass-white-hover: rgba(0, 0, 0, 0.35);
             --glass-menu: rgba(30, 30, 40, 0.7);
             --accent-blue: rgba(0, 160, 255, 0.6);
-            --accent-gold: #ffb432b3;
-            --accent-green: rgba(80, 220, 140, 0.7);
             --border-light: rgba(255, 255, 255, 0.08);
             --text-primary: #f0f4fa;
-            --text-secondary: rgba(180, 230, 255, 0.95);
             --text-tertiary: rgba(200, 210, 230, 0.7);
             --topbar-bg: rgba(255, 255, 255, 0.75);
             --topbar-text: rgba(0, 0, 0, 0.8);
@@ -63,18 +54,12 @@
             --divider-color: rgba(255, 255, 255, 0.06);
         }
 
-        /* 白天变量 */
         html[data-theme="light"] {
             --bg-color: #f0f4f8;
-            --glass-white: rgba(255, 255, 255, 0.6);
-            --glass-white-hover: rgba(255, 255, 255, 0.8);
             --glass-menu: rgba(240, 242, 250, 0.9);
             --accent-blue: rgba(0, 120, 255, 0.8);
-            --accent-gold: rgba(220, 140, 20, 0.8);
-            --accent-green: rgba(40, 170, 110, 0.8);
             --border-light: rgba(0, 0, 0, 0.08);
             --text-primary: #1a1d29;
-            --text-secondary: rgba(30, 35, 50, 0.9);
             --text-tertiary: rgba(60, 65, 80, 0.7);
             --topbar-bg: rgba(255, 255, 255, 0.9);
             --topbar-text: rgba(30, 35, 50, 0.9);
@@ -113,7 +98,6 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* 顶部栏 */
         .top-bar {
             position: fixed;
             top: 0;
@@ -141,18 +125,9 @@
             font-weight: 600;
             color: var(--topbar-text);
             text-decoration: none;
-            letter-spacing: 0.3px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
         }
 
-        .top-title:hover {
-            text-decoration: underline;
-            transform: translateX(-50%) scale(1.02);
-            opacity: 1;
-        }
-
-        /* 右侧按钮组（翻译 + 主题） */
         .right-actions {
             display: flex;
             align-items: center;
@@ -161,8 +136,8 @@
             position: relative;
         }
 
-        /* 翻译按钮 */
-        .translate-btn {
+        .translate-btn,
+        .theme-toggle {
             background: transparent;
             border: none;
             color: var(--topbar-text);
@@ -174,42 +149,17 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            padding: 0;
         }
 
         .translate-btn img {
             width: 24px;
             height: 24px;
-            display: block;
         }
 
-        .translate-btn:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 主题切换按钮 */
         .theme-toggle {
-            background: transparent;
-            border: none;
-            color: var(--topbar-text);
             font-size: 1.5rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .theme-toggle:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 翻译下拉菜单 */
         .translate-dropdown {
             position: absolute;
             top: calc(100% + 8px);
@@ -243,43 +193,26 @@
             text-decoration: none;
             padding: 10px 20px;
             font-size: 0.95rem;
-            transition: background 0.2s;
-            white-space: nowrap;
         }
 
         .translate-dropdown a:hover {
             background: var(--accent-blue);
         }
 
-        /* 菜单按钮 */
         .menu-button {
             background: transparent;
             border: none;
             color: var(--topbar-text);
             font-size: 1.9rem;
-            line-height: 1;
-            cursor: pointer;
             width: 48px;
             height: 48px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                background 0.2s;
+            cursor: pointer;
         }
 
-        .menu-button:hover {
-            background: rgba(128, 128, 128, 0.1);
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .menu-button.active {
-            transform: rotate(180deg);
-            background: rgba(0, 160, 255, 0.1);
-        }
-
-        /* 侧边菜单（毛玻璃弹出式） */
         .menu {
             position: fixed;
             top: 80px;
@@ -298,8 +231,7 @@
             opacity: 0;
             pointer-events: none;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                background-color 0.4s ease;
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .menu.open {
@@ -317,10 +249,9 @@
             border-radius: 16px;
             font-weight: 500;
             font-size: 1rem;
-            background: transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             transform: translateX(-16px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .menu.open a {
@@ -328,22 +259,6 @@
             transform: translateX(0);
         }
 
-        /* 菜单项延迟 - 6项 */
-        .menu a:nth-child(1) { transition-delay: 0.05s; }
-        .menu a:nth-child(2) { transition-delay: 0.1s; }
-        .menu a:nth-child(3) { transition-delay: 0.15s; }
-        .menu a:nth-child(4) { transition-delay: 0.2s; }
-        .menu a:nth-child(5) { transition-delay: 0.25s; }
-        .menu a:nth-child(6) { transition-delay: 0.3s; }
-
-        .menu a:hover {
-            background: var(--accent-blue);
-            transform: translateX(6px);
-            color: var(--text-primary);
-            box-shadow: 0 0 12px var(--accent-blue);
-        }
-
-        /* ========== 主内容区域 ========== */
         .donate-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -354,7 +269,6 @@
             padding: 0 10px;
         }
 
-        /* 捐赠卡片 */
         .donate-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px) saturate(180%);
@@ -387,25 +301,6 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
 
-        /* 卡片顶部微光 */
-        .donate-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
-            pointer-events: none;
-            transition: opacity 0.4s;
-            opacity: 0;
-        }
-
-        .donate-card:hover::before {
-            opacity: 1;
-        }
-
-        /* 卡片徽章 */
         .card-badge {
             display: inline-flex;
             align-items: center;
@@ -431,7 +326,6 @@
             color: var(--badge-qr-text);
         }
 
-        /* 卡片标题 */
         .card-title {
             font-size: 1.35rem;
             font-weight: 700;
@@ -439,10 +333,8 @@
             margin-bottom: 6px;
             position: relative;
             z-index: 1;
-            letter-spacing: 0.2px;
         }
 
-        /* 卡片描述 */
         .card-desc {
             font-size: 0.9rem;
             color: var(--text-tertiary);
@@ -453,7 +345,6 @@
             max-width: 280px;
         }
 
-        /* 分隔线 */
         .card-divider {
             width: 50px;
             height: 2px;
@@ -469,14 +360,6 @@
             width: 70px;
         }
 
-        .donate-card.ad-card:hover .card-divider {
-            background: var(--badge-ad-text);
-        }
-        .donate-card.qr-card:hover .card-divider {
-            background: var(--badge-qr-text);
-        }
-
-        /* ===== 广告容器 ===== */
         .ad-wrapper {
             width: 100%;
             max-width: 380px;
@@ -488,7 +371,6 @@
             border-radius: 14px;
             position: relative;
             z-index: 1;
-            transition: background 0.4s ease;
             overflow: hidden;
         }
 
@@ -498,19 +380,16 @@
             min-height: 280px;
         }
 
-        /* 广告占位提示（广告未加载时显示） */
         .ad-placeholder-note {
             position: absolute;
             pointer-events: none;
             font-size: 0.78rem;
             color: var(--ad-placeholder-text);
             text-align: center;
-            letter-spacing: 0.3px;
             z-index: 0;
             transition: opacity 0.5s;
         }
 
-        /* ===== 二维码图片容器 ===== */
         .qr-image-wrapper {
             width: 100%;
             max-width: 320px;
@@ -528,34 +407,17 @@
             display: block;
             border-radius: 14px;
             object-fit: cover;
-            transition: transform 0.4s ease;
         }
 
-        .donate-card.qr-card:hover .qr-image-wrapper {
-            transform: scale(1.03);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-        }
-
-        .donate-card.qr-card:hover .qr-image-wrapper img {
-            transform: scale(1.04);
-        }
-
-        /* 二维码提示小字 */
         .qr-tip {
             font-size: 0.75rem;
             color: var(--text-tertiary);
             margin-top: 12px;
             position: relative;
             z-index: 1;
-            letter-spacing: 0.2px;
             opacity: 0.8;
         }
 
-        /* 卡片入场动画延迟 */
-        .donate-card:nth-child(1) { transition-delay: 0.05s; }
-        .donate-card:nth-child(2) { transition-delay: 0.18s; }
-
-        /* ========== 底部信息 ========== */
         .footer {
             position: fixed;
             bottom: 0;
@@ -565,7 +427,6 @@
             font-size: 0.9rem;
             color: var(--text-primary);
             opacity: 0.7;
-            text-shadow: 0 2px 5px var(--shadow-color);
             z-index: 500;
             background: var(--footer-bg);
             backdrop-filter: blur(8px);
@@ -575,73 +436,27 @@
             transition: all 0.4s ease;
         }
 
-        .footer p {
-            margin: 4px 0;
-        }
-
         .footer a {
             color: var(--accent-blue);
             text-decoration: none;
-            transition: color 0.2s;
         }
 
-        .footer a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        /* 弹跳动画 */
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.04); }
-            60% { transform: scale(0.98); }
-            85% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-
-        .bounce-effect {
-            animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* ========== 响应式 ========== */
         @media (max-width: 768px) {
             .donate-section {
                 grid-template-columns: 1fr;
                 width: 90%;
-                gap: 22px;
-                margin: 88px auto 130px;
-                padding: 0 4px;
             }
-            .donate-card {
-                padding: 22px 16px 20px;
-                border-radius: 18px;
+            .ad-wrapper {
+                max-width: 100%;
+                min-height: 250px;
             }
-            .card-title { font-size: 1.2rem; }
-            .card-desc { font-size: 0.85rem; max-width: 240px; }
-            .ad-wrapper { max-width: 100%; min-height: 250px; }
-            .ad-wrapper ins { min-height: 250px; }
-            .qr-image-wrapper { max-width: 260px; }
-            .menu { width: calc(100% - 48px); left: 24px; }
-            .footer { padding: 10px 0 8px; font-size: 0.8rem; }
-        }
-
-        @media (max-width: 420px) {
-            .donate-section {
-                width: 94%;
-                gap: 16px;
-                margin: 80px auto 120px;
+            .ad-wrapper ins {
+                min-height: 250px;
             }
-            .donate-card { padding: 18px 12px 16px; border-radius: 16px; }
-            .card-title { font-size: 1.1rem; }
-            .card-badge { font-size: 0.72rem; padding: 5px 10px; }
-            .ad-wrapper { min-height: 200px; }
-            .ad-wrapper ins { min-height: 200px; }
-            .qr-image-wrapper { max-width: 220px; }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部栏 -->
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
         <a href="../index.html" class="top-title" data-translate-key="top-title">返回总览</a>
@@ -660,7 +475,6 @@
         </div>
     </div>
 
-    <!-- 侧边菜单（完整6项） -->
     <div class="menu" id="menu">
         <a href="../mirror/mirror.html" data-translate-key="menu-mirror">镜像站(🚧)</a>
         <a href="../mcsever/main.html" data-translate-key="menu-mcserver">MC服务器</a>
@@ -670,16 +484,13 @@
         <a href="../main/bulletin_board.html" data-translate-key="menu-bulletin">公告栏</a>
     </div>
 
-    <!-- ========== 双卡片捐赠区域 ========== -->
     <section class="donate-section" id="donateSection">
-        <!-- 卡片1：Google Ads 免费支持 -->
         <div class="donate-card ad-card" id="adCard">
             <span class="card-badge badge-ad" data-translate-key="donate-ad-badge">免费支持</span>
             <h3 class="card-title" data-translate-key="donate-ad-title">广告支持</h3>
             <p class="card-desc" data-translate-key="donate-ad-desc">点击GoogleADS以支持枫树继续运营</p>
             <div class="card-divider"></div>
             <div class="ad-wrapper" id="adWrapper">
-                <!-- 广告单元A -->
                 <ins class="adsbygoogle"
                      style="display:block; width:100%; min-height:280px;"
                      data-ad-client="ca-pub-4874836697909333"
@@ -694,7 +505,6 @@
             </div>
         </div>
 
-        <!-- 卡片2：扫码捐赠 -->
         <div class="donate-card qr-card" id="qrCard">
             <span class="card-badge badge-qr" data-translate-key="donate-qr-badge">扫码捐赠</span>
             <h3 class="card-title" data-translate-key="donate-qr-title">支付宝捐赠</h3>
@@ -707,7 +517,6 @@
         </div>
     </section>
 
-    <!-- 底部信息 -->
     <div class="footer">
         <p><a href="../readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
         <p>
@@ -718,9 +527,6 @@
     </div>
 
     <script>
-        // ========================
-        // 多语言数据（基于当前简体中文HTML文本重新翻译）
-        // ========================
         const translations = {
             'zh-TW': {
                 'page-title': '支持楓樹 · 掃碼捐贈 & 廣告支持',
@@ -827,12 +633,9 @@
                     titleEl.textContent = defaultTexts.get(key) || '支持枫树 · 扫码捐赠 & 广告支持';
                 } else {
                     const langPack = translations[lang];
-                    if (langPack && langPack[key]) {
-                        titleEl.textContent = langPack[key];
-                    }
+                    if (langPack && langPack[key]) titleEl.textContent = langPack[key];
                 }
             }
-
             document.querySelectorAll('[data-translate-key]').forEach(el => {
                 if (el.tagName === 'TITLE') return;
                 const key = el.getAttribute('data-translate-key');
@@ -848,18 +651,11 @@
             localStorage.setItem('preferredLanguage', lang);
         }
 
-        // 菜单控制
         function toggleMenu() {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
-            const isOpen = menu.classList.contains('open');
-            if (isOpen) {
-                menu.classList.remove('open');
-                btn.classList.remove('active');
-            } else {
-                menu.classList.add('open');
-                btn.classList.add('active');
-            }
+            menu.classList.toggle('open');
+            btn.classList.toggle('active');
         }
 
         // 翻译下拉
@@ -868,8 +664,6 @@
         translateBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             translateDropdown.classList.toggle('open');
-            this.classList.add('bounce-effect');
-            setTimeout(() => this.classList.remove('bounce-effect'), 500);
         });
         translateDropdown.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -880,25 +674,18 @@
             });
         });
 
-        // 点击外部关闭
         document.addEventListener('click', (e) => {
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
-            const dropdown = document.getElementById('translateDropdown');
-            const transBtn = document.getElementById('translateBtn');
             if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
                 toggleMenu();
             }
-            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
-                dropdown.classList.remove('open');
+            if (!translateDropdown.contains(e.target) && !translateBtn.contains(e.target)) {
+                translateDropdown.classList.remove('open');
             }
         });
-        document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
-        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
 
-        // ========================
-        // 主题切换（修复：图标立即初始化，不再等待 load 事件）
-        // ========================
+        // 主题切换
         const themeBtn = document.getElementById('themeBtn');
         const htmlEl = document.documentElement;
 
@@ -907,9 +694,7 @@
         }
 
         function updateThemeIcon(theme) {
-            if (themeBtn) {
-                themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
-            }
+            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
         }
 
         function applyTheme(theme) {
@@ -918,15 +703,12 @@
             updateThemeIcon(theme);
         }
 
-        // 立即设置图标
         (function initThemeIconNow() {
-            const currentTheme = getCurrentTheme();
-            updateThemeIcon(currentTheme);
+            updateThemeIcon(getCurrentTheme());
         })();
 
         themeBtn.addEventListener('click', () => {
-            const currentTheme = getCurrentTheme();
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const newTheme = getCurrentTheme() === 'light' ? 'dark' : 'light';
             applyTheme(newTheme);
         });
 
@@ -950,7 +732,7 @@
             }
         }
 
-        // 广告加载后隐藏占位文字
+        // 广告占位观察
         function setupAdObserver() {
             const adWrapper = document.getElementById('adWrapper');
             const placeholder = adWrapper.querySelector('.ad-placeholder-note');
@@ -973,18 +755,14 @@
                 }, 5000);
             }
         }
+        cacheDefaultTexts();
+        const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
+        applyLanguage(savedLang);
+        document.getElementById('menu').classList.remove('open');
+        setupCardAnimations();
+        setupAdObserver();
 
-        // 页面加载完成后执行
-        window.addEventListener('load', () => {
-            cacheDefaultTexts();
-            document.getElementById('menu').classList.remove('open');
-            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
-            applyLanguage(savedLang);
-            setupCardAnimations();
-            setupAdObserver();
-        });
-
-        // 页面可见性变化时尝试刷新广告
+        // 页面可见性变化时尝试刷新未加载的广告
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
                 const adWrapper = document.getElementById('adWrapper');

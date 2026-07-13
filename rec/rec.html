@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--如果需要发布此网页的衍生版，请勿使用以上链接，详情见"readme.html"的限制-->
     <!--原作者信息:bili@CN_MapleSTUDIO,QQ:2142428583，经作者允许后，发布的改版页面请带上此信息，并在下方署名二次更改的作者信息-->
-    <title data-translate-key="page-title">请我喝杯冰阔落，显示故障多刷新几遍</title>
+    <title data-translate-key="page-title">支持枫树 · 扫码捐赠 & 广告支持</title>
     <link rel="icon" href="../Pictures/logo.jpg">
+
+    <!-- Google AdSense 脚本 -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4874836697909333"
+            crossorigin="anonymous">
+    </script>
+
     <style>
         /* 全局重置 */
         * {
@@ -22,15 +28,29 @@
             --glass-white-hover: rgba(0, 0, 0, 0.35);
             --glass-menu: rgba(30, 30, 40, 0.7);
             --accent-blue: rgba(0, 160, 255, 0.6);
+            --accent-gold: #ffb432b3;
+            --accent-green: rgba(80, 220, 140, 0.7);
             --border-light: rgba(255, 255, 255, 0.08);
             --text-primary: #f0f4fa;
             --text-secondary: rgba(180, 230, 255, 0.95);
+            --text-tertiary: rgba(200, 210, 230, 0.7);
             --topbar-bg: rgba(255, 255, 255, 0.75);
             --topbar-text: rgba(0, 0, 0, 0.8);
             --shadow-color: rgba(0, 0, 0, 0.5);
             --gradient-start: #1a1f2a;
             --gradient-end: #0a0c10;
             --footer-bg: rgba(10, 15, 20, 0.3);
+            --card-bg: rgba(20, 24, 34, 0.55);
+            --card-hover-bg: rgba(25, 30, 42, 0.7);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --card-shadow: rgba(0, 0, 0, 0.45);
+            --badge-ad-bg: #289eff26;
+            --badge-ad-text: #0099ffe6;
+            --badge-qr-bg: #28d1801f;
+            --badge-qr-text: #28d180e6;
+            --ad-placeholder-bg: rgba(30, 35, 50, 0.5);
+            --ad-placeholder-text: rgba(180, 190, 210, 0.45);
+            --divider-color: rgba(255, 255, 255, 0.06);
         }
 
         /* 白天变量 */
@@ -40,18 +60,33 @@
             --glass-white-hover: rgba(255, 255, 255, 0.8);
             --glass-menu: rgba(240, 242, 250, 0.9);
             --accent-blue: rgba(0, 120, 255, 0.8);
+            --accent-gold: rgba(220, 140, 20, 0.8);
+            --accent-green: rgba(40, 170, 110, 0.8);
             --border-light: rgba(0, 0, 0, 0.08);
             --text-primary: #1a1d29;
             --text-secondary: rgba(30, 35, 50, 0.9);
+            --text-tertiary: rgba(60, 65, 80, 0.7);
             --topbar-bg: rgba(255, 255, 255, 0.9);
             --topbar-text: rgba(30, 35, 50, 0.9);
             --shadow-color: rgba(0, 0, 0, 0.15);
             --gradient-start: #e8ecf5;
             --gradient-end: #f5f7fa;
             --footer-bg: rgba(255, 255, 255, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.55);
+            --card-hover-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(0, 0, 0, 0.06);
+            --card-shadow: rgba(0, 0, 0, 0.12);
+            --badge-ad-bg: #1ebfff1a;
+            --badge-ad-text: #0099ffe6;
+            --badge-qr-bg: rgba(40, 160, 100, 0.1);
+            --badge-qr-text: rgba(30, 140, 90, 0.9);
+            --ad-placeholder-bg: rgba(240, 242, 248, 0.6);
+            --ad-placeholder-text: rgba(120, 130, 150, 0.4);
+            --divider-color: rgba(0, 0, 0, 0.06);
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             min-height: 100vh;
@@ -61,7 +96,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             overflow-x: hidden;
             background-image: radial-gradient(circle at 30% 40%, var(--gradient-start) 0%, var(--gradient-end) 70%);
             background-attachment: fixed;
@@ -181,7 +216,7 @@
             opacity: 0;
             transform: scale(0.9) translateY(-8px);
             transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
             transform-origin: top right;
         }
@@ -221,7 +256,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        background 0.2s;
+                background 0.2s;
         }
 
         .menu-button:hover {
@@ -253,8 +288,8 @@
             opacity: 0;
             pointer-events: none;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        background-color 0.4s ease;
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.4s ease;
         }
 
         .menu.open {
@@ -283,13 +318,25 @@
             transform: translateX(0);
         }
 
-        /* 菜单项延迟 - 现在有6项 */
-        .menu a:nth-child(1) { transition-delay: 0.05s; }
-        .menu a:nth-child(2) { transition-delay: 0.1s; }
-        .menu a:nth-child(3) { transition-delay: 0.15s; }
-        .menu a:nth-child(4) { transition-delay: 0.2s; }
-        .menu a:nth-child(5) { transition-delay: 0.25s; }
-        .menu a:nth-child(6) { transition-delay: 0.3s; }
+        /* 菜单项延迟 - 6项 */
+        .menu a:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .menu a:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        .menu a:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+        .menu a:nth-child(4) {
+            transition-delay: 0.2s;
+        }
+        .menu a:nth-child(5) {
+            transition-delay: 0.25s;
+        }
+        .menu a:nth-child(6) {
+            transition-delay: 0.3s;
+        }
 
         .menu a:hover {
             background: var(--accent-blue);
@@ -298,50 +345,226 @@
             box-shadow: 0 0 12px var(--accent-blue);
         }
 
-        /* 图片容器 */
-        .image-container {
-            position: relative;
-            width: 70%;
-            max-width: 800px;
-            margin: 100px auto 0;
-            background: var(--glass-white);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 32px var(--shadow-color),
-                        inset 0 1px 1px rgba(128, 128, 128, 0.1);
-            border: 1px solid var(--border-light);
+        /* ========== 主内容区域 ========== */
+        .donate-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            width: 85%;
+            max-width: 1000px;
+            margin: 100px auto 120px;
+            padding: 0 10px;
+        }
+
+        /* 捐赠卡片 */
+        .donate-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 22px;
+            padding: 28px 24px 24px;
+            box-shadow: 0 10px 36px var(--card-shadow),
+                inset 0 1px 1px rgba(128, 128, 128, 0.08);
+            border: 1px solid var(--card-border);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(24px);
         }
 
-        .image-container:hover {
-            background: var(--glass-white-hover);
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 12px 40px var(--shadow-color),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        .donate-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .image-container img {
+        .donate-card:hover {
+            background: var(--card-hover-bg);
+            transform: translateY(-6px);
+            box-shadow: 0 18px 48px var(--shadow-color),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        /* 卡片顶部微光 */
+        .donate-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+            transition: opacity 0.4s;
+            opacity: 0;
+        }
+
+        .donate-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 卡片徽章 */
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-ad {
+            background: var(--badge-ad-bg);
+            color: var(--badge-ad-text);
+        }
+
+        .badge-qr {
+            background: var(--badge-qr-bg);
+            color: var(--badge-qr-text);
+        }
+
+        /* 卡片标题 */
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.2px;
+        }
+
+        /* 卡片描述 */
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            margin-bottom: 18px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+            max-width: 280px;
+        }
+
+        /* 分隔线 */
+        .card-divider {
+            width: 50px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--divider-color);
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+
+        .donate-card:hover .card-divider {
+            width: 70px;
+        }
+
+        .donate-card.ad-card:hover .card-divider {
+            background: var(--badge-ad-text);
+        }
+        .donate-card.qr-card:hover .card-divider {
+            background: var(--badge-qr-text);
+        }
+
+        /* ===== 广告容器 ===== */
+        .ad-wrapper {
+            width: 100%;
+            max-width: 380px;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--ad-placeholder-bg);
+            border-radius: 14px;
+            position: relative;
+            z-index: 1;
+            transition: background 0.4s ease;
+            overflow: hidden;
+        }
+
+        .ad-wrapper ins {
+            display: block;
+            width: 100%;
+            min-height: 280px;
+        }
+
+        /* 广告占位提示（广告未加载时显示） */
+        .ad-placeholder-note {
+            position: absolute;
+            pointer-events: none;
+            font-size: 0.78rem;
+            color: var(--ad-placeholder-text);
+            text-align: center;
+            letter-spacing: 0.3px;
+            z-index: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* ===== 二维码图片容器 ===== */
+        .qr-image-wrapper {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .qr-image-wrapper img {
             width: 100%;
             height: auto;
-            border-radius: 12px;
+            display: block;
+            border-radius: 14px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
 
-        .image-container:hover img {
+        .donate-card.qr-card:hover .qr-image-wrapper {
             transform: scale(1.03);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
         }
 
-        /* 底部信息 */
+        .donate-card.qr-card:hover .qr-image-wrapper img {
+            transform: scale(1.04);
+        }
+
+        /* 二维码提示小字 */
+        .qr-tip {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.2px;
+            opacity: 0.8;
+        }
+
+        /* 卡片入场动画延迟 */
+        .donate-card:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .donate-card:nth-child(2) {
+            transition-delay: 0.18s;
+        }
+
+        /* ========== 底部信息 ========== */
         .footer {
             position: fixed;
-            bottom: 25px;
+            bottom: 0;
             left: 0;
             width: 100%;
             text-align: center;
@@ -353,7 +576,7 @@
             background: var(--footer-bg);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            padding: 12px 0 8px;
+            padding: 12px 0 10px;
             border-top: 1px solid var(--border-light);
             transition: all 0.4s ease;
         }
@@ -375,26 +598,98 @@
 
         /* 弹跳动画 */
         @keyframes bounce {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.04); }
-            60% { transform: scale(0.98); }
-            85% { transform: scale(1.01); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            35% {
+                transform: scale(1.04);
+            }
+            60% {
+                transform: scale(0.98);
+            }
+            85% {
+                transform: scale(1.01);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .bounce-effect {
             animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* 响应式 */
-        @media (max-width: 700px) {
-            .image-container {
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .donate-section {
+                grid-template-columns: 1fr;
                 width: 90%;
-                margin-top: 80px;
+                gap: 22px;
+                margin: 88px auto 130px;
+                padding: 0 4px;
             }
+
+            .donate-card {
+                padding: 22px 16px 20px;
+                border-radius: 18px;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+            .card-desc {
+                font-size: 0.85rem;
+                max-width: 240px;
+            }
+
+            .ad-wrapper {
+                max-width: 100%;
+                min-height: 250px;
+            }
+            .ad-wrapper ins {
+                min-height: 250px;
+            }
+
+            .qr-image-wrapper {
+                max-width: 260px;
+            }
+
             .menu {
                 width: calc(100% - 48px);
                 left: 24px;
+            }
+
+            .footer {
+                padding: 10px 0 8px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .donate-section {
+                width: 94%;
+                gap: 16px;
+                margin: 80px auto 120px;
+            }
+            .donate-card {
+                padding: 18px 12px 16px;
+                border-radius: 16px;
+            }
+            .card-title {
+                font-size: 1.1rem;
+            }
+            .card-badge {
+                font-size: 0.72rem;
+                padding: 5px 10px;
+            }
+            .ad-wrapper {
+                min-height: 200px;
+            }
+            .ad-wrapper ins {
+                min-height: 200px;
+            }
+            .qr-image-wrapper {
+                max-width: 220px;
             }
         }
     </style>
@@ -422,17 +717,55 @@
     <!-- 侧边菜单（完整6项） -->
     <div class="menu" id="menu">
         <a href="../mirror/mirror.html" data-translate-key="menu-mirror">镜像站(🚧)</a>
-        <a href="../mcsever/main.html" data-translate-key="menu-mcserver">MC服务器(🚫)</a>
+        <a href="../mcsever/main.html" data-translate-key="menu-mcserver">MC服务器</a>
         <a href="../mcapks.html" data-translate-key="menu-mcapks">MC版本库(🚫)</a>
-        <a href="../software/main.html" data-translate-key="menu-software">软件库(🚫)</a>
+        <a href="../software/main.html" data-translate-key="menu-software">软件库</a>
         <a href="../tools/main.html" data-translate-key="menu-tools">小工具(🚫)</a>
         <a href="../main/bulletin_board.html" data-translate-key="menu-bulletin">公告栏</a>
     </div>
 
-    <!-- 图片展示区域 -->
-    <div class="image-container">
-        <img src="../Pictures/juanzeng.jpg" alt="捐赠二维码">
-    </div>
+    <!-- ========== 双卡片捐赠区域 ========== -->
+    <section class="donate-section" id="donateSection">
+
+        <!-- 卡片1：Google Ads 免费支持 -->
+        <div class="donate-card ad-card" id="adCard">
+            <span class="card-badge badge-ad" data-translate-key="donate-ad-badge">免费支持</span>
+            <h3 class="card-title" data-translate-key="donate-ad-title">广告支持</h3>
+            <p class="card-desc" data-translate-key="donate-ad-desc">点击GoogleADS以支持枫树继续运营</p>
+            <div class="card-divider"></div>
+            <div class="ad-wrapper" id="adWrapper">
+                <!-- Google AdSense 广告单元 -->
+                <!--
+                ★ 重要提示：请将 data-ad-slot 的值替换为您在 Google AdSense 后台创建的广告单元ID。
+                ★ 如果您使用的是 AdSense 自动广告，此处的广告单元可能不是必需的。
+                ★ 当前 data-ad-slot 为占位值，广告可能无法正常展示。
+                -->
+                <ins class="adsbygoogle"
+                     style="display:block; width:100%; min-height:280px;"
+                     data-ad-client="ca-pub-4874836697909333"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true">
+                </ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                <span class="ad-placeholder-note" data-translate-key="ad-placeholder">广告加载中…</span>
+            </div>
+        </div>
+
+        <!-- 卡片2：扫码捐赠 -->
+        <div class="donate-card qr-card" id="qrCard">
+            <span class="card-badge badge-qr" data-translate-key="donate-qr-badge">扫码捐赠</span>
+            <h3 class="card-title" data-translate-key="donate-qr-title">支付宝捐赠</h3>
+            <p class="card-desc" data-translate-key="donate-qr-desc">扫描下方二维码，为枫树捐赠，感谢您的慷慨支持！</p>
+            <div class="card-divider"></div>
+            <div class="qr-image-wrapper">
+                <img src="../Pictures/donate.webp" alt="捐赠二维码">
+            </div>
+            <p class="qr-tip" data-translate-key="qr-tip">💡 显示故障请多刷新几遍</p>
+        </div>
+    </section>
 
     <!-- 底部信息 -->
     <div class="footer">
@@ -449,57 +782,89 @@
 
     <script>
         // ========================
-        // 多语言本地化数据
+        // 多语言数据
         // ========================
         const translations = {
             'zh-TW': {
-                'page-title': '請我喝杯冰闊落，顯示故障多刷新幾遍',
+                'page-title': '支持楓樹 · 掃碼捐贈 & 廣告支持',
                 'top-title': '返回總覽',
                 'menu-mirror': '鏡像站(🚧)',
-                'menu-mcserver': 'MC伺服器(🚫)',
+                'menu-mcserver': 'MC伺服器',
                 'menu-mcapks': 'MC版本庫(🚫)',
-                'menu-software': '軟體庫(🚫)',
+                'menu-software': '軟體庫',
                 'menu-tools': '小工具(🚫)',
                 'menu-bulletin': '公告欄',
+                'donate-ad-badge': '🆓 免費支持',
+                'donate-ad-title': '廣告支持',
+                'donate-ad-desc': '觀看下方贊助商廣告，無需付費即可支持楓樹繼續營運',
+                'donate-qr-badge': '📱 掃碼捐贈',
+                'donate-qr-title': '掃碼請喝冰闊落',
+                'donate-qr-desc': '掃描下方二維碼，請楓樹喝杯冰闊落，感謝您的慷慨支持！',
+                'qr-tip': '💡 顯示故障請多刷新幾遍',
+                'ad-placeholder': '廣告載入中…',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
                 'footer-powered-prefix': '此站點由 ',
                 'footer-powered-suffix': ' 驅動'
             },
             'en': {
-                'page-title': 'Buy me a Coke, refresh if display fails',
+                'page-title': 'Support Maple · Scan & Ad Support',
                 'top-title': 'Back to Overview',
                 'menu-mirror': 'Mirror (🚧)',
-                'menu-mcserver': 'MC Server (🚫)',
+                'menu-mcserver': 'MC Server',
                 'menu-mcapks': 'MC Versions (🚫)',
-                'menu-software': 'Software (🚫)',
+                'menu-software': 'Software ',
                 'menu-tools': 'Tools (🚫)',
                 'menu-bulletin': 'Bulletin',
+                'donate-ad-badge': '🆓 Free Support',
+                'donate-ad-title': 'Ad Support',
+                'donate-ad-desc': 'View the sponsored ad below to support Maple at no cost',
+                'donate-qr-badge': '📱 Scan to Donate',
+                'donate-qr-title': 'Buy Me a Coke',
+                'donate-qr-desc': 'Scan the QR code below to buy Maple a Coke. Thank you for your generosity!',
+                'qr-tip': '💡 Refresh if display fails',
+                'ad-placeholder': 'Loading ad…',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
                 'footer-powered-prefix': 'Powered by ',
                 'footer-powered-suffix': ''
             },
             'ja': {
-                'page-title': 'アイスコーラをおごって、表示不具合は何度か更新してね',
+                'page-title': 'メイプルをサポート · QR & 広告支援',
                 'top-title': '概要に戻る',
                 'menu-mirror': 'ミラーサイト(🚧)',
-                'menu-mcserver': 'MCサーバー(🚫)',
+                'menu-mcserver': 'MCサーバー',
                 'menu-mcapks': 'MCバージョンライブラリ(🚫)',
-                'menu-software': 'ソフトウェア(🚫)',
+                'menu-software': 'ソフトウェア',
                 'menu-tools': 'ツール(🚫)',
                 'menu-bulletin': '掲示板',
+                'donate-ad-badge': '🆓 無料サポート',
+                'donate-ad-title': '広告支援',
+                'donate-ad-desc': '下のスポンサー広告を閲覧して、無料でメイプルをサポートできます',
+                'donate-qr-badge': '📱 QRで寄付',
+                'donate-qr-title': 'コーラをおごる',
+                'donate-qr-desc': '下のQRコードをスキャンして、メイプルにコーラをおごってください。ご支援に感謝します！',
+                'qr-tip': '💡 表示不具合は数回更新してください',
+                'ad-placeholder': '広告を読み込み中…',
                 'footer-copyright': 'MapleSTUDIO 著作権所有',
                 'footer-powered-prefix': 'このサイトは ',
                 'footer-powered-suffix': ' によって運営されています'
             },
             'ko': {
-                'page-title': '얼음 콜라 한 잔 사주세요, 표시 오류는 여러 번 새로고침',
+                'page-title': '메이플 지원 · QR & 광고 후원',
                 'top-title': '개요로 돌아가기',
                 'menu-mirror': '미러 사이트(🚧)',
-                'menu-mcserver': 'MC 서버(🚫)',
+                'menu-mcserver': 'MC 서버',
                 'menu-mcapks': 'MC 버전 라이브러리(🚫)',
-                'menu-software': '소프트웨어(🚫)',
+                'menu-software': '소프트웨어',
                 'menu-tools': '도구(🚫)',
                 'menu-bulletin': '게시판',
+                'donate-ad-badge': '🆓 무료 지원',
+                'donate-ad-title': '광고 후원',
+                'donate-ad-desc': '아래 스폰서 광고를 시청하여 무료로 메이플을 지원하세요',
+                'donate-qr-badge': '📱 QR로 기부',
+                'donate-qr-title': '콜라 한 잔 사주세요',
+                'donate-qr-desc': '아래 QR코드를 스캔하여 메이플에게 콜라를 사주세요. 관대한 지원에 감사드립니다!',
+                'qr-tip': '💡 표시 오류는 여러 번 새로고침하세요',
+                'ad-placeholder': '광고 로딩 중…',
                 'footer-copyright': 'MapleSTUDIO 저작권 소유',
                 'footer-powered-prefix': '이 사이트는 ',
                 'footer-powered-suffix': ' 에 의해 구동됩니다'
@@ -523,7 +888,7 @@
             if (titleEl) {
                 const key = titleEl.getAttribute('data-translate-key');
                 if (lang === 'zh-CN') {
-                    titleEl.textContent = defaultTexts.get(key) || '请我喝杯冰阔落，显示故障多刷新几遍';
+                    titleEl.textContent = defaultTexts.get(key) || '支持枫树 · 扫码捐赠 & 广告支持';
                 } else {
                     const langPack = translations[lang];
                     if (langPack && langPack[key]) {
@@ -558,7 +923,7 @@
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
             const isOpen = menu.classList.contains('open');
-            
+
             if (isOpen) {
                 menu.classList.remove('open');
                 btn.classList.remove('active');
@@ -609,7 +974,7 @@
         // 主题切换
         const themeBtn = document.getElementById('themeBtn');
         const html = document.documentElement;
-        
+
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             html.setAttribute('data-theme', savedTheme);
@@ -628,18 +993,66 @@
             updateThemeIcon(newTheme);
         });
 
-        // 图片入场动画
-        document.addEventListener('DOMContentLoaded', () => {
-            const imageContainer = document.querySelector('.image-container');
-            imageContainer.style.opacity = '0';
-            imageContainer.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                imageContainer.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                imageContainer.style.opacity = '1';
-                imageContainer.style.transform = 'translateY(0)';
-            }, 200);
-        });
+        // 卡片入场动画（Intersection Observer）
+        function setupCardAnimations() {
+            const cards = document.querySelectorAll('.donate-card');
+
+            // 如果浏览器支持 IntersectionObserver，使用它
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.15,
+                    rootMargin: '0px 0px -30px 0px'
+                });
+
+                cards.forEach(card => observer.observe(card));
+            } else {
+                // 降级方案：直接延迟显示
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, 200 + index * 150);
+                });
+            }
+        }
+
+        // 广告加载后隐藏占位文字
+        function setupAdObserver() {
+            const adWrapper = document.getElementById('adWrapper');
+            const placeholder = adWrapper.querySelector('.ad-placeholder-note');
+            if (!placeholder) return;
+
+            // 使用 MutationObserver 监听广告容器变化
+            if ('MutationObserver' in window) {
+                const observer = new MutationObserver(() => {
+                    const insEl = adWrapper.querySelector('ins');
+                    if (insEl && insEl.clientHeight > 10) {
+                        placeholder.style.opacity = '0';
+                        // 广告成功加载后可以断开观察
+                        setTimeout(() => {
+                            if (insEl.clientHeight > 10) {
+                                placeholder.style.display = 'none';
+                            }
+                        }, 800);
+                        observer.disconnect();
+                    }
+                });
+                observer.observe(adWrapper, { childList: true, subtree: true, attributes: true });
+                // 5秒后如果广告仍未加载，保留占位文字但降低不透明度
+                setTimeout(() => {
+                    const insEl = adWrapper.querySelector('ins');
+                    if (!insEl || insEl.clientHeight < 10) {
+                        placeholder.style.opacity = '0.35';
+                    }
+                }, 5000);
+            }
+        }
 
         // 初始化
         window.addEventListener('load', () => {
@@ -648,6 +1061,23 @@
             document.getElementById('menu').classList.remove('open');
             const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
             applyLanguage(savedLang);
+            setupCardAnimations();
+            setupAdObserver();
+        });
+
+        // 页面可见性变化时，如果广告未加载则尝试刷新（部分广告拦截器会延迟加载）
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                const adWrapper = document.getElementById('adWrapper');
+                const insEl = adWrapper ? adWrapper.querySelector('ins') : null;
+                if (insEl && insEl.clientHeight < 10 && window.adsbygoogle) {
+                    try {
+                        window.adsbygoogle.push({});
+                    } catch (e) {
+                        // 静默处理
+                    }
+                }
+            }
         });
     </script>
 </body>

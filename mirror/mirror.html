@@ -177,7 +177,7 @@
             opacity: 0;
             transform: scale(0.9) translateY(-8px);
             transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
             transform-origin: top right;
         }
@@ -217,7 +217,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        background 0.2s;
+                background 0.2s;
         }
 
         .menu-button:hover {
@@ -249,8 +249,8 @@
             opacity: 0;
             pointer-events: none;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        background-color 0.4s ease;
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.4s ease;
         }
 
         .menu.open {
@@ -280,11 +280,21 @@
         }
 
         /* 菜单项延迟 */
-        .menu a:nth-child(1) { transition-delay: 0.05s; }
-        .menu a:nth-child(2) { transition-delay: 0.1s; }
-        .menu a:nth-child(3) { transition-delay: 0.15s; }
-        .menu a:nth-child(4) { transition-delay: 0.2s; }
-        .menu a:nth-child(5) { transition-delay: 0.25s; }
+        .menu a:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .menu a:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        .menu a:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+        .menu a:nth-child(4) {
+            transition-delay: 0.2s;
+        }
+        .menu a:nth-child(5) {
+            transition-delay: 0.25s;
+        }
 
         .menu a:hover {
             background: var(--accent-blue);
@@ -313,7 +323,7 @@
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border-radius: 16px;
             box-shadow: 0 20px 40px var(--shadow-color),
-                        inset 0 1px 1px rgba(128, 128, 128, 0.1);
+                inset 0 1px 1px rgba(128, 128, 128, 0.1);
             border: 1px solid var(--border-light);
             transform-style: preserve-3d;
             transition: all 0.4s ease;
@@ -373,11 +383,21 @@
 
         /* 弹跳动画 */
         @keyframes bounce {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.04); }
-            60% { transform: scale(0.98); }
-            85% { transform: scale(1.01); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            35% {
+                transform: scale(1.04);
+            }
+            60% {
+                transform: scale(0.98);
+            }
+            85% {
+                transform: scale(1.01);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .bounce-effect {
@@ -434,10 +454,10 @@
     <!-- 侧边菜单 -->
     <div class="menu" id="menu">
         <a href="windows.html" data-translate-key="menu-windows">Windows源（维护中）</a>
-        <a href="linux.html" data-translate-key="menu-linux">Linux源（维护中）</a>
-        <a href="macos.html" data-translate-key="menu-macos">MacOS源（维护中）</a>
-        <a href="others.html" data-translate-key="menu-others">杂项（维护中）</a>
-        <a href="board.html" data-translate-key="menu-board">公告栏</a>
+        <a href="linux.html" data-translate-key="menu-linux">Linux源（不可用）</a>
+        <a href="macos.html" data-translate-key="menu-macos">MacOS源（不可用）</a>
+        <a href="others.html" data-translate-key="menu-others">杂项（不可用）</a>
+        <a href="board.html" data-translate-key="menu-board">公告板</a>
     </div>
 
     <!-- 3D区域 -->
@@ -465,55 +485,55 @@
         // ========================
         const translations = {
             'zh-TW': {
-                'top-title': '楓葉工作室',
+                'top-title': '返回總覽',
                 'menu-windows': 'Windows源（維護中）',
-                'menu-linux': 'Linux源（維護中）',
-                'menu-macos': 'MacOS源（維護中）',
-                'menu-others': '雜項（維護中）',
+                'menu-linux': 'Linux源（不可用）',
+                'menu-macos': 'MacOS源（不可用）',
+                'menu-others': '雜項（不可用）',
                 'menu-board': '公告欄',
-                'content-message': '本站旨在收集、整理各種官方鏡像並提供下載，可點擊左上角展開下載選項，點擊頂部欄返回',
+                'content-message': '本站旨在收集、整理各種官方鏡像並提供下載，可點擊左上角展開下載選項，點擊頂部欄返回。',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
                 'footer-powered-prefix': '此站點由 ',
                 'footer-powered-suffix': ' 驅動',
                 'footer-icp': '萌ICP備20250732號'
             },
             'en': {
-                'top-title': 'Maple Studio',
-                'menu-windows': 'Windows (Maintenance)',
-                'menu-linux': 'Linux (Maintenance)',
-                'menu-macos': 'MacOS (Maintenance)',
-                'menu-others': 'Others (Maintenance)',
-                'menu-board': 'Bulletin',
-                'content-message': 'This site collects and organizes official images for download. Click the top-left menu to expand options, and the top bar to return.',
+                'top-title': 'Back to Overview',
+                'menu-windows': 'Windows (Under Maintenance)',
+                'menu-linux': 'Linux (Unavailable)',
+                'menu-macos': 'MacOS (Unavailable)',
+                'menu-others': 'Others (Unavailable)',
+                'menu-board': 'Bulletin Board',
+                'content-message': 'This site collects and organizes various official images for download. Click the top-left menu to expand download options, and click the top bar to go back.',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
                 'footer-powered-prefix': 'Powered by ',
                 'footer-powered-suffix': '',
-                'footer-icp': 'MoeICP Bei 20250732'
+                'footer-icp': 'MoeICP-20250732'
             },
             'ja': {
-                'top-title': 'メープルスタジオ',
+                'top-title': '概要に戻る',
                 'menu-windows': 'Windows（メンテナンス中）',
-                'menu-linux': 'Linux（メンテナンス中）',
-                'menu-macos': 'MacOS（メンテナンス中）',
-                'menu-others': 'その他（メンテナンス中）',
+                'menu-linux': 'Linux（利用不可）',
+                'menu-macos': 'MacOS（利用不可）',
+                'menu-others': 'その他（利用不可）',
                 'menu-board': '掲示板',
-                'content-message': 'このサイトは公式イメージを収集・整理してダウンロードを提供しています。左上のメニューでオプションを展開し、トップバーで戻ります。',
-                'footer-copyright': 'MapleSTUDIO 著作権所有',
-                'footer-powered-prefix': 'このサイトは ',
-                'footer-powered-suffix': ' によって運営されています',
-                'footer-icp': '萌ICP備20250732号'
+                'content-message': '当サイトでは、各種公式イメージを収集・整理し、ダウンロードを提供しています。左上のメニューからダウンロードオプションを展開し、トップバーで戻ることができます。',
+                'footer-copyright': 'MapleSTUDIO 全著作権所有',
+                'footer-powered-prefix': '提供: ',
+                'footer-powered-suffix': '',
+                'footer-icp': '萌ICP备20250732号'
             },
             'ko': {
-                'top-title': '메이플 스튜디오',
+                'top-title': '개요로 돌아가기',
                 'menu-windows': 'Windows (유지보수 중)',
-                'menu-linux': 'Linux (유지보수 중)',
-                'menu-macos': 'MacOS (유지보수 중)',
-                'menu-others': '기타 (유지보수 중)',
+                'menu-linux': 'Linux (사용 불가)',
+                'menu-macos': 'MacOS (사용 불가)',
+                'menu-others': '기타 (사용 불가)',
                 'menu-board': '게시판',
-                'content-message': '이 사이트는 공식 이미지를 수집 및 정리하여 다운로드를 제공합니다. 왼쪽 상단 메뉴를 클릭하여 옵션을 확장하고, 상단 바로 돌아갑니다.',
-                'footer-copyright': 'MapleSTUDIO 저작권 소유',
-                'footer-powered-prefix': '이 사이트는 ',
-                'footer-powered-suffix': ' 에 의해 구동됩니다',
+                'content-message': '이 사이트는 다양한 공식 이미지를 수집 및 정리하여 다운로드를 제공합니다. 왼쪽 상단 메뉴를 클릭하여 다운로드 옵션을 확장하고, 상단 바를 클릭하여 돌아갈 수 있습니다.',
+                'footer-copyright': 'MapleSTUDIO All Rights Reserved',
+                'footer-powered-prefix': '제공: ',
+                'footer-powered-suffix': '',
                 'footer-icp': '萌ICP备20250732号'
             }
         };
@@ -548,18 +568,24 @@
                     }
                 }
             });
+
+            // 更新HTML lang属性
+            document.documentElement.lang = lang;
+
+            // 保存语言偏好
             localStorage.setItem('preferredLanguage', lang);
         }
 
         // ========================
-        // 3D效果逻辑（保持不变）
+        // 3D效果逻辑
         // ========================
         const content = document.getElementById('content');
         const glassLayer = document.getElementById('glass-layer');
-        const resistance = 0.1; 
-        const maxTilt = 20; 
+        const resistance = 0.1;
+        const maxTilt = 20;
         let isDragging = false;
-        let offsetX = 0, offsetY = 0;
+        let offsetX = 0,
+            offsetY = 0;
 
         if (matchMedia('(pointer: coarse)').matches) {
             let startX, startY;
@@ -603,7 +629,8 @@
 
         function applyTilt() {
             content.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
-            glassLayer.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
+            glassLayer.style.transform =
+                `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
         }
 
         function resetPosition() {
@@ -622,7 +649,7 @@
             const menu = document.getElementById('menu');
             const btn = document.getElementById('menuBtn');
             const isOpen = menu.classList.contains('open');
-            
+
             if (isOpen) {
                 menu.classList.remove('open');
                 btn.classList.remove('active');
@@ -675,11 +702,11 @@
         document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
 
         // ========================
-        // 主题切换（原有逻辑）
+        // 主题切换
         // ========================
         const themeBtn = document.getElementById('themeBtn');
         const html = document.documentElement;
-        
+
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             html.setAttribute('data-theme', savedTheme);
@@ -693,7 +720,7 @@
         function toggleTheme() {
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);

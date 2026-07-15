@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>上传规则 - 软件库</title>
+    <link rel="icon" href="/Pictures/logo_main.webp" type="image/x-icon">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-color: #0a0c10;
+            --glass-card: rgba(18, 20, 28, 0.5);
+            --glass-menu: rgba(16, 18, 26, 0.7);
+            --glass-topbar: rgba(14, 16, 22, 0.6);
+            --glass-footer: rgba(10, 12, 18, 0.5);
+            --accent-blue: rgba(0, 160, 255, 0.75);
+            --accent-blue-solid: #0090e0;
+            --accent-glow: rgba(0, 160, 255, 0.3);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-list: rgba(255, 255, 255, 0.06);
+            --text-primary: #eaf0f8;
+            --text-secondary: rgba(200, 218, 240, 0.9);
+            --text-tertiary: rgba(170, 184, 210, 0.7);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --shadow-card: rgba(0, 0, 0, 0.3);
+            --divider: rgba(255, 255, 255, 0.06);
+        }
+        [data-theme="light"] {
+            --bg-color: #f2f5fb;
+            --glass-card: rgba(255, 255, 255, 0.5);
+            --glass-menu: rgba(255, 255, 255, 0.7);
+            --glass-topbar: rgba(255, 255, 255, 0.6);
+            --glass-footer: rgba(255, 255, 255, 0.5);
+            --accent-blue: rgba(0, 115, 230, 0.8);
+            --accent-blue-solid: #0066cc;
+            --accent-glow: rgba(0, 115, 230, 0.25);
+            --border-light: rgba(0, 0, 0, 0.08);
+            --border-list: rgba(0, 0, 0, 0.06);
+            --text-primary: #1a1e2b;
+            --text-secondary: rgba(26, 32, 44, 0.85);
+            --text-tertiary: rgba(50, 58, 78, 0.7);
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --shadow-card: rgba(0, 0, 0, 0.06);
+            --divider: rgba(0, 0, 0, 0.05);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0; padding: 0; min-height: 100vh;
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+            background-color: var(--bg-color); color: var(--text-primary);
+            display: flex; flex-direction: column; align-items: center; overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            position: relative; z-index: 0; padding-top: 80px; padding-bottom: 110px;
+        }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('/Pictures/background_software1_mobie.webp');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            opacity: 1; z-index: -1; pointer-events: none; transition: background-image 0.5s ease;
+        }
+        @media (min-width: 768px) { body::before { background-image: url('/Pictures/background_software1_PC.webp'); } }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+        .top-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 64px;
+            background: var(--glass-topbar); backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            display: flex; align-items: center; padding: 0 20px;
+            box-shadow: 0 2px 20px var(--shadow-color); z-index: 1000;
+            border-bottom: 1px solid var(--border-light); transition: all 0.4s ease; gap: 12px;
+        }
+        .top-title {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
+            text-decoration: none; letter-spacing: 0.4px; white-space: nowrap;
+            display: flex; align-items: center; gap: 6px;
+            cursor: pointer;
+        }
+        .icon-leaf { transition: transform 0.4s ease; }
+        .top-title:hover .icon-leaf { transform: rotate(-12deg) scale(1.15); }
+        .menu-button, .theme-toggle, .lang-toggle {
+            background: transparent; border: none; color: var(--text-primary); cursor: pointer;
+            width: 44px; height: 44px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .menu-button { font-size: 1.7rem; line-height: 1; }
+        .theme-toggle { font-size: 1.4rem; margin-left: auto; }
+        .lang-toggle img {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+        .menu-button:hover, .theme-toggle:hover, .lang-toggle:hover { background: rgba(128,128,128,0.15); transform: scale(1.1); }
+        .menu-button.active { transform: rotate(180deg); background: rgba(0,160,255,0.15); }
+        .side-menu {
+            position: fixed; top: 76px; left: 20px; width: 230px;
+            background: var(--glass-menu); backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 20px; padding: 6px 0; box-shadow: 0 16px 40px var(--shadow-color);
+            z-index: 999; border: 1px solid var(--border-light);
+            transform-origin: top left; transform: scale(0.7) translateY(-20px);
+            opacity: 0; pointer-events: none;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+        }
+        .side-menu.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+        .side-menu a {
+            display: block; color: var(--text-primary); text-decoration: none;
+            padding: 12px 20px; margin: 4px 10px; border-radius: 14px;
+            font-weight: 500; font-size: 0.95rem; background: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0; transform: translateX(-14px); letter-spacing: 0.2px;
+        }
+        .side-menu.open a { opacity: 1; transform: translateX(0); }
+        .side-menu a:nth-child(1) { transition-delay: 0.04s; }
+        .side-menu a:nth-child(2) { transition-delay: 0.08s; }
+        .side-menu a:nth-child(3) { transition-delay: 0.12s; }
+        .side-menu a:nth-child(4) { transition-delay: 0.16s; }
+        .side-menu a:nth-child(5) { transition-delay: 0.20s; }
+        .side-menu a:nth-child(6) { transition-delay: 0.24s; }
+        .side-menu a:hover { background: var(--accent-blue); color: white; transform: translateX(5px); box-shadow: 0 0 18px var(--accent-glow); }
+        .main-container { width: 100%; max-width: 900px; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; z-index: 1; }
+        .rules-card {
+            background: var(--glass-card); backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            border-radius: 20px; border: 1px solid var(--border-list);
+            box-shadow: 0 12px 28px var(--shadow-card);
+            padding: 32px 28px; color: var(--text-primary); animation: fadeDown 0.55s ease;
+        }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+        .rules-card h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .rules-card .subtitle {
+            font-size: 0.9rem; color: var(--text-tertiary); margin-bottom: 24px;
+            border-left: 3px solid var(--accent-blue); padding-left: 12px;
+        }
+        .rules-card ol { padding-left: 24px; color: var(--text-secondary); line-height: 1.75; }
+        .rules-card ol li { margin-bottom: 12px; font-size: 0.95rem; }
+        .rules-card ol li::marker { color: var(--accent-blue); font-weight: 600; }
+        .rules-card a { color: var(--accent-blue-solid); text-decoration: none; font-weight: 500; border-bottom: 1px dashed var(--accent-blue); }
+        .rules-card a:hover { opacity: 0.8; }
+        .rules-card .email-link { color: var(--accent-blue-solid); font-weight: 600; border-bottom: none; text-decoration: underline; }
+        .footer {
+            position: fixed; bottom: 0; left: 0; width: 100%; text-align: center;
+            font-size: 0.8rem; color: var(--text-primary); opacity: 0.8;
+            text-shadow: 0 2px 5px var(--shadow-color); z-index: 500;
+            background: var(--glass-footer); backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px); padding: 10px 0 8px;
+            border-top: 1px solid var(--border-light); transition: all 0.4s;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px;
+        }
+        .footer a { color: var(--accent-blue-solid); text-decoration: none; font-weight: 500; }
+        .footer a:hover { opacity: 0.8; text-decoration: underline; }
+        @media (max-width: 750px) { .rules-card { padding: 24px 16px; } }
+        @media (max-width: 500px) { .main-container { padding: 0 10px; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button class="menu-button" id="menuBtn" aria-label="菜单">☰</button>
+        <a href="https://mlms.qzz.io/software/main" class="top-title">
+            <span class="icon-leaf"></span>
+            <span data-i18n="pageTitle">返回软件仓库</span>
+        </a>
+        <button class="lang-toggle" id="langBtn" aria-label="切换语言">
+            <img src="../Pictures/icon_translate.webp" alt="语言">
+        </button>
+        <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+    </div>
+
+    <nav class="side-menu" id="sideMenu">
+        <a href="/mirror/mirror.html" data-i18n="menu1">镜像站 🚧</a>
+        <a href="/mcserver/main.html" data-i18n="menu2">MC服务器</a>
+        <a href="/mcapks.html" data-i18n="menu3">MC版本库 🚫</a>
+        <a href="/software.html" data-i18n="menu4">软件库</a>
+        <a href="/tools/main.html" data-i18n="menu5">小工具 🚫</a>
+        <a href="../main/bulletin_board.html" data-i18n="menu6">公告栏</a>
+    </nav>
+
+    <div class="main-container">
+        <div class="rules-card">
+            <h1 data-i18n="mainTitle">📤 上传内容与合法性限制</h1>
+            <p class="subtitle" data-i18n="subtitle">上传内容为完整的 HTML 网页，所有网页内容应遵守以下规则，可在此基础上个性化编辑。</p>
+
+            <ol>
+                <li data-i18n="rule1"><strong>内容形式：</strong>上传的软件页面必须是一个独立、完整的 HTML 网页。可选附作者信息（B站、抖音、小红书、快手等平台账号）。</li>
+                <li data-i18n="rule2"><strong>存储方式：</strong>所有软件文件须使用第三方平台存储，<strong>禁止使用限速平台</strong>（如百度网盘、夸克网盘等）。上传完成后将下载链接集成到 HTML 网页中。</li>
+                <li data-i18n="rule3"><strong>编写帮助：</strong>不会编写 HTML 的用户可使用 AI 工具生成，或参考以下样板：<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">第三方存储样板</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub或托管同步样板</a></li>
+                <li data-i18n="rule4"><strong>提交方式：</strong>将完整 HTML 代码以邮件附件或正文形式发送至：<a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> 或 <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>。<br>邮件中必须附带 <strong>+86 手机号</strong>（不得使用虚拟号码），我们将短信验证。审核预计 <strong>3~4 天</strong>，结果通过邮箱（常用）或短信回复。</li>
+                <li data-i18n="rule5"><strong>法律法规：</strong>禁止上传任何违反国家法律法规的内容，包括但不限于色情、暴力、赌博、挑起地缘政治冲突的相关软件，<strong>一经发现移交公安处理</strong>。</li>
+                <li data-i18n="rule6"><strong>恶意代码：</strong>禁止上传含有恶意代码、病毒、木马、勒索软件或后门的程序。</li>
+                <li data-i18n="rule7"><strong>链接有效性：</strong>所有超链接应确保有效。失效链接需及时更新，超过半年未整改的页面将被删除。暂时内容缺失可使用“<code>111</code>”标记占位。</li>
+                <li data-i18n="rule8"><strong>付费与解密：</strong>禁止上传需要解密、购买或以任何方式付费才能使用的资源。</li>
+                <li data-i18n="rule9"><strong>广告与收费：</strong>禁止在软件中植入广告或二次收费（官方原有收费除外）。</li>
+                <li data-i18n="rule10"><strong>知识产权：</strong>上传他人享有知识产权、商标权、专利权的软件或资源，必须获得明确授权并在页面中显著标明许可信息。</li>
+                <li data-i18n="rule11"><strong>数据存储：</strong>本站不存储任何用户数据，所有数据均由第三方平台托管，上传者自行负责文件安全与可用性。</li>
+                <li data-i18n="rule12"><strong>学习用途：</strong>未经许可上传的内容仅供学习参考，下载者应在 24 小时内删除。</li>
+                <li data-i18n="rule13"><strong>责任归属：</strong>因上传者不遵守规则，而本站审核机制在极端情况下出现疏漏的，由上传者自行承担全部责任，本站不付任何责任。</li>
+                <li data-i18n="rule14"><strong>隐私追踪：</strong>严禁上传可用于绕过用户同意收集数据的追踪代码或分析 SDK。</li>
+                <li data-i18n="rule15"><strong>隐私信息：</strong>禁止上传含有他人隐私信息（身份证号、银行卡号、个人照片等）的文件。</li>
+                <li data-i18n="rule16"><strong>隐蔽通信：</strong>禁止上传私自嵌入隐蔽通信模块的程序。</li>
+                <li data-i18n="rule17"><strong>攻击工具：</strong>禁止上传用于网络攻击、端口扫描、漏洞利用的自动化攻击工具。</li>
+                <li data-i18n="rule18"><strong>版权素材：</strong>禁止上传可能引发版权争议的全套游戏资源或未授权商业素材包。</li>
+                <li data-i18n="rule19"><strong>开源修改：</strong>对修改自他人开源项目的软件，必须保留原始版权声明并明确标注修改内容。</li>
+                <li data-i18n="rule20"><strong>命名冲突：</strong>禁止上传与已有项目同名或极易混淆的软件，除非获得项目拥有者明确授权或在页面显著位置标记说明。</li>
+                <li data-i18n="rule21"><strong>版本标签：</strong>网页中引用的超链接或下载按钮必须对应明确的版本标签（tag），不允许仅 commit 而缺少版本标记。</li>
+                <li data-i18n="rule22"><strong>恶意行为：</strong>上传的网页代码不得含有任何形式的挖矿、弹窗广告、浏览器劫持等恶意行为。</li>
+                <li data-i18n="rule23"><strong>代码稳定：</strong>不得上传包含无限循环、强制内存泄漏等故意破坏系统稳定性的测试代码。</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span><a href="readme.html" data-i18n="footer1">MapleSTUDIO 版权所有</a></span>
+        <span>|</span>
+        <span data-i18n="footer2">由 <a href="https://github.com" target="_blank" rel="noopener">Github</a> 驱动</span>
+        <span>|</span>
+        <span><a href="uploadsoftware.html" target="_blank" rel="noopener" data-i18n="footer3">上传软件</a></span>
+        <span>|</span>
+        <span><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" rel="noopener" data-i18n="footer4">萌ICP备20250732号</a></span>
+    </div>
+
+    <script>
+        (function() {
+            const i18n = {
+                'zh-CN': {
+                    pageTitle: '返回软件仓库',
+                    mainTitle: '📤 上传内容与合法性限制',
+                    subtitle: '上传内容为完整的 HTML 网页，所有网页内容应遵守以下规则，可在此基础上个性化编辑。',
+                    menu1: '镜像站 🚧',
+                    menu2: 'MC服务器',
+                    menu3: 'MC版本库 🚫',
+                    menu4: '软件库',
+                    menu5: '小工具 🚫',
+                    menu6: '公告栏',
+                    rule1: '<strong>内容形式：</strong>上传的软件页面必须是一个独立、完整的 HTML 网页。可选附作者信息（B站、抖音、小红书、快手等平台账号）。',
+                    rule2: '<strong>存储方式：</strong>所有软件文件须使用第三方平台存储，<strong>禁止使用限速平台</strong>（如百度网盘、夸克网盘等）。上传完成后将下载链接集成到 HTML 网页中。',
+                    rule3: '<strong>编写帮助：</strong>不会编写 HTML 的用户可使用 AI 工具生成，或参考以下样板：<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">第三方存储样板</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub或托管同步样板</a>',
+                    rule4: '<strong>提交方式：</strong>将完整 HTML 代码以邮件附件或正文形式发送至：<a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> 或 <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>。<br>邮件中必须附带 <strong>+86 手机号</strong>（不得使用虚拟号码），我们将短信验证。审核预计 <strong>3~4 天</strong>，结果通过邮箱（常用）或短信回复。',
+                    rule5: '<strong>法律法规：</strong>禁止上传任何违反国家法律法规的内容，包括但不限于色情、暴力、赌博、挑起地缘政治冲突的相关软件，<strong>一经发现移交公安处理</strong>。',
+                    rule6: '<strong>恶意代码：</strong>禁止上传含有恶意代码、病毒、木马、勒索软件或后门的程序。',
+                    rule7: '<strong>链接有效性：</strong>所有超链接应确保有效。失效链接需及时更新，超过半年未整改的页面将被删除。暂时内容缺失可使用“<code>111</code>”标记占位。',
+                    rule8: '<strong>付费与解密：</strong>禁止上传需要解密、购买或以任何方式付费才能使用的资源。',
+                    rule9: '<strong>广告与收费：</strong>禁止在软件中植入广告或二次收费（官方原有收费除外）。',
+                    rule10: '<strong>知识产权：</strong>上传他人享有知识产权、商标权、专利权的软件或资源，必须获得明确授权并在页面中显著标明许可信息。',
+                    rule11: '<strong>数据存储：</strong>本站不存储任何用户数据，所有数据均由第三方平台托管，上传者自行负责文件安全与可用性。',
+                    rule12: '<strong>学习用途：</strong>未经许可上传的内容仅供学习参考，下载者应在 24 小时内删除。',
+                    rule13: '<strong>责任归属：</strong>因上传者不遵守规则，而本站审核机制在极端情况下出现疏漏的，由上传者自行承担全部责任，本站不付任何责任。',
+                    rule14: '<strong>隐私追踪：</strong>严禁上传可用于绕过用户同意收集数据的追踪代码或分析 SDK。',
+                    rule15: '<strong>隐私信息：</strong>禁止上传含有他人隐私信息（身份证号、银行卡号、个人照片等）的文件。',
+                    rule16: '<strong>隐蔽通信：</strong>禁止上传私自嵌入隐蔽通信模块的程序。',
+                    rule17: '<strong>攻击工具：</strong>禁止上传用于网络攻击、端口扫描、漏洞利用的自动化攻击工具。',
+                    rule18: '<strong>版权素材：</strong>禁止上传可能引发版权争议的全套游戏资源或未授权商业素材包。',
+                    rule19: '<strong>开源修改：</strong>对修改自他人开源项目的软件，必须保留原始版权声明并明确标注修改内容。',
+                    rule20: '<strong>命名冲突：</strong>禁止上传与已有项目同名或极易混淆的软件，除非获得项目拥有者明确授权或在页面显著位置标记说明。',
+                    rule21: '<strong>版本标签：</strong>网页中引用的超链接或下载按钮必须对应明确的版本标签（tag），不允许仅 commit 而缺少版本标记。',
+                    rule22: '<strong>恶意行为：</strong>上传的网页代码不得含有任何形式的挖矿、弹窗广告、浏览器劫持等恶意行为。',
+                    rule23: '<strong>代码稳定：</strong>不得上传包含无限循环、强制内存泄漏等故意破坏系统稳定性的测试代码。',
+                    footer1: 'MapleSTUDIO 版权所有',
+                    footer2: '由 <a href="https://github.com" target="_blank" rel="noopener">Github</a> 驱动',
+                    footer3: '上传软件',
+                    footer4: '萌ICP备20250732号'
+                },
+                'zh-TW': {
+                    pageTitle: '返回軟體倉庫',
+                    mainTitle: '📤 上傳內容與合法性限制',
+                    subtitle: '上傳內容為完整的 HTML 網頁，所有網頁內容應遵守以下規則，可在此基礎上個性化編輯。',
+                    menu1: '鏡像站 🚧',
+                    menu2: 'MC伺服器',
+                    menu3: 'MC版本庫 🚫',
+                    menu4: '軟體庫',
+                    menu5: '小工具 🚫',
+                    menu6: '公告欄',
+                    rule1: '<strong>內容形式：</strong>上傳的軟體頁面必須是一個獨立、完整的 HTML 網頁。可選附作者資訊（B站、抖音、小紅書、快手等平台帳號）。',
+                    rule2: '<strong>存儲方式：</strong>所有軟體檔案須使用第三方平台存儲，<strong>禁止使用限速平台</strong>（如百度網盤、夸克網盤等）。上傳完成後將下載連結整合到 HTML 網頁中。',
+                    rule3: '<strong>編寫幫助：</strong>不會編寫 HTML 的使用者可使用 AI 工具生成，或參考以下範例：<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">第三方存儲範例</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub或託管同步範例</a>',
+                    rule4: '<strong>提交方式：</strong>將完整 HTML 代碼以郵件附件或正文形式發送至：<a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> 或 <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>。<br>郵件中必須附帶 <strong>+86 手機號</strong>（不得使用虛擬號碼），我們將短信驗證。審核預計 <strong>3~4 天</strong>，結果通過郵箱（常用）或短信回覆。',
+                    rule5: '<strong>法律法規：</strong>禁止上傳任何違反國家法律法規的內容，包括但不限於色情、暴力、賭博、挑起地緣政治衝突的相關軟體，<strong>一經發現移交公安處理</strong>。',
+                    rule6: '<strong>惡意代碼：</strong>禁止上傳含有惡意代碼、病毒、木馬、勒索軟體或後門的程式。',
+                    rule7: '<strong>連結有效性：</strong>所有超連結應確保有效。失效連結需及時更新，超過半年未整改的頁面將被刪除。暫時內容缺失可使用“<code>111</code>”標記佔位。',
+                    rule8: '<strong>付費與解密：</strong>禁止上傳需要解密、購買或以任何方式付費才能使用的資源。',
+                    rule9: '<strong>廣告與收費：</strong>禁止在軟體中植入廣告或二次收費（官方原有收費除外）。',
+                    rule10: '<strong>智慧財產權：</strong>上傳他人享有智慧財產權、商標權、專利權的軟體或資源，必須獲得明確授權並在頁面中顯著標明許可資訊。',
+                    rule11: '<strong>資料存儲：</strong>本站不存儲任何使用者資料，所有資料均由第三方平台託管，上傳者自行負責檔案安全與可用性。',
+                    rule12: '<strong>學習用途：</strong>未經許可上傳的內容僅供學習參考，下載者應在 24 小時內刪除。',
+                    rule13: '<strong>責任歸屬：</strong>因上傳者不遵守規則，而本站審核機制在極端情況下出現疏漏的，由上傳者自行承擔全部責任，本站不負任何責任。',
+                    rule14: '<strong>隱私追蹤：</strong>嚴禁上傳可用於繞過使用者同意收集資料的追蹤代碼或分析 SDK。',
+                    rule15: '<strong>隱私資訊：</strong>禁止上傳含有他人隱私資訊（身份證號、銀行卡號、個人照片等）的檔案。',
+                    rule16: '<strong>隱蔽通訊：</strong>禁止上傳私自嵌入隱蔽通訊模組的程式。',
+                    rule17: '<strong>攻擊工具：</strong>禁止上傳用於網路攻擊、埠掃描、漏洞利用的自動化攻擊工具。',
+                    rule18: '<strong>版權素材：</strong>禁止上傳可能引發版權爭議的全套遊戲資源或未授權商業素材包。',
+                    rule19: '<strong>開源修改：</strong>對修改自他人開源專案的軟體，必須保留原始版權聲明並明確標註修改內容。',
+                    rule20: '<strong>命名衝突：</strong>禁止上傳與已有專案同名或極易混淆的軟體，除非獲得專案擁有者明確授權或在頁面顯著位置標記說明。',
+                    rule21: '<strong>版本標籤：</strong>網頁中引用的超連結或下載按鈕必須對應明確的版本標籤（tag），不允許僅 commit 而缺少版本標記。',
+                    rule22: '<strong>惡意行為：</strong>上傳的網頁代碼不得含有任何形式的挖礦、彈窗廣告、瀏覽器劫持等惡意行為。',
+                    rule23: '<strong>代碼穩定：</strong>不得上傳包含無限迴圈、強制記憶體洩漏等故意破壞系統穩定性的測試代碼。',
+                    footer1: 'MapleSTUDIO 版權所有',
+                    footer2: '由 <a href="https://github.com" target="_blank" rel="noopener">Github</a> 驅動',
+                    footer3: '上傳軟體',
+                    footer4: '萌ICP備20250732號'
+                },
+                'en': {
+                    pageTitle: 'Back to Repository',
+                    mainTitle: '📤 Upload Content & Legality Restrictions',
+                    subtitle: 'The uploaded content must be a complete HTML page. All content must comply with the following rules, on which basis personalization is allowed.',
+                    menu1: 'Mirror 🚧',
+                    menu2: 'MC Server',
+                    menu3: 'MC Versions 🚫',
+                    menu4: 'Software',
+                    menu5: 'Tools 🚫',
+                    menu6: 'Bulletin',
+                    rule1: '<strong>Content Format:</strong> The submitted software page must be an independent, complete HTML page. Author info (Bilibili, TikTok, RED, Kuaishou, etc.) may be optionally included.',
+                    rule2: '<strong>Storage Method:</strong> All software files must be hosted on a third‑party platform. <strong>Speed‑limited platforms</strong> (e.g., Baidu Netdisk, Quark) are prohibited. After uploading, integrate the download link into the HTML page.',
+                    rule3: '<strong>Writing Help:</strong> Users unfamiliar with HTML can use AI tools or refer to these templates:<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">Third‑Party Storage Template</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub / Sync Template</a>',
+                    rule4: '<strong>Submission:</strong> Send the complete HTML code as email attachment or body to: <a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> or <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>.<br>A <strong>+86 mobile number</strong> (virtual numbers not allowed) must be included; we will verify via SMS. Review takes about <strong>3–4 days</strong>; results are sent by email (preferred) or SMS.',
+                    rule5: '<strong>Laws & Regulations:</strong> Content violating national laws (including pornography, violence, gambling, inciting geopolitical conflicts) is strictly prohibited. <strong>Offenders will be reported to public security.</strong>',
+                    rule6: '<strong>Malicious Code:</strong> Programs containing malware, viruses, trojans, ransomware, or backdoors are forbidden.',
+                    rule7: '<strong>Link Validity:</strong> All hyperlinks must remain valid. Broken links must be updated promptly; pages not corrected within six months will be removed. Temporary missing content may be marked with “<code>111</code>”.',
+                    rule8: '<strong>Payment & Decryption:</strong> Resources that require decryption, purchase, or any form of payment are prohibited.',
+                    rule9: '<strong>Ads & Charges:</strong> Do not embed advertisements or secondary charges in the software (official charges excepted).',
+                    rule10: '<strong>Intellectual Property:</strong> If you upload software or resources owned by others (copyright, trademark, patent), you must obtain explicit authorization and clearly display the license information on the page.',
+                    rule11: '<strong>Data Storage:</strong> This site stores no user data. All data is hosted on third‑party platforms; the uploader is responsible for file security and availability.',
+                    rule12: '<strong>Study Purpose:</strong> Unauthorized content is for study reference only; downloaders should delete it within 24 hours.',
+                    rule13: '<strong>Liability:</strong> If the uploader fails to comply with the rules and the site’s review mechanism has an oversight under extreme circumstances, the uploader bears full responsibility; the site assumes no liability.',
+                    rule14: '<strong>Privacy Tracking:</strong> Tracking code or analytics SDKs that can bypass user consent are strictly prohibited.',
+                    rule15: '<strong>Private Information:</strong> Files containing others’ private information (ID numbers, bank card numbers, personal photos, etc.) are forbidden.',
+                    rule16: '<strong>Covert Communication:</strong> Programs with secretly embedded covert communication modules are prohibited.',
+                    rule17: '<strong>Attack Tools:</strong> Automated attack tools for network attacks, port scanning, or vulnerability exploitation are forbidden.',
+                    rule18: '<strong>Copyrighted Assets:</strong> Full game assets or unauthorized commercial material packs that may cause copyright disputes are prohibited.',
+                    rule19: '<strong>Open Source Modification:</strong> Software modified from open‑source projects must retain the original copyright notice and clearly indicate the modifications.',
+                    rule20: '<strong>Name Conflicts:</strong> Do not upload software with the same or confusingly similar name to existing projects, unless explicitly authorized by the project owner or clearly marked on the page.',
+                    rule21: '<strong>Version Tags:</strong> All hyperlinks or download buttons on the page must correspond to an explicit version tag; commits without version tags are not allowed.',
+                    rule22: '<strong>Malicious Behavior:</strong> Uploaded web code must not contain any form of cryptomining, pop‑up ads, browser hijacking, or similar malicious behavior.',
+                    rule23: '<strong>Code Stability:</strong> Test code that contains infinite loops, forced memory leaks, or other acts that deliberately destabilize the system is forbidden.',
+                    footer1: 'MapleSTUDIO All Rights Reserved',
+                    footer2: 'Powered by <a href="https://github.com" target="_blank" rel="noopener">Github</a>',
+                    footer3: 'Upload Software',
+                    footer4: 'MoeICP 20250732'
+                },
+                'ja': {
+                    pageTitle: 'ソフトウェアリポジトリに戻る',
+                    mainTitle: '📤 アップロード内容と合法性の制限',
+                    subtitle: 'アップロードする内容は完全なHTMLページである必要があります。以下のルールに従い、個別に編集することができます。',
+                    menu1: 'ミラー 🚧',
+                    menu2: 'MCサーバー',
+                    menu3: 'MCバージョン 🚫',
+                    menu4: 'ソフトウェア',
+                    menu5: 'ツール 🚫',
+                    menu6: '掲示板',
+                    rule1: '<strong>コンテンツ形式：</strong>提出するソフトウェアページは、独立した完全なHTMLページである必要があります。作者情報（Bilibili、TikTok、RED、Kuaishouなど）を任意で含めることができます。',
+                    rule2: '<strong>保存方法：</strong>すべてのソフトウェアファイルはサードパーティのプラットフォームでホストする必要があります。<strong>速度制限のあるプラットフォーム</strong>（Baidu Netdisk、Quarkなど）は使用禁止です。アップロード後、ダウンロードリンクをHTMLページに統合してください。',
+                    rule3: '<strong>作成のヘルプ：</strong>HTMLに不慣れな方はAIツールを使用するか、以下のテンプレートを参照してください：<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">サードパーティストレージテンプレート</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub / 同期テンプレート</a>',
+                    rule4: '<strong>提出方法：</strong>完全なHTMLコードをメールの添付または本文として以下に送信してください：<a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> または <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>。<br><strong>+86 携帯電話番号</strong>（仮想番号は不可）を必ず記載してください。SMSで確認します。審査には<strong>3〜4日</strong>程度かかり、結果はメール（推奨）またはSMSで返信されます。',
+                    rule5: '<strong>法令遵守：</strong>国の法令に違反するコンテンツ（ポルノ、暴力、ギャンブル、地政学的紛争を扇動するソフトウェアを含む）のアップロードは禁止されています。<strong>違反者は公安に通報されます。</strong>',
+                    rule6: '<strong>マルウェア：</strong>マルウェア、ウイルス、トロイの木馬、ランサムウェア、バックドアを含むプログラムは禁止されています。',
+                    rule7: '<strong>リンクの有効性：</strong>すべてのハイパーリンクは有効である必要があります。リンク切れは速やかに更新し、半年以上修正されないページは削除されます。一時的にコンテンツが不足する場合は「<code>111</code>」のマークでプレースホルダーとしてください。',
+                    rule8: '<strong>支払いと復号：</strong>復号、購入、または何らかの支払いを必要とするリソースは禁止されています。',
+                    rule9: '<strong>広告と課金：</strong>ソフトウェア内に広告や二次課金を埋め込まないでください（公式の課金を除く）。',
+                    rule10: '<strong>知的財産権：</strong>他人の著作権、商標権、特許権を有するソフトウェアやリソースをアップロードする場合は、明示的な許可を得て、ページにライセンス情報を明確に表示する必要があります。',
+                    rule11: '<strong>データ保存：</strong>当サイトは一切のユーザーデータを保存しません。すべてのデータはサードパーティプラットフォームでホストされ、アップロード者がファイルの安全性と可用性に責任を負います。',
+                    rule12: '<strong>学習目的：</strong>許可なくアップロードされたコンテンツは学習参考用であり、ダウンロード者は24時間以内に削除する必要があります。',
+                    rule13: '<strong>責任の所在：</strong>アップロード者がルールを遵守せず、極端な状況で当サイトの審査メカニズムに見落としがあった場合、全責任はアップロード者が負い、当サイトは一切の責任を負いません。',
+                    rule14: '<strong>プライバシートラッキング：</strong>ユーザーの同意を回避してデータを収集するトラッキングコードや分析SDKのアップロードは固く禁じます。',
+                    rule15: '<strong>個人情報：</strong>他人の個人情報（身分証明書番号、銀行口座番号、個人写真など）を含むファイルは禁止されています。',
+                    rule16: '<strong>隠蔽通信：</strong>隠し通信モジュールを密かに埋め込んだプログラムは禁止されています。',
+                    rule17: '<strong>攻撃ツール：</strong>ネットワーク攻撃、ポートスキャン、脆弱性悪用のための自動化ツールは禁止されています。',
+                    rule18: '<strong>著作権素材：</strong>著作権紛争を引き起こす可能性のある完全なゲームアセットや未許可の商用素材パックは禁止されています。',
+                    rule19: '<strong>オープンソースの改変：</strong>オープンソースプロジェクトを改変したソフトウェアは、元の著作権表示を保持し、改変内容を明示する必要があります。',
+                    rule20: '<strong>名称の衝突：</strong>既存のプロジェクトと同名または混同しやすい名称のソフトウェアのアップロードは、プロジェクト所有者の明示的な許可があるか、ページに明確に表示されている場合を除き、禁止されています。',
+                    rule21: '<strong>バージョンタグ：</strong>ページ内のハイパーリンクやダウンロードボタンは、明確なバージョンタグに対応している必要があり、タグなしのコミットのみでは許可されません。',
+                    rule22: '<strong>悪質な行為：</strong>アップロードするWebコードに、暗号通貨マイニング、ポップアップ広告、ブラウザハイジャックなどの悪質な行為を含めてはなりません。',
+                    rule23: '<strong>コードの安定性：</strong>無限ループや強制的なメモリリークなど、システムの安定性を意図的に損なうテストコードのアップロードは禁止されています。',
+                    footer1: 'MapleSTUDIO 無断複写・転載を禁じます',
+                    footer2: '<a href="https://github.com" target="_blank" rel="noopener">Github</a> によって駆動',
+                    footer3: 'ソフトウェアをアップロード',
+                    footer4: '萌ICP備20250732号'
+                },
+                'ko': {
+                    pageTitle: '소프트웨어 저장소로 돌아가기',
+                    mainTitle: '📤 업로드 콘텐츠 및 합법성 제한',
+                    subtitle: '업로드 콘텐츠는 완전한 HTML 페이지여야 합니다. 다음 규칙을 준수하는 범위 내에서 개별 편집이 가능합니다.',
+                    menu1: '미러 🚧',
+                    menu2: 'MC 서버',
+                    menu3: 'MC 버전 🚫',
+                    menu4: '소프트웨어',
+                    menu5: '도구 🚫',
+                    menu6: '게시판',
+                    rule1: '<strong>콘텐츠 형식:</strong> 제출할 소프트웨어 페이지는 독립적이고 완전한 HTML 페이지여야 합니다. 작성자 정보(Bilibili, TikTok, RED, Kuaishou 등)를 선택적으로 포함할 수 있습니다.',
+                    rule2: '<strong>저장 방법:</strong> 모든 소프트웨어 파일은 제3자 플랫폼에서 호스팅해야 합니다. <strong>속도 제한 플랫폼</strong>(바이두 넷디스크, Quark 등)은 금지됩니다. 업로드 후 다운로드 링크를 HTML 페이지에 통합하세요.',
+                    rule3: '<strong>작성 도움말:</strong> HTML에 익숙하지 않은 분은 AI 도구를 사용하거나 다음 템플릿을 참고하세요:<br> • <a href="https://mlms.qzz.io/software/pages/Adobe(all)/adobe" target="_blank" rel="noopener">제3자 스토리지 템플릿</a><br> • <a href="https://mlms.qzz.io/software/pages/7zip_list/7zip" target="_blank" rel="noopener">GitHub / 동기화 템플릿</a>',
+                    rule4: '<strong>제출 방법:</strong> 완전한 HTML 코드를 이메일 첨부 또는 본문으로 다음 주소로 보내주세요: <a class="email-link" href="mailto:jiapeixuan100@163.com">jiapeixuan100@163.com</a> 또는 <a class="email-link" href="mailto:jiapeixuan9181128@outlook.com">jiapeixuan9181128@outlook.com</a>.<br><strong>+86 휴대폰 번호</strong>(가상 번호 불가)를 반드시 포함해야 하며, SMS로 확인합니다. 심사에는 약 <strong>3~4일</strong>이 소요되며, 결과는 이메일(권장) 또는 SMS로 회신됩니다.',
+                    rule5: '<strong>법규 준수:</strong> 국가 법규를 위반하는 콘텐츠(음란물, 폭력, 도박, 지정학적 갈등을 조장하는 소프트웨어 포함)의 업로드는 금지됩니다. <strong>위반 시 공안에 인계됩니다.</strong>',
+                    rule6: '<strong>악성 코드:</strong> 악성 코드, 바이러스, 트로이 목마, 랜섬웨어, 백도어를 포함한 프로그램은 금지됩니다.',
+                    rule7: '<strong>링크 유효성:</strong> 모든 하이퍼링크는 유효해야 합니다. 깨진 링크는 즉시 수정되어야 하며, 6개월 이상 수정되지 않은 페이지는 삭제됩니다. 임시로 콘텐츠가 부족한 경우 “<code>111</code>”로 표시할 수 있습니다.',
+                    rule8: '<strong>결제 및 복호화:</strong> 복호화, 구매 또는 어떠한 형태의 결제를 요구하는 리소스는 금지됩니다.',
+                    rule9: '<strong>광고 및 요금:</strong> 소프트웨어 내에 광고나 이중 과금을 포함하지 마세요(공식 요금은 제외).',
+                    rule10: '<strong>지식 재산권:</strong> 타인의 저작권, 상표권, 특허권이 있는 소프트웨어나 리소스를 업로드할 경우, 명시적인 허가를 받고 페이지에 라이선스 정보를 명확히 표시해야 합니다.',
+                    rule11: '<strong>데이터 저장:</strong> 이 사이트는 어떠한 사용자 데이터도 저장하지 않습니다. 모든 데이터는 제3자 플랫폼에서 호스팅되며, 업로더가 파일의 안전과 가용성을 책임집니다.',
+                    rule12: '<strong>학습 목적:</strong> 허가 없이 업로드된 콘텐츠는 학습 참고용으로만 제공되며, 다운로더는 24시간 이내에 삭제해야 합니다.',
+                    rule13: '<strong>책임 소재:</strong> 업로더가 규칙을 준수하지 않아 사이트의 심사 메커니즘이 극단적인 상황에서 누락된 경우, 모든 책임은 업로더에게 있으며, 사이트는 어떠한 책임도 지지 않습니다.',
+                    rule14: '<strong>개인정보 추적:</strong> 사용자 동의를 우회하여 데이터를 수집하는 추적 코드나 분석 SDK의 업로드는 엄격히 금지됩니다.',
+                    rule15: '<strong>개인정보:</strong> 타인의 개인정보(주민등록번호, 은행 계좌번호, 개인 사진 등)가 포함된 파일은 금지됩니다.',
+                    rule16: '<strong>은밀한 통신:</strong> 은밀하게 통신 모듈을 내장한 프로그램은 금지됩니다.',
+                    rule17: '<strong>공격 도구:</strong> 네트워크 공격, 포트 스캔, 취약점 익스플로잇을 위한 자동화 도구는 금지됩니다.',
+                    rule18: '<strong>저작권 자산:</strong> 저작권 분쟁을 일으킬 수 있는 완전한 게임 애셋이나 허가되지 않은 상업용 소재 팩은 금지됩니다.',
+                    rule19: '<strong>오픈소스 수정:</strong> 오픈소스 프로젝트를 수정한 소프트웨어는 원래 저작권 표시를 유지하고 수정 내용을 명확히 표시해야 합니다.',
+                    rule20: '<strong>이름 충돌:</strong> 기존 프로젝트와 동일하거나 혼동하기 쉬운 이름의 소프트웨어 업로드는 프로젝트 소유자의 명시적 허가가 있거나 페이지에 명확히 표시된 경우를 제외하고 금지됩니다.',
+                    rule21: '<strong>버전 태그:</strong> 페이지 내 하이퍼링크나 다운로드 버튼은 명확한 버전 태그와 연결되어야 하며, 태그 없는 커밋만으로는 허용되지 않습니다.',
+                    rule22: '<strong>악의적 행위:</strong> 업로드된 웹 코드에는 암호화폐 채굴, 팝업 광고, 브라우저 하이재킹 등 악의적 행위가 포함되어서는 안 됩니다.',
+                    rule23: '<strong>코드 안정성:</strong> 무한 루프, 강제 메모리 누수 등 시스템 안정성을 고의로 해치는 테스트 코드의 업로드는 금지됩니다.',
+                    footer1: 'MapleSTUDIO All Rights Reserved',
+                    footer2: '<a href="https://github.com" target="_blank" rel="noopener">Github</a> 제공',
+                    footer3: '소프트웨어 업로드',
+                    footer4: '萌ICP備20250732号'
+                }
+            };
+
+            function applyLanguage(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.dataset.i18n;
+                    if (i18n[lang] && i18n[lang][key]) {
+                        if (i18n[lang][key].includes('<')) {
+                            el.innerHTML = i18n[lang][key];
+                        } else {
+                            el.textContent = i18n[lang][key];
+                        }
+                    }
+                });
+                document.documentElement.lang = lang;
+                localStorage.setItem('lang', lang);
+            }
+
+            function cycleLanguage() {
+                const langs = Object.keys(i18n);
+                let current = localStorage.getItem('lang') || 'zh-CN';
+                let idx = langs.indexOf(current);
+                idx = (idx + 1) % langs.length;
+                applyLanguage(langs[idx]);
+            }
+
+            const themeBtn = document.getElementById('themeBtn');
+            const html = document.documentElement;
+            function initTheme() {
+                const saved = localStorage.getItem('theme') || 'dark';
+                html.setAttribute('data-theme', saved);
+                themeBtn.textContent = saved === 'light' ? '☀️' : '🌙';
+            }
+            function toggleTheme() {
+                const cur = html.getAttribute('data-theme');
+                const next = cur === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                themeBtn.textContent = next === 'light' ? '☀️' : '🌙';
+            }
+            themeBtn.addEventListener('click', toggleTheme);
+
+            const sideMenu = document.getElementById('sideMenu');
+            const menuBtn = document.getElementById('menuBtn');
+            function toggleMenu() {
+                const isOpen = sideMenu.classList.contains('open');
+                sideMenu.classList.toggle('open', !isOpen);
+                menuBtn.classList.toggle('active', !isOpen);
+            }
+            menuBtn.addEventListener('click', toggleMenu);
+            document.addEventListener('click', (e) => {
+                if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target) && sideMenu.classList.contains('open')) {
+                    toggleMenu();
+                }
+            });
+            sideMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (e.target.tagName === 'A') setTimeout(toggleMenu, 200);
+            });
+
+            const langBtn = document.getElementById('langBtn');
+            langBtn.addEventListener('click', cycleLanguage);
+
+            initTheme();
+            const savedLang = localStorage.getItem('lang') || 'zh-CN';
+            applyLanguage(savedLang);
+            sideMenu.classList.remove('open');
+            menuBtn.classList.remove('active');
+        })();
+    </script>
+</body>
+</html>

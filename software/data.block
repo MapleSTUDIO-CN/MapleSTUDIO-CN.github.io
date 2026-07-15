@@ -9,8 +9,7 @@
     "size": "若干GiB",
     "platform": ["windows"],
     "downloadUrl": "/software/pages/Adobe(all)/adobe.html"
-  }
- {
+  
     "id": 2,
     "name": "Adobe合集",
     "icon": "/software/pages/Adobe(all)/adobe_icon.png",

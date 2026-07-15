@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>软件库</title>
+  <!-- 浏览器选项卡图标 -->
+  <link rel="icon" href="../Pictures/logo_main.webp" type="image/x-icon">
+  <style>
+    /* ========== 全局重置 & 变量 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #0a0c10;
+      --glass-bg: rgba(18, 20, 28, 0.5);
+      --glass-hover: rgba(25, 28, 38, 0.6);
+      --glass-stripe: rgba(22, 24, 34, 0.45);
+      --glass-menu: rgba(16, 18, 26, 0.7);
+      --glass-search: rgba(14, 16, 24, 0.55);
+      --glass-card: rgba(18, 20, 28, 0.5);
+      --glass-pagination: rgba(20, 22, 30, 0.5);
+      --glass-toast: rgba(16, 18, 26, 0.75);
+      --glass-footer: rgba(10, 12, 18, 0.5);
+      --glass-topbar: rgba(14, 16, 22, 0.6);
+      --accent-blue: rgba(0, 160, 255, 0.75);
+      --accent-blue-solid: #0090e0;
+      --accent-glow: rgba(0, 160, 255, 0.3);
+      --border-light: rgba(255, 255, 255, 0.08);
+      --border-list: rgba(255, 255, 255, 0.06);
+      --text-primary: #eaf0f8;
+      --text-secondary: rgba(200, 218, 240, 0.9);
+      --text-tertiary: rgba(170, 184, 210, 0.7);
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --shadow-card: rgba(0, 0, 0, 0.3);
+      --platform-bg: rgba(255, 255, 255, 0.06);
+      --badge-hot: rgba(255, 80, 50, 0.9);
+      --badge-new: rgba(0, 200, 120, 0.9);
+      --badge-rec: var(--accent-blue);
+      --divider: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f2f5fb;
+      --glass-bg: rgba(255, 255, 255, 0.5);
+      --glass-hover: rgba(255, 255, 255, 0.65);
+      --glass-stripe: rgba(250, 251, 254, 0.45);
+      --glass-menu: rgba(255, 255, 255, 0.7);
+      --glass-search: rgba(255, 255, 255, 0.55);
+      --glass-card: rgba(255, 255, 255, 0.5);
+      --glass-pagination: rgba(255, 255, 255, 0.5);
+      --glass-toast: rgba(255, 255, 255, 0.75);
+      --glass-footer: rgba(255, 255, 255, 0.5);
+      --glass-topbar: rgba(255, 255, 255, 0.6);
+      --accent-blue: rgba(0, 115, 230, 0.8);
+      --accent-blue-solid: #0066cc;
+      --accent-glow: rgba(0, 115, 230, 0.25);
+      --border-light: rgba(0, 0, 0, 0.08);
+      --border-list: rgba(0, 0, 0, 0.06);
+      --text-primary: #1a1e2b;
+      --text-secondary: rgba(26, 32, 44, 0.85);
+      --text-tertiary: rgba(50, 58, 78, 0.7);
+      --shadow-color: rgba(0, 0, 0, 0.08);
+      --shadow-card: rgba(0, 0, 0, 0.06);
+      --platform-bg: rgba(0, 0, 0, 0.03);
+      --badge-hot: rgba(210, 50, 20, 0.85);
+      --badge-new: rgba(0, 160, 90, 0.85);
+      --badge-rec: var(--accent-blue);
+      --divider: rgba(0, 0, 0, 0.05);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      position: relative;
+      z-index: 0;
+      padding-top: 80px;
+      padding-bottom: 110px;
+    }
+
+    /* 背景图 - 默认移动端 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../Pictures/background_software1_mobie.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      z-index: -1;
+      pointer-events: none;
+      transition: background-image 0.5s ease;
+    }
+
+    /* 平板及以上设备使用PC背景 */
+    @media (min-width: 768px) {
+      body::before {
+        background-image: url('../Pictures/background_software1_PC.webp');
+      }
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+    /* ========== 顶部栏 - 毛玻璃 ========== */
+    .top-bar {
+      position: fixed; top: 0; left: 0; width: 100%; height: 64px;
+      background: var(--glass-topbar); backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      display: flex; align-items: center; padding: 0 20px;
+      box-shadow: 0 2px 20px var(--shadow-color); z-index: 1000;
+      border-bottom: 1px solid var(--border-light); transition: all 0.4s ease; gap: 12px;
+    }
+    .top-title {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
+      text-decoration: none; letter-spacing: 0.4px; white-space: nowrap;
+      user-select: none; pointer-events: none; display: flex; align-items: center; gap: 6px;
+    }
+    .icon-leaf { transition: transform 0.4s ease; }
+    .top-title:hover .icon-leaf { transform: rotate(-12deg) scale(1.15); }
+    .menu-button, .theme-toggle {
+      background: transparent; border: none; color: var(--text-primary); cursor: pointer;
+      width: 44px; height: 44px; border-radius: 12px; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .menu-button { font-size: 1.7rem; line-height: 1; }
+    .theme-toggle { font-size: 1.4rem; margin-left: auto; }
+    .menu-button:hover, .theme-toggle:hover { background: rgba(128,128,128,0.15); transform: scale(1.1); }
+    .menu-button.active { transform: rotate(180deg); background: rgba(0,160,255,0.15); }
+
+    /* ========== 侧边菜单 - 毛玻璃 ========== */
+    .side-menu {
+      position: fixed; top: 76px; left: 20px; width: 230px;
+      background: var(--glass-menu); backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 20px; padding: 6px 0; box-shadow: 0 16px 40px var(--shadow-color);
+      z-index: 999; border: 1px solid var(--border-light);
+      transform-origin: top left; transform: scale(0.7) translateY(-20px);
+      opacity: 0; pointer-events: none;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+    }
+    .side-menu.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+    .side-menu a {
+      display: block; color: var(--text-primary); text-decoration: none;
+      padding: 12px 20px; margin: 4px 10px; border-radius: 14px;
+      font-weight: 500; font-size: 0.95rem; background: transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0; transform: translateX(-14px); letter-spacing: 0.2px;
+    }
+    .side-menu.open a { opacity: 1; transform: translateX(0); }
+    .side-menu a:nth-child(1) { transition-delay: 0.04s; }
+    .side-menu a:nth-child(2) { transition-delay: 0.08s; }
+    .side-menu a:nth-child(3) { transition-delay: 0.12s; }
+    .side-menu a:nth-child(4) { transition-delay: 0.16s; }
+    .side-menu a:nth-child(5) { transition-delay: 0.20s; }
+    .side-menu a:nth-child(6) { transition-delay: 0.24s; }
+    .side-menu a:hover { background: var(--accent-blue); color: white; transform: translateX(5px); box-shadow: 0 0 18px var(--accent-glow); }
+    .side-menu a.active-page { background: var(--accent-blue); color: white; font-weight: 600; pointer-events: none; }
+
+    /* ========== 主布局容器 ========== */
+    .main-container { width: 100%; max-width: 1100px; padding: 0 20px; display: flex; flex-direction: column; gap: 20px; z-index: 1; }
+
+    /* ========== 搜索区域 ========== */
+    .search-section { display: flex; flex-direction: column; gap: 10px; align-items: center; animation: fadeDown 0.55s ease; }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    .search-wrapper { position: relative; width: 100%; max-width: 580px; }
+    .search-input {
+      width: 100%; padding: 13px 48px 13px 18px; border-radius: 15px;
+      border: 1.5px solid var(--border-light); background: var(--glass-search);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      color: var(--text-primary); font-size: 1rem; font-family: inherit;
+      letter-spacing: 0.3px; transition: all 0.3s ease; outline: none;
+      box-shadow: 0 4px 18px var(--shadow-color);
+    }
+    .search-input::placeholder { color: var(--text-tertiary); }
+    .search-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 4px var(--accent-glow); }
+    .search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: var(--text-tertiary); pointer-events: none; }
+    .search-input:focus ~ .search-icon { color: var(--accent-blue-solid); }
+    .search-clear {
+      position: absolute; right: 42px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--text-tertiary); font-size: 1.1rem;
+      cursor: pointer; padding: 4px 8px; border-radius: 50%; display: none; transition: all 0.2s;
+    }
+    .search-clear.visible { display: block; }
+    .search-clear:hover { color: var(--text-primary); background: rgba(128,128,128,0.15); }
+    .search-stats { font-size: 0.85rem; color: var(--text-primary); text-align: center; min-height: 22px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .search-stats strong { color: var(--accent-blue-solid); font-weight: 600; }
+
+    /* ========== 软件列表 - 毛玻璃 ========== */
+    .software-list {
+      display: flex; flex-direction: column; gap: 2px; border-radius: 18px;
+      overflow: hidden; background: var(--glass-card); backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid var(--border-list);
+      box-shadow: 0 12px 28px var(--shadow-card);
+      min-height: 200px;
+    }
+    .list-item {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+      padding: 13px 18px; transition: background 0.25s ease, transform 0.2s ease;
+      cursor: pointer; border-bottom: 1px solid var(--divider); letter-spacing: 0.2px;
+      background: transparent;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item:hover { background: var(--glass-hover); transform: translateX(4px); }
+    .list-item:nth-child(even) { background: var(--glass-stripe); }
+    .list-item:nth-child(even):hover { background: var(--glass-hover); }
+
+    /* 图标容器 */
+    .item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--platform-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      border: 1px solid var(--border-light);
+      transition: transform 0.3s;
+      overflow: hidden;
+    }
+    .item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .list-item:hover .item-icon { transform: scale(1.08); box-shadow: 0 0 16px var(--accent-glow); }
+    .item-info { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 4px; }
+    .item-name-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .item-name { font-weight: 600; font-size: 1rem; color: var(--text-primary); }
+    .item-version { font-size: 0.75rem; color: var(--text-tertiary); }
+    .item-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .item-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; flex-shrink: 0; }
+    .badge-row { display: flex; gap: 5px; }
+    .badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 8px; font-weight: 600; color: white; background: var(--accent-blue); }
+    .badge-hot { background: var(--badge-hot); }
+    .badge-new { background: var(--badge-new); }
+    .badge-rec { background: var(--badge-rec); }
+    .platform-icons { display: flex; gap: 6px; font-size: 0.85rem; color: var(--text-tertiary); }
+    .item-size { font-size: 0.75rem; color: var(--text-tertiary); white-space: nowrap; }
+    .item-download {
+      padding: 8px 18px; border-radius: 10px; background: var(--accent-blue);
+      border: none; color: white; font-weight: 600; font-size: 0.8rem;
+      cursor: pointer; letter-spacing: 0.3px; font-family: inherit;
+      transition: all 0.3s; white-space: nowrap; margin-left: 6px;
+      box-shadow: 0 3px 12px var(--accent-glow); flex-shrink: 0;
+    }
+    .item-download:hover { background: var(--accent-blue-solid); transform: translateY(-2px); }
+
+    /* 空状态/错误状态 - 毛玻璃 */
+    .empty-state, .error-state {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 20px; text-align: center; color: var(--text-primary);
+      background: var(--glass-card); backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px); border-radius: 18px;
+      border: 1px solid var(--border-list);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .empty-state.visible, .error-state.visible { display: flex; }
+    .empty-icon, .error-icon { font-size: 3.5rem; margin-bottom: 12px; opacity: 0.7; }
+
+    /* Toast - 毛玻璃 */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(25px);
+      background: var(--glass-toast); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--accent-blue); color: var(--text-primary);
+      padding: 10px 22px; border-radius: 30px; font-size: 0.9rem; font-weight: 500;
+      z-index: 2000; opacity: 0; pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 10px 30px var(--shadow-color);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ========== 分页控件 - 毛玻璃 ========== */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 0;
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: var(--glass-pagination);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: 0.2px;
+      transition: all 0.25s ease;
+      min-width: 38px;
+      text-align: center;
+      user-select: none;
+    }
+    .pagination button:hover:not(:disabled) {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px var(--shadow-color);
+    }
+    .pagination button.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 14px var(--accent-glow);
+      pointer-events: none;
+    }
+    .pagination button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .pagination .page-info {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      padding: 0 6px;
+      letter-spacing: 0.2px;
+    }
+
+    /* 底部 - 毛玻璃 */
+    .footer {
+      position: fixed; bottom: 0; left: 0; width: 100%; text-align: center;
+      font-size: 0.8rem; color: var(--text-primary); opacity: 0.8;
+      text-shadow: 0 2px 5px var(--shadow-color); z-index: 500;
+      background: var(--glass-footer); backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px); padding: 10px 0 8px;
+      border-top: 1px solid var(--border-light); transition: all 0.4s;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px;
+    }
+    .footer a { color: var(--accent-blue-solid); text-decoration: none; font-weight: 500; }
+    .footer a:hover { opacity: 0.8; text-decoration: underline; }
+
+    @media (max-width: 750px) {
+      .list-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .item-meta { margin-left: 0; width: 100%; justify-content: space-between; }
+      .item-download { margin-left: 0; align-self: stretch; text-align: center; }
+      .pagination button { padding: 7px 11px; font-size: 0.78rem; min-width: 32px; }
+    }
+    @media (max-width: 500px) {
+      .main-container { padding: 0 10px; }
+      .list-item { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部栏 -->
+  <div class="top-bar">
+    <button class="menu-button" id="menuBtn" aria-label="菜单">☰</button>
+    <a href="https://mlms.qzz.io/" class="top-title" data-translate-key="top-title">返回总览</a>
+    <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+  </div>
+
+  <!-- 侧边菜单 -->
+  <nav class="side-menu" id="sideMenu">
+    <a href="/mirror/mirror.html">镜像站 🚧</a>
+    <a href="/mcserver/main.html">MC服务器</a>
+    <a href="/mcapks.html">MC版本库 🚫</a>
+    <a href="/software.html" class="active-page">软件库</a>
+    <a href="/tools/main.html">小工具 🚫</a>
+    <a href="../main/bulletin_board.html">公告栏</a>
+  </nav>
+
+  <!-- 主内容区 -->
+  <div class="main-container">
+    <div class="search-section">
+      <div class="search-wrapper">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索软件名称、描述..." autocomplete="off">
+        <button class="search-clear" id="searchClear" title="清除">✕</button>
+        <span class="search-icon">🔍</span>
+      </div>
+      <div class="search-stats" id="searchStats">正在加载软件列表…</div>
+    </div>
+
+    <div class="software-list" id="softwareList"></div>
+    
+    <!-- 分页控件 -->
+    <div class="pagination" id="pagination"></div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">没有找到匹配的软件</div>
+      <div class="empty-sub">请尝试调整搜索关键词</div>
+    </div>
+    <div class="error-state" id="errorState">
+      <div class="error-icon">⚠️</div>
+      <div class="empty-sub">哇呜，数据库崩溃啦</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="footer">
+    <span><a href="readme.html">MapleSTUDIO 版权所有</a></span>
+    <span>|</span>
+    <span>由 <a href="https://github.com" target="_blank" rel="noopener">Github</a> 驱动</span>
+    <span>|</span>
+    <span><a href="rules.html" target="_blank" rel="noopener">上传软件</a></span>
+    <span>|</span>
+    <span><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" rel="noopener">萌ICP备20250732号</a></span>
+  </div>
+
+  <script>
+    (function() {
+      const platformEmoji = { windows:'🪟', mac:'🍎', linux:'🐧', web:'🌍' };
+      const platformLabel = { windows:'Win', mac:'Mac', linux:'Linux', web:'Web' };
+
+      const softwareListEl = document.getElementById('softwareList');
+      const searchInput = document.getElementById('searchInput');
+      const searchClear = document.getElementById('searchClear');
+      const searchStats = document.getElementById('searchStats');
+      const paginationEl = document.getElementById('pagination');
+      const emptyState = document.getElementById('emptyState');
+      const errorState = document.getElementById('errorState');
+      const toast = document.getElementById('toast');
+      const sideMenu = document.getElementById('sideMenu');
+      const menuBtn = document.getElementById('menuBtn');
+      const themeBtn = document.getElementById('themeBtn');
+      const html = document.documentElement;
+
+      const ITEMS_PER_PAGE = 10;
+
+      let softwareData = [];
+      let filteredData = [];
+      let currentPage = 1;
+      let searchQuery = '';
+      let toastTimer = null;
+
+      function showToast(msg) {
+        if (toastTimer) clearTimeout(toastTimer);
+        toast.textContent = msg;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      function isImagePath(str) {
+        if (!str || typeof str !== 'string') return false;
+        return /\.(jpe?g|png|gif|webp|svg|bmp|ico|icon)(\?.*)?$/i.test(str.trim());
+      }
+
+      function getIconHTML(icon) {
+        if (isImagePath(icon)) {
+          return `<img src="${icon}" alt="icon" loading="lazy">`;
+        }
+        return icon || '📦';
+      }
+
+      function getTotalPages() {
+        return Math.ceil(filteredData.length / ITEMS_PER_PAGE) || 1;
+      }
+
+      function getCurrentPageData() {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return filteredData.slice(start, start + ITEMS_PER_PAGE);
+      }
+
+      async function loadData() {
+        try {
+          const response = await fetch('data.block');
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          let text = await response.text();
+          text = text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+          const rawData = JSON.parse(text);
+          if (!Array.isArray(rawData)) throw new Error('数据格式错误');
+          softwareData = rawData.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+          filteredData = [...softwareData];
+          currentPage = 1;
+          renderPage();
+        } catch (err) {
+          console.error('加载 data.block 失败:', err);
+          errorState.classList.add('visible');
+          softwareListEl.style.display = 'none';
+          paginationEl.style.display = 'none';
+          emptyState.classList.remove('visible');
+          searchStats.innerHTML = '⚠️ 数据库崩溃，请联系管理员';
+        }
+      }
+
+      function renderList(dataArr) {
+        softwareListEl.innerHTML = '';
+        if (dataArr.length === 0) {
+          emptyState.classList.add('visible');
+          softwareListEl.style.display = 'none';
+          paginationEl.style.display = 'none';
+          return;
+        }
+        emptyState.classList.remove('visible');
+        errorState.classList.remove('visible');
+        softwareListEl.style.display = '';
+        paginationEl.style.display = '';
+
+        dataArr.forEach((sw, idx) => {
+          const item = document.createElement('div');
+          item.className = 'list-item';
+          item.style.animationDelay = `${idx * 0.02}s`;
+
+          const badgesHTML = (sw.badges && sw.badges.length) ? sw.badges.map(b => {
+            const label = b==='hot'?'🔥热门':b==='new'?'✨新版':'⭐推荐';
+            const cls = b==='hot'?'badge-hot':b==='new'?'badge-new':'badge-rec';
+            return `<span class="badge ${cls}">${label}</span>`;
+          }).join('') : '';
+
+          const platformIcons = (sw.platform || []).map(p => 
+            `<span title="${platformLabel[p]||p}">${platformEmoji[p]||'💻'}</span>`
+          ).join('');
+
+          const iconHTML = getIconHTML(sw.icon);
+
+          item.innerHTML = `
+            <div class="item-icon">${iconHTML}</div>
+            <div class="item-info">
+              <div class="item-name-row">
+                <span class="item-name">${sw.name || '未知软件'}</span>
+                <span class="item-version">${sw.version || ''}</span>
+              </div>
+              <div class="item-desc">${sw.desc || ''}</div>
+            </div>
+            <div class="item-meta">
+              <div class="badge-row">${badgesHTML}</div>
+              <div class="platform-icons">${platformIcons}</div>
+              <span class="item-size">📦 ${sw.size || '未知'}</span>
+              <button class="item-download" data-name="${sw.name}" data-url="${sw.downloadUrl || '#'}">⬇ 下载</button>
+            </div>
+          `;
+          softwareListEl.appendChild(item);
+        });
+
+        softwareListEl.querySelectorAll('.item-download').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const url = btn.dataset.url;
+            const name = btn.dataset.name;
+            
+            if (url && url !== '#') {
+              if (url.startsWith('http://') || url.startsWith('https://')) {
+                window.open(url, '_blank');
+              } else {
+                window.location.href = url;
+              }
+            } else {
+              showToast(`✅ 正在定向：${name}`);
+              btn.style.transform = 'scale(0.92)';
+              setTimeout(() => { btn.style.transform = ''; }, 180);
+            }
+          });
+        });
+
+        softwareListEl.querySelectorAll('.list-item').forEach(row => {
+          row.addEventListener('click', () => {
+            const name = row.querySelector('.item-name').textContent;
+            showToast(`📋 查看详情：${name}（略略略，不给看）`);
+          });
+        });
+      }
+
+      function renderPagination() {
+        const totalPages = getTotalPages();
+        paginationEl.innerHTML = '';
+
+        if (totalPages <= 1) {
+          paginationEl.style.display = 'none';
+          return;
+        }
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '◀ 上一页';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderPage();
+            softwareListEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+        paginationEl.appendChild(prevBtn);
+
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage + 1 < maxVisible) {
+          startPage = Math.max(1, endPage - maxVisible + 1);
+        }
+
+        if (startPage > 1) {
+          const firstBtn = document.createElement('button');
+          firstBtn.textContent = '1';
+          firstBtn.addEventListener('click', () => { currentPage = 1; renderPage(); });
+          paginationEl.appendChild(firstBtn);
+          if (startPage > 2) {
+            const dots = document.createElement('span');
+            dots.className = 'page-info';
+            dots.textContent = '...';
+            paginationEl.appendChild(dots);
+          }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.textContent = i;
+          if (i === currentPage) pageBtn.classList.add('active');
+          pageBtn.addEventListener('click', () => { currentPage = i; renderPage(); });
+          paginationEl.appendChild(pageBtn);
+        }
+
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            const dots = document.createElement('span');
+            dots.className = 'page-info';
+            dots.textContent = '...';
+            paginationEl.appendChild(dots);
+          }
+          const lastBtn = document.createElement('button');
+          lastBtn.textContent = totalPages;
+          lastBtn.addEventListener('click', () => { currentPage = totalPages; renderPage(); });
+          paginationEl.appendChild(lastBtn);
+        }
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = '下一页 ▶';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderPage();
+            softwareListEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+        paginationEl.appendChild(nextBtn);
+      }
+
+      function updateStats(count) {
+        const totalPages = getTotalPages();
+        if (searchQuery.trim()) {
+          searchStats.innerHTML = `找到 <strong>${count}</strong> 款匹配软件，共 <strong>${totalPages}</strong> 页（共 ${softwareData.length} 款）`;
+        } else if (softwareData.length) {
+          searchStats.innerHTML = `共 <strong>${softwareData.length}</strong> 款软件 · 第 <strong>${currentPage}</strong>/<strong>${totalPages}</strong> 页 · 按名称 A-Z 排列`;
+        }
+      }
+
+      function renderPage() {
+        const pageData = getCurrentPageData();
+        renderList(pageData);
+        renderPagination();
+        updateStats(filteredData.length);
+      }
+
+      function filterAndRender() {
+        const q = searchQuery.trim().toLowerCase();
+        if (q) {
+          filteredData = softwareData.filter(sw =>
+            (sw.name||'').toLowerCase().includes(q) ||
+            (sw.desc||'').toLowerCase().includes(q) ||
+            (sw.category||'').toLowerCase().includes(q) ||
+            (sw.version||'').toLowerCase().includes(q)
+          );
+        } else {
+          filteredData = [...softwareData];
+        }
+        currentPage = 1;
+        renderPage();
+      }
+
+      searchInput.addEventListener('input', function() {
+        searchQuery = this.value;
+        searchClear.classList.toggle('visible', !!searchQuery.trim());
+        filterAndRender();
+      });
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        searchClear.classList.remove('visible');
+        searchInput.focus();
+        filterAndRender();
+      });
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
+        if (e.key === 'Escape' && document.activeElement === searchInput) {
+          searchInput.blur();
+          if (searchQuery.trim()) {
+            searchInput.value = ''; searchQuery = '';
+            searchClear.classList.remove('visible'); filterAndRender();
+          }
+        }
+      });
+
+      function toggleMenu() {
+        const isOpen = sideMenu.classList.contains('open');
+        sideMenu.classList.toggle('open', !isOpen);
+        menuBtn.classList.toggle('active', !isOpen);
+      }
+      menuBtn.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e) => {
+        if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target) && sideMenu.classList.contains('open')) toggleMenu();
+      });
+      sideMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (e.target.tagName === 'A' && !e.target.classList.contains('active-page')) setTimeout(toggleMenu, 200);
+      });
+
+      function initTheme() {
+        const saved = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', saved);
+        themeBtn.textContent = saved === 'light' ? '☀️' : '🌙';
+      }
+      function toggleTheme() {
+        const cur = html.getAttribute('data-theme');
+        const next = cur === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeBtn.textContent = next === 'light' ? '☀️' : '🌙';
+        showToast(next === 'light' ? '☀️ 已切换至日间模式' : '🌙 已切换至夜间模式');
+      }
+      themeBtn.addEventListener('click', toggleTheme);
+
+      function init() {
+        initTheme();
+        loadData();
+        sideMenu.classList.remove('open');
+        menuBtn.classList.remove('active');
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
+  </script>
+</body>
+</html>

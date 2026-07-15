@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7-Zip 版本列表</title>
+    <style>
+        /* ===== 全局重置 & 变量 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f0f1f3;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b6b7b;
+            --text-tertiary: #8e8e9a;
+            --border-light: rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06), 0 16px 40px rgba(0, 0, 0, 0.08);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* 7-Zip 橙 */
+            --primary: #d46a1a;
+            --primary-light: #fff4ea;
+            --primary-gradient: linear-gradient(135deg, #b85a0e 0%, #e07c2e 50%, #f0944a 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans', 'Microsoft YaHei', 'Segoe UI',
+                sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            padding-bottom: env(safe-area-inset-bottom, 40px);
+        }
+
+        /* ===== 顶部导航栏（毛玻璃） ===== */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid var(--border-light);
+            gap: 12px;
+        }
+
+        .nav-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+        }
+
+        .back-btn {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            flex-shrink: 0;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            transform: scale(1.04);
+        }
+        .back-btn:active {
+            background: rgba(0, 0, 0, 0.12);
+            transform: scale(0.95);
+        }
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-title {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-badge {
+            position: relative;
+            z-index: 1;
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ===== 主容器 ===== */
+        .main-container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 16px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ===== 加载 & 错误状态 ===== */
+        .status-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            gap: 12px;
+        }
+        .status-box .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(0, 0, 0, 0.06);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .status-box .error-icon {
+            font-size: 40px;
+        }
+        .status-box .retry-btn {
+            margin-top: 8px;
+            padding: 8px 24px;
+            border: none;
+            border-radius: 20px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .status-box .retry-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        /* ===== Release 卡片 ===== */
+        .release-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+        .release-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .release-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            padding: 16px 20px 12px 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .release-tag {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+        .release-tag a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .release-tag a:hover {
+            color: var(--primary);
+        }
+
+        .release-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: var(--primary-light);
+            color: var(--primary);
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .release-badge.latest {
+            background: var(--primary);
+            color: #fff;
+        }
+        .release-badge.prerelease {
+            background: #fff0e6;
+            color: #b85a0e;
+        }
+        .release-badge.draft {
+            background: #f0f0f0;
+            color: #888;
+        }
+
+        .release-meta {
+            margin-left: auto;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        .release-body {
+            padding: 12px 20px 16px 20px;
+        }
+        .release-body .description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .release-body .description.expanded {
+            -webkit-line-clamp: unset;
+        }
+        .release-body .toggle-desc {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        .release-body .toggle-desc:hover {
+            opacity: 0.7;
+        }
+
+        /* ===== 资源列表（Assets） ===== */
+        .assets-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .asset-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px 5px 10px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            font-size: 12px;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-decoration: none;
+            border: 1px solid transparent;
+            max-width: 100%;
+        }
+        .asset-item:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: rgba(212, 106, 26, 0.2);
+        }
+        .asset-item .asset-name {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 160px;
+        }
+        .asset-item .asset-size {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+        .asset-item .dl-icon {
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+        .asset-item:hover .dl-icon {
+            opacity: 0.9;
+        }
+
+        .no-assets {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            padding: 4px 0;
+        }
+
+        /* ===== 底部信息 ===== */
+        .footer-info {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 8px;
+        }
+        .footer-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            .release-header {
+                flex-wrap: wrap;
+                gap: 6px 10px;
+                padding: 14px 16px 10px 16px;
+            }
+            .release-tag {
+                font-size: 16px;
+            }
+            .release-meta {
+                font-size: 12px;
+                margin-left: 0;
+                width: 100%;
+            }
+            .release-body {
+                padding: 10px 16px 14px 16px;
+            }
+            .assets-grid {
+                gap: 6px;
+            }
+            .asset-item {
+                padding: 4px 10px 4px 8px;
+                font-size: 11px;
+            }
+            .asset-item .asset-name {
+                max-width: 100px;
+            }
+            .nav-title {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .asset-item .asset-name {
+                max-width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 导航栏 ===== -->
+    <header class="nav-bar">
+        <button
+        class="back-btn"
+        onclick="if(window.history.length>1){window.history.back()}else{window.location.href='/'}"
+        aria-label="返回上一页"
+        title="返回上一页"
+    >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5m0 0l7 7m-7-7l7-7" />
+        </svg>
+    </button>
+        <span class="nav-title">📦 7-Zip版本库</span>
+        <span class="nav-badge" id="releaseCount">加载中…</span>
+    </header>
+
+    <!-- ===== 主容器 ===== -->
+    <main class="main-container" id="app">
+        <!-- 由 JavaScript 动态渲染 -->
+    </main>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const API_URL = 'https://api.github.com/repos/ip7z/7zip/releases';
+            const REPO_URL = 'https://github.com/ip7z/7zip';
+            const CONTAINER = document.getElementById('app');
+            const COUNT_BADGE = document.getElementById('releaseCount');
+
+            // ---------- 工具函数 ----------
+            function formatSize(bytes) {
+                if (!bytes) return '';
+                const units = ['B', 'KB', 'MB', 'GB'];
+                let i = 0;
+                let size = bytes;
+                while (size >= 1024 && i < units.length - 1) {
+                    size /= 1024;
+                    i++;
+                }
+                return size.toFixed(i === 0 ? 0 : 1) + ' ' + units[i];
+            }
+
+            function formatDate(iso) {
+                if (!iso) return '';
+                const d = new Date(iso);
+                return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' }) +
+                    ' ' + d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // 将 markdown 风格的行内链接转换为 <a>（仅处理最简情况）
+            function linkify(text) {
+                if (!text) return '';
+                // 匹配 https?:// 或 [text](url) 格式
+                let html = escapeHtml(text);
+                // 先处理 [text](url)
+                html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+                '<a href="$2" target="_blank" rel="noopener">$1</a>');
+                // 再处理裸 URL
+                html = html.replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g,
+                    '<a href="$1" target="_blank" rel="noopener">$1</a>');
+                return html;
+            }
+
+            // ---------- 渲染 ----------
+            function render(releases) {
+                if (!releases || releases.length === 0) {
+                    CONTAINER.innerHTML = `
+                        <div class="status-box">
+                            <div style="font-size:32px;">📭</div>
+                            <p>暂无 Release</p>
+                        </div>
+                    `;
+                    COUNT_BADGE.textContent = '0 个版本';
+                    return;
+                }
+
+                // 按发布时间降序
+                const sorted = [...releases].sort((a, b) =>
+                    new Date(b.published_at || b.created_at) - new Date(a.published_at || a.created_at)
+                );
+
+                COUNT_BADGE.textContent = sorted.length + ' 个版本';
+
+                let html = '';
+
+                sorted.forEach((rel, index) => {
+                    const isLatest = index === 0;
+                    const tag = rel.tag_name || '未知';
+                    const name = rel.name || tag;
+                    const published = rel.published_at || rel.created_at;
+                    const isPrerelease = !!rel.prerelease;
+                    const isDraft = !!rel.draft;
+                    const body = rel.body || '';
+
+                    // 提取描述（取第一段非空）
+                    let desc = body;
+                    if (desc) {
+                        // 如果 body 很长，截取前 300 字符作为预览
+                        const trimmed = desc.trim();
+                        if (trimmed.length > 300) {
+                            desc = trimmed.slice(0, 300) + '…';
+                        } else {
+                            desc = trimmed;
+                        }
+                    }
+
+                    // 判断是否需要"展开"按钮（原始 body 超过 300 字符）
+                    const needExpand = body && body.trim().length > 300;
+
+                    // 资源列表
+                    const assets = rel.assets || [];
+                    let assetsHtml = '';
+                    if (assets.length > 0) {
+                        const items = assets.map(asset => {
+                            const size = formatSize(asset.size);
+                            return `
+                                <a href="${asset.browser_download_url}" class="asset-item" target="_blank" rel="noopener" title="${escapeHtml(asset.name)}">
+                                    <span class="dl-icon">⬇</span>
+                                    <span class="asset-name">${escapeHtml(asset.name)}</span>
+                                    ${size ? `<span class="asset-size">${size}</span>` : ''}
+                                </a>
+                            `;
+                        }).join('');
+                        assetsHtml = `<div class="assets-grid">${items}</div>`;
+                    } else {
+                        assetsHtml = `<div class="no-assets">暂无附件</div>`;
+                    }
+
+                    // 标签
+                    let badges = '';
+                    if (isLatest) badges += `<span class="release-badge latest">最新</span>`;
+                    if (isPrerelease) badges += `<span class="release-badge prerelease">预发布</span>`;
+                    if (isDraft) badges += `<span class="release-badge draft">草稿</span>`;
+
+                    // 卡片
+                    html += `
+                        <div class="release-card">
+                            <div class="release-header">
+                                <span class="release-tag">
+                                    <a href="${rel.html_url}" target="_blank" rel="noopener">${escapeHtml(name)}</a>
+                                </span>
+                                ${badges}
+                                <span class="release-meta">
+                                    ${published ? formatDate(published) : ''}
+                                    ${tag ? `· <code style="font-size:12px;background:rgba(0,0,0,0.04);padding:1px 6px;border-radius:4px;">${escapeHtml(tag)}</code>` : ''}
+                                </span>
+                            </div>
+                            <div class="release-body">
+                                ${desc ? `<div class="description${needExpand ? '' : ' expanded'}" id="desc-${index}">${linkify(desc)}</div>` : ''}
+                                ${needExpand ? `<button class="toggle-desc" data-index="${index}">展开全部</button>` : ''}
+                                ${assetsHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // 底部信息
+                html += `
+                    <div class="footer-info">
+                        数据来自 <a href="${REPO_URL}" target="_blank" rel="noopener">ip7z/7zip</a> ·
+                        共 ${sorted.length} 个 Release ·
+                        <a href="${API_URL}" target="_blank" rel="noopener">API</a>
+                    </div>
+                `;
+
+                CONTAINER.innerHTML = html;
+
+                // ---------- 展开/收起 逻辑 ----------
+                document.querySelectorAll('.toggle-desc').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = this.dataset.index;
+                        const descEl = document.getElementById('desc-' + idx);
+                        if (!descEl) return;
+                        const isExpanded = descEl.classList.contains('expanded');
+                        if (isExpanded) {
+                            descEl.classList.remove('expanded');
+                            this.textContent = '展开全部';
+                        } else {
+                            descEl.classList.add('expanded');
+                            this.textContent = '收起';
+                        }
+                    });
+                });
+            }
+
+            // ---------- 加载数据 ----------
+            function fetchReleases() {
+                CONTAINER.innerHTML = `
+                    <div class="status-box">
+                        <div class="spinner"></div>
+                        <p>正在获取 Release 列表…</p>
+                    </div>
+                `;
+                COUNT_BADGE.textContent = '加载中…';
+
+                fetch(API_URL)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP ${res.status} ${res.statusText}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        // GitHub API 返回数组
+                        if (!Array.isArray(data)) {
+                            throw new Error('API 返回数据格式异常');
+                        }
+                        render(data);
+                    })
+                    .catch(err => {
+                        console.error('获取 Release 失败:', err);
+                        CONTAINER.innerHTML = `
+                            <div class="status-box">
+                                <div class="error-icon">⚠️</div>
+                                <p><strong>加载失败</strong></p>
+                                <p style="font-size:14px;color:var(--text-tertiary);">${escapeHtml(err.message)}</p>
+                                <button class="retry-btn" onclick="location.reload();">重新加载</button>
+                            </div>
+                        `;
+                        COUNT_BADGE.textContent = '加载失败';
+                    });
+            }
+
+            // ---------- 启动 ----------
+            fetchReleases();
+        })();
+    </script>
+
+</body>
+</html>

@@ -9,5 +9,17 @@
     "size": "若干GiB",
     "platform": ["windows"],
     "downloadUrl": "/software/pages/Adobe(all)/adobe.html"
+  },
+  {
+    "id": 2,
+    "name": "7zip",
+    "icon": "unknown",
+    "category": "brows",
+    "version": "unknown",
+    "desc": "unknown",
+    "size": "unknown",
+    "platform": ["windows", "mac", "linux"],
+    "badges": ["unknown"],
+    "downloadUrl": "/software/pages/7zip_list/7zip.html"
   }
 ]

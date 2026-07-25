@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MC 版本库 · 我的世界</title>
+    <style>
+        /* ===== 全局重置 & 变量 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f0f1f3;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b6b7b;
+            --text-tertiary: #8e8e9a;
+            --border-light: rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06), 0 16px 40px rgba(0, 0, 0, 0.08);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+            --primary: #d46a1a;
+            --primary-light: #fff4ea;
+            --primary-gradient: linear-gradient(135deg, #b85a0e 0%, #e07c2e 50%, #f0944a 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            padding-bottom: env(safe-area-inset-bottom, 40px);
+        }
+
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid var(--border-light);
+            gap: 12px;
+        }
+
+        .nav-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+        }
+
+        .nav-title {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .nav-badge {
+            position: relative;
+            z-index: 1;
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .main-container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 16px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            align-items: center;
+        }
+
+        .filter-bar .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-right: 4px;
+        }
+
+        .filter-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+        .filter-btn:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .filter-bar .search-box {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .filter-bar .search-box input {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            background: var(--bg);
+            font-size: 13px;
+            outline: none;
+            width: 160px;
+            transition: var(--transition);
+        }
+        .filter-bar .search-box input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(212, 106, 26, 0.12);
+        }
+
+        .version-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .version-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+            border: 1px solid transparent;
+        }
+        .version-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-light);
+        }
+
+        .version-card .meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 1 1 200px;
+        }
+
+        .version-card .version-name {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        .version-card .version-name .beta-tag {
+            font-size: 11px;
+            font-weight: 600;
+            background: #ffd966;
+            color: #7a5d00;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .version-card .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .version-card .badge {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 3px 12px;
+            border-radius: 20px;
+            background: var(--bg);
+            color: var(--text-secondary);
+        }
+        .version-card .badge.arch {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .version-card .badge.size {
+            background: #eef2ff;
+            color: #3b4f8c;
+        }
+        .version-card .badge.date {
+            background: #f0f7ee;
+            color: #2d6a4f;
+        }
+
+        .version-card .actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .version-card .dl-btn {
+            padding: 6px 18px;
+            border-radius: 20px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--primary-gradient);
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 6px rgba(212, 106, 26, 0.25);
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .version-card .dl-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 106, 26, 0.3);
+        }
+        .version-card .dl-btn:active {
+            transform: scale(0.96);
+        }
+        .version-card .dl-btn.secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+            box-shadow: none;
+        }
+        .version-card .dl-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.06);
+            box-shadow: none;
+        }
+        .version-card .dl-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            gap: 12px;
+        }
+        .status-box .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(0, 0, 0, 0.06);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .status-box .error-icon {
+            font-size: 40px;
+        }
+        .status-box .retry-btn {
+            margin-top: 8px;
+            padding: 8px 28px;
+            border-radius: 24px;
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .status-box .retry-btn:hover {
+            opacity: 0.85;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 640px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-bar .search-box {
+                margin-left: 0;
+            }
+            .filter-bar .search-box input {
+                width: 100%;
+            }
+            .version-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .version-card .actions {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+            .nav-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav-bar">
+        <span class="nav-title">⛏️ MC 版本库</span>
+        <span class="nav-badge" id="versionCount">加载中…</span>
+    </header>
+
+    <main class="main-container">
+
+        <div class="filter-bar" id="filterBar">
+            <span class="label">架构：</span>
+            <button class="filter-btn active" data-arch="all">全部</button>
+            <button class="filter-btn" data-arch="v8a">arm64-v8a</button>
+            <button class="filter-btn" data-arch="v7a">armeabi-v7a</button>
+            <button class="filter-btn" data-arch="x86">x86</button>
+            <button class="filter-btn" data-arch="x86_64">x86_64</button>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索版本号…" />
+            </div>
+        </div>
+
+        <div class="version-list" id="versionList">
+            <div class="status-box">
+                <div class="spinner"></div>
+                <span>正在获取版本列表…</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const listEl = document.getElementById('versionList');
+            const countEl = document.getElementById('versionCount');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+
+            let allVersions = [];
+            let filteredVersions = [];
+            let currentArch = 'all';
+            let currentKeyword = '';
+
+            // 用代理解决跨域 (使用第三方 CORS 代理)
+            const API_BASE = 'https://api.allorigins.win/raw?url=';
+            const ORIGIN_API = 'http://mcapks.net/api';
+
+            function formatDate(dateStr) {
+                if (!dateStr) return '未知';
+                try {
+                    const d = new Date(dateStr);
+                    return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+                } catch (_) { return dateStr; }
+            }
+
+            function guessArch(version) {
+                const v = version.toLowerCase();
+                if (v.includes('v8a') || v.includes('arm64')) return 'v8a';
+                if (v.includes('v7a') || v.includes('armeabi')) return 'v7a';
+                if (v.includes('x86_64') || v.includes('x64')) return 'x86_64';
+                if (v.includes('x86')) return 'x86';
+                return 'v8a';
+            }
+
+            // 直接从原接口请求（绕过 CORS 用代理）
+            async function fetchAPI(endpoint) {
+                const url = `${ORIGIN_API}/${endpoint}`;
+                try {
+                    // 先用代理试试
+                    const proxyUrl = `${API_BASE}${encodeURIComponent(url)}`;
+                    const resp = await fetch(proxyUrl, {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    return await resp.json();
+                } catch (e) {
+                    // 如果代理失败，尝试直接请求（部分环境可能支持）
+                    console.warn('代理请求失败，尝试直连:', e);
+                    const resp = await fetch(url);
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    return await resp.json();
+                }
+            }
+
+            function render() {
+                if (!allVersions.length) {
+                    listEl.innerHTML = `
+                        <div class="status-box">
+                            <div class="error-icon">📭</div>
+                            <span>暂无版本数据</span>
+                        </div>
+                    `;
+                    countEl.textContent = '0 个版本';
+                    return;
+                }
+
+                let list = allVersions;
+                if (currentArch !== 'all') {
+                    list = list.filter(v => guessArch(v.version) === currentArch);
+                }
+
+                if (currentKeyword.trim()) {
+                    const kw = currentKeyword.trim().toLowerCase();
+                    list = list.filter(v => v.version.toLowerCase().includes(kw));
+                }
+
+                filteredVersions = list;
+                countEl.textContent = filteredVersions.length + ' 个版本';
+
+                if (!filteredVersions.length) {
+                    listEl.innerHTML = `<div class="empty-state">没有匹配的版本</div>`;
+                    return;
+                }
+
+                let html = '';
+                const showList = filteredVersions.slice(0, 50);
+                for (const v of showList) {
+                    const arch = guessArch(v.version);
+                    const isBeta = v.beta === true || v.beta === 'true' || v.beta === 1;
+                    const sizeStr = v.size || '未知';
+                    const dateStr = formatDate(v.date);
+
+                    html += `
+                        <div class="version-card" data-version="${v.version}">
+                            <div class="meta">
+                                <span class="version-name">
+                                    ${v.version}
+                                    ${isBeta ? '<span class="beta-tag">测试版</span>' : ''}
+                                </span>
+                                <div class="badge-group">
+                                    <span class="badge arch">${arch}</span>
+                                    <span class="badge size">${sizeStr}</span>
+                                    <span class="badge date">${dateStr}</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="dl-btn" data-version="${v.version}" data-arch="${arch}">📥 下载</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                listEl.innerHTML = html;
+
+                if (filteredVersions.length > 50) {
+                    const tip = document.createElement('div');
+                    tip.style.cssText = 'text-align:center;color:var(--text-tertiary);font-size:13px;padding:8px 0;';
+                    tip.textContent = `仅显示前 50 个版本，共 ${filteredVersions.length} 个`;
+                    listEl.appendChild(tip);
+                }
+
+                listEl.querySelectorAll('.dl-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const version = this.dataset.version;
+                        const arch = this.dataset.arch || 'v8a';
+                        handleDownload(version, arch);
+                    });
+                });
+            }
+
+            async function handleDownload(version, arch) {
+                const btn = document.querySelector(`.dl-btn[data-version="${version}"]`);
+                if (btn) {
+                    btn.textContent = '⏳ 获取中…';
+                    btn.disabled = true;
+                }
+
+                try {
+                    // 直接用代理请求下载接口
+                    const url = `${ORIGIN_API}/get-download.php?version=${encodeURIComponent(version)}&type=${arch}`;
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                    const resp = await fetch(proxyUrl);
+                    const json = await resp.json();
+
+                    if (!json.success) {
+                        alert('获取下载链接失败: ' + (json.error?.message || '未知错误'));
+                        return;
+                    }
+
+                    const data = json.data;
+                    if (!data.downloads || !data.downloads.length) {
+                        alert('该版本暂无下载链接');
+                        return;
+                    }
+
+                    const dl = data.downloads[0];
+                    if (dl.url) {
+                        if (dl.password) {
+                            alert(`下载链接: ${dl.url}\n提取码: ${dl.password}`);
+                        } else {
+                            window.open(dl.url, '_blank');
+                        }
+                    } else {
+                        alert('下载链接无效');
+                    }
+                } catch (err) {
+                    alert('请求失败: ' + err.message);
+                } finally {
+                    if (btn) {
+                        btn.textContent = '📥 下载';
+                        btn.disabled = false;
+                    }
+                }
+            }
+
+            async function fetchVersions() {
+                listEl.innerHTML = `
+                    <div class="status-box">
+                        <div class="spinner"></div>
+                        <span>正在获取版本列表…</span>
+                    </div>
+                `;
+                countEl.textContent = '加载中…';
+
+                try {
+                    const json = await fetchAPI('get-vslist.php');
+
+                    if (!json.success) {
+                        throw new Error(json.message || '获取失败');
+                    }
+
+                    allVersions = json.data?.versions || [];
+                    allVersions.sort((a, b) => {
+                        return b.version.localeCompare(a.version, undefined, { numeric: true });
+                    });
+
+                    render();
+                } catch (err) {
+                    listEl.innerHTML = `
+                        <div class="status-box">
+                            <div class="error-icon">⚠️</div>
+                            <span>加载失败: ${err.message}</span>
+                            <button class="retry-btn" id="retryBtn">重新加载</button>
+                        </div>
+                    `;
+                    countEl.textContent = '加载失败';
+                    document.getElementById('retryBtn')?.addEventListener('click', fetchVersions);
+                }
+            }
+
+            function applyFilters() {
+                render();
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentArch = this.dataset.arch;
+                    applyFilters();
+                });
+            });
+
+            let searchTimer = null;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    currentKeyword = this.value;
+                    applyFilters();
+                }, 300);
+            });
+
+            fetchVersions();
+
+        })();
+    </script>
+
+</body>
+</html>

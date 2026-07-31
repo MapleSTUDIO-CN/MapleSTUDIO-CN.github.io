@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c1780a0b7159c3e0f401cc229e5e6700";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenYYY · 云音乐格式转换</title>
+    <meta name="keywords" content="NCM转MP3, NCM转FLAC, QMC转MP3, UC转MP3, UC转FLAC, KWM转MP3, KWM转FLAC, XM转MP3, XM转WAV, XM转FLAC, XM转M4A, TM0转MP3, TM3转MP3, QMC3转MP3, QMC2转OGG, QMC0转MP3, QMCFLAC转FLAC, QMCOGG转OGG, TKM转M4A, BKCMP3转MP3, BKCM4A转M4A, BKCFLAC转FLAC, BKCWAV转WAV, BKCAPE转APE, BKCOGG转OGG, BKCWMA转WMA, MGGL转OGG, MFLAC转FLAC, MFLAC0转FLAC, MGG转OGG, MGG1转OGG, MGG0转OGG, 666C6163转FLAC, 6D7033转MP3, 6F6767转OGG, 6D3461转M4A, 776176转WAV, TM2转M4A, TM6转M4A, CACHE转MP3, VPR转MP3, KGM转MP3, KGMA转MP3, NCM批量在线转换为MP3, NCM批量在线转换为FLAC, QMC批量在线转换为MP3, UC批量在线转换为MP3, UC批量在线转换为FLAC, KWM批量在线转换为MP3, KWM批量在线转换为FLAC, XM批量在线转换为MP3, XM批量在线转换为WAV, XM批量在线转换为FLAC, XM批量在线转换为M4A, TM0批量在线转换为MP3, TM3批量在线转换为MP3, QMC3批量在线转换为MP3, QMC2批量在线转换为OGG, QMC0批量在线转换为MP3, QMCFLAC批量在线转换为FLAC, QMCOGG批量在线转换为OGG, TKM批量在线转换为M4A, BKCMP3批量在线转换为MP3, BKCM4A批量在线转换为M4A, BKCFLAC批量在线转换为FLAC, BKCWAV批量在线转换为WAV, BKCAPE批量在线转换为APE, BKCOGG批量在线转换为OGG, BKCWMA批量在线转换为WMA, MGGL批量在线转换为OGG, MFLAC批量在线转换为FLAC, MFLAC0批量在线转换为FLAC, MGG批量在线转换为OGG, MGG1批量在线转换为OGG, MGG0批量在线转换为OGG, 666C6163批量在线转换为FLAC, 6D7033批量在线转换为MP3, 6F6767批量在线转换为OGG, 6D3461批量在线转换为M4A, 776176批量在线转换为WAV, TM2批量在线转换为M4A, TM6批量在线转换为M4A, CACHE批量在线转换为MP3, VPR批量在线转换为MP3, KGM批量在线转换为MP3, KGMA批量在线转换为MP3">
+    <meta name="description" content="本站提供云音乐格式批量在线转换，浏览器本地转换，无需上传，可将NCM批量在线转换为MP3, NCM批量在线转换为FLAC, QMC批量在线转换为MP3, UC批量在线转换为MP3, UC批量在线转换为FLAC, KWM批量在线转换为MP3, KWM批量在线转换为FLAC, XM批量在线转换为MP3, XM批量在线转换为WAV, XM批量在线转换为FLAC, XM批量在线转换为M4A, TM0批量在线转换为MP3, TM3批量在线转换为MP3, QMC3批量在线转换为MP3, QMC2批量在线转换为OGG, QMC0批量在线转换为MP3, QMCFLAC批量在线转换为FLAC, QMCOGG批量在线转换为OGG, TKM批量在线转换为M4A, BKCMP3批量在线转换为MP3, BKCM4A批量在线转换为M4A, BKCFLAC批量在线转换为FLAC, BKCWAV批量在线转换为WAV, BKCAPE批量在线转换为APE, BKCOGG批量在线转换为OGG, BKCWMA批量在线转换为WMA, MGGL批量在线转换为OGG, MFLAC批量在线转换为FLAC, MFLAC0批量在线转换为FLAC, MGG批量在线转换为OGG, MGG1批量在线转换为OGG, MGG0批量在线转换为OGG, 666C6163批量在线转换为FLAC, 6D7033批量在线转换为MP3, 6F6767批量在线转换为OGG, 6D3461批量在线转换为M4A, 776176批量在线转换为WAV, TM2批量在线转换为M4A, TM6批量在线转换为M4A, CACHE批量在线转换为MP3, VPR批量在线转换为MP3, KGM批量在线转换为MP3, KGMA批量在线转换为MP3，支持预览、下载等功能">
+    <meta name="csrf-param" content="_csrf">
+    <meta name="csrf-token" content="v2lD5a70zyPO0GuXoHIkrGWNHxmWmRYU63eSyVlGpXz1WXDW_aSpSJroDvb_A3CfIvtld_DJYUPdHKWRGiLCRA==">
+
+    <style>
+        /* ===== 全局样式 ===== */
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary: #4a6cf7;
+            --primary-hover: #3651d5;
+            --primary-light: #eef1fe;
+            --primary-soft: #e4e9fc;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-focus: #4a6cf7;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.10), 0 4px 10px -4px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-xs: 6px;
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Monaco', 'Ubuntu Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 20px 16px 50px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -30%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(74, 108, 247, 0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -25%;
+            left: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== 头部 ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .header .icon-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: var(--primary-light);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+        .header .sub {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .header .sub strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ===== 主卡片 ===== */
+        .main-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .card-body {
+            padding: 28px 26px;
+        }
+
+        /* ===== 上传区域 ===== */
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-sm);
+            padding: 36px 20px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fafbfc;
+            position: relative;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 6px rgba(74, 108, 247, 0.04);
+        }
+        .drop-zone.drag-over {
+            border-style: solid;
+            transform: scale(1.01);
+        }
+        .drop-zone-icon {
+            font-size: 34px;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 700;
+            color: var(--primary);
+            transition: var(--transition);
+            letter-spacing: -1px;
+        }
+        .drop-zone.drag-over .drop-zone-icon {
+            transform: translateY(-4px);
+        }
+        .drop-zone-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .drop-zone-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .format-badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px 10px;
+            margin-top: 12px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .format-badge-group .badge {
+            background: #f1f5f9;
+            padding: 2px 10px;
+            border-radius: 20px;
+            border: 1px solid #e8ecf1;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== 工具栏 ===== */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .toolbar .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .toolbar .status-text {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+        .toolbar .status-text .count {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px 16px;
+            border-radius: var(--radius-xs);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.30);
+        }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: #059669;
+            border-color: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.30);
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.30);
+        }
+        .btn-outline {
+            background: #fff;
+            color: var(--primary);
+            border-color: #d0d5f0;
+        }
+        .btn-outline:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .btn-sm {
+            padding: 6px 13px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+        .btn-xs {
+            padding: 4px 10px;
+            font-size: 0.74rem;
+            border-radius: 5px;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none !important;
+        }
+
+        /* ===== 表格 ===== */
+        .table-wrap {
+            margin-top: 18px;
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            min-width: 600px;
+        }
+        .table-wrap th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .table-wrap td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .table-wrap tr:last-child td {
+            border-bottom: none;
+        }
+        .table-wrap tr:hover td {
+            background: #fafbfc;
+        }
+
+        .table-wrap .file-name {
+            font-weight: 500;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .table-wrap .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .status-badge.done {
+            background: var(--success-bg);
+            color: #059669;
+        }
+        .status-badge.pending {
+            background: var(--warning-bg);
+            color: #b45309;
+        }
+        .status-badge.error {
+            background: var(--danger-bg);
+            color: #b91c1c;
+        }
+        .status-badge .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .table-wrap .action-btns {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .table-wrap .action-btns .btn {
+            font-size: 0.7rem;
+            padding: 3px 9px;
+            border-radius: 4px;
+        }
+
+        /* ===== 空状态 ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #cbd5e1;
+        }
+
+        /* ===== Toast ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            background: #1e293b;
+            color: #fff;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            animation: toastIn 0.35s ease, toastOut 0.3s ease 1.8s forwards;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 400px;
+        }
+        .toast.success {
+            border-left: 3px solid var(--success);
+        }
+        .toast.error {
+            border-left: 3px solid var(--danger);
+        }
+        .toast.info {
+            border-left: 3px solid var(--primary);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+        }
+
+        /* ===== 加载遮罩 ===== */
+        .page-loading {
+            background: #f8fafc;
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+        }
+        .page-loading .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid #e2e8f0;
+            border-top: 2.5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        /* ===== 底部 ===== */
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px 8px 30px;
+            }
+            .card-body {
+                padding: 18px 14px;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .drop-zone {
+                padding: 24px 12px 20px;
+            }
+            .drop-zone-icon {
+                font-size: 26px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar .btn-group {
+                justify-content: center;
+            }
+            .toolbar .status-text {
+                margin-left: 0;
+                text-align: center;
+            }
+            .table-wrap table {
+                font-size: 0.78rem;
+                min-width: 480px;
+            }
+            .table-wrap th,
+            .table-wrap td {
+                padding: 8px 10px;
+            }
+            .table-wrap .file-name {
+                max-width: 100px;
+            }
+            .btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            .format-badge-group .badge {
+                font-size: 0.65rem;
+                padding: 1px 8px;
+            }
+        }
+        @media (max-width: 380px) {
+            .table-wrap table {
+                min-width: 360px;
+                font-size: 0.7rem;
+            }
+            .table-wrap th,
+            .table-wrap td {
+                padding: 6px 6px;
+            }
+            .table-wrap .file-name {
+                max-width: 70px;
+            }
+            .btn-sm {
+                padding: 4px 8px;
+                font-size: 0.68rem;
+            }
+            .card-body {
+                padding: 12px 8px;
+            }
+        }
+    </style>
+
+    <!-- ===== 依赖 JS（与 OpenYYY 相同目录） ===== -->
+    <script src="/assets/4bb2364f/js/bootstrap.js"></script>
+    <script src="/assets/a1682d65/jquery.js"></script>
+    <script src="/assets/d1d8a473/yii.js"></script>
+    <script src="/js/metaflac.js"></script>
+    <script src="/js/jsmediatags.min.js"></script>
+    <script src="/js/decrypt.js"></script>
+    <script src="/js/aes.js"></script>
+    <script src="/js/zip.js"></script>
+    <script src="/js/id3.js"></script>
+    <script src="/js/script.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ===== 头部 ===== -->
+        <div class="header">
+            <div class="icon-wrap">♪</div>
+            <h1>OpenYYY · 云音乐格式转换</h1>
+            <div class="sub">
+                浏览器本地转换 · 无需上传 · 支持 <strong>NCM / QMC / KGM / KWM / XM</strong> 等 40+ 格式
+            </div>
+        </div>
+
+        <!-- ===== 主卡片 ===== -->
+        <div class="main-card" id="site-index">
+            <div class="card-body">
+
+                <!-- 加载提示 -->
+                <div class="page-loading" id="page-loading">
+                    <span class="spinner"></span>
+                    <span>网页正在加载，请稍候…</span>
+                </div>
+
+                <!-- ===== 上传区域 ===== -->
+                <div class="drop-zone" id="dropZone">
+                    <span class="drop-zone-icon">⤓</span>
+                    <div class="drop-zone-title">点击上传或拖拽文件到此处</div>
+                    <div class="drop-zone-desc">支持多选 · 单次可批量转换</div>
+                    <div class="format-badge-group">
+                        <span class="badge">.ncm</span>
+                        <span class="badge">.qmc</span>
+                        <span class="badge">.kgm</span>
+                        <span class="badge">.kwm</span>
+                        <span class="badge">.xm</span>
+                        <span class="badge">.uc</span>
+                        <span class="badge">.tm0</span>
+                        <span class="badge">.mgg</span>
+                        <span class="badge">.bkc</span>
+                        <span class="badge">.vpr</span>
+                        <span class="badge">.cache</span>
+                        <span class="badge" style="color:var(--primary);">+ 更多</span>
+                    </div>
+                    <input id="upload" type="file" name="files[]" accept=".ncm,.uc,.kwm,.xm,.wav,.mp3,.flac,.m4a,.ogg,.tm0,.tm3,.qmc3,.qmc2,.qmc0,.qmcflac,.qmcogg,.tkm,.bkcmp3,.bkcm4a,.bkcflac,.bkcwav,.bkcape,.bkcogg,.bkcwma,.mggl,.mflac,.mflac0,.mgg,.mgg1,.mgg0,.666c6163,.6d7033,.6f6767,.6d3461,.776176,.tm2,.tm6,.cache,.vpr,.kgm,.kgma" multiple>
+                </div>
+
+                <!-- ===== 工具栏 ===== -->
+                <div class="toolbar" id="download-all-btn-container">
+                    <div class="btn-group">
+                        <button onclick="downloadAll()" type="button" class="btn btn-success btn-sm">
+                            <span>↓</span> 下载全部
+                        </button>
+                        <button onclick="downloadZip()" type="button" class="btn btn-success btn-sm">
+                            <span>📦</span> 生成 ZIP
+                        </button>
+                        <button onclick="deletedAll()" type="button" class="btn btn-danger btn-sm">
+                            <span>✕</span> 删除全部
+                        </button>
+                    </div>
+                    <div class="status-text" id="zip-status">
+                        已转换 <span class="count" id="file-count">0</span> 个文件
+                    </div>
+                </div>
+
+                <!-- ===== 结果表格 ===== -->
+                <div class="table-wrap" id="table-wrap">
+                    <table id="res-table" class="table">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;">文件名</th>
+                                <th style="width:20%;">状态</th>
+                                <th style="width:25%;">操作</th>
+                                <th style="width:25%;">转换结果</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-tbody">
+                            <!-- 由 script.js 动态渲染 -->
+                        </tbody>
+                    </table>
+                    <div class="empty-state" id="empty-state">
+                        <span class="empty-icon">( )</span>
+                        <p>暂无文件，请选择音乐文件开始转换</p>
+                        <p style="font-size:0.78rem;color:#94a3b8;">支持 NCM / QMC / KGM / KWM / XM 等格式</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===== 底部 ===== -->
+        <div class="footer">
+            <p>© OpenYYY.com 2026 · 云音乐文件格式 (QMC/KGM/KWM/NCM/XM) 转 MP3 / FLAC / OGG / M4A / WAV</p>
+            <p style="font-size:0.72rem;color:#b0b8c4;">浏览器本地转换 · 不上传服务器 · 速度飞快</p>
+        </div>
+    </div>
+
+    <!-- ===== Toast 容器 ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        (function() {
+            // ----- 轻量 Toast -----
+            const toastContainer = document.getElementById('toastContainer');
+
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const prefix = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+                toast.innerHTML = `<span>${prefix}</span> ${message}`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                }, 2200);
+            }
+
+            // ----- 覆盖原生的 alert / 提示 -----
+            // 保持与 script.js 兼容，重写一些可能用到的方法
+            window.showToast = showToast;
+
+            // ----- 文件计数 -----
+            function updateFileCount() {
+                const tbody = document.getElementById('res-tbody');
+                const countEl = document.getElementById('file-count');
+                if (!tbody || !countEl) return;
+                const rows = tbody.querySelectorAll('tr');
+                const count = rows.length;
+                countEl.textContent = count;
+                const empty = document.getElementById('empty-state');
+                if (empty) {
+                    empty.style.display = count === 0 ? 'block' : 'none';
+                }
+            }
+
+            // 监听 DOM 变化，更新计数
+            const observer = new MutationObserver(() => updateFileCount());
+            const tbody = document.getElementById('res-tbody');
+            if (tbody) {
+                observer.observe(tbody, { childList: true, subtree: true });
+            }
+
+            // 初始计数
+            setTimeout(updateFileCount, 300);
+
+            // ----- 加载完成后隐藏 loading -----
+            const loadingEl = document.getElementById('page-loading');
+            if (loadingEl) {
+                // 检查 script.js 是否已加载完成（它会在 document.ready 中隐藏 loading）
+                // 但为了安全，设置一个超时隐藏
+                setTimeout(() => {
+                    if (loadingEl && loadingEl.style.display !== 'none') {
+                        loadingEl.style.display = 'none';
+                    }
+                }, 3000);
+            }
+
+            // ----- 检测 script.js 是否已定义 checkBrowser -----
+            // 如果未定义，说明 script.js 未加载或加载失败，给出提示
+            setTimeout(() => {
+                if (typeof checkBrowser !== 'function') {
+                    const warning = document.createElement('div');
+                    warning.style.cssText =
+                        'background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:14px 18px;margin-top:12px;color:#991b1b;font-size:0.85rem;';
+                    warning.innerHTML =
+                        '<strong>⚠ 提示：</strong> 核心转换脚本未加载，请确保所有 JS 文件存在于正确的路径，或刷新页面重试。';
+                    const container = document.querySelector('.card-body');
+                    if (container) {
+                        container.insertBefore(warning, container.querySelector('.table-wrap'));
+                    }
+                }
+            }, 2500);
+
+            // ----- 拖拽高亮 (本地增强) -----
+            const dropZone = document.getElementById('dropZone');
+            if (dropZone) {
+                ['dragover', 'dragenter'].forEach(evt => {
+                    dropZone.addEventListener(evt, function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.classList.add('drag-over');
+                    });
+                });
+                ['dragleave', 'dragend', 'drop'].forEach(evt => {
+                    dropZone.addEventListener(evt, function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.classList.remove('drag-over');
+                    });
+                });
+            }
+
+            // ----- 暴露给全局 -----
+            window.updateFileCount = updateFileCount;
+
+            console.log('[OpenYYY] 页面已加载，等待转换脚本就绪…');
+        })();
+    </script>
+
+    <!-- ===== 兼容 script.js 的初始化 ===== -->
+    <script>
+        // 当 jQuery 和 script.js 就绪后，执行初始化
+        $(document).ready(function() {
+            // 隐藏 loading（如果 script.js 没有处理）
+            const loadingEl = document.getElementById('page-loading');
+            if (loadingEl) {
+                setTimeout(() => {
+                    loadingEl.style.display = 'none';
+                }, 500);
+            }
+
+            // 检查 checkBrowser 是否存在
+            if (typeof checkBrowser === 'function') {
+                checkBrowser();
+                // 绑定文件上传事件（如果 script.js 没有绑定）
+                const upload = document.getElementById('upload');
+                if (upload && typeof handleFileSelect === 'function') {
+                    // 防止重复绑定
+                    if (!upload._listenerAdded) {
+                        upload.addEventListener('change', handleFileSelect, false);
+                        upload._listenerAdded = true;
+                    }
+                }
+            } else {
+                // script.js 未加载，但 upload 仍然需要绑定（如果有 fallback）
+                const upload = document.getElementById('upload');
+                if (upload) {
+                    // 如果 handleFileSelect 未定义，提供一个 fallback 提示
+                    upload.addEventListener('change', function() {
+                        if (typeof handleFileSelect !== 'function') {
+                            showToast('转换脚本未加载，请刷新页面重试', 'error');
+                        }
+                    });
+                }
+            }
+
+            // 更新文件计数
+            if (typeof updateFileCount === 'function') {
+                updateFileCount();
+            }
+        });
+    </script>
+
+</body>
+</html>

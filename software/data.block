@@ -6,19 +6,19 @@
     "category": "办公",
     "version": "v125.0.6422.141",
     "desc": "最强办公软件集合页面",
-    "size": "若干GiB",
+    "size": "＜10GiB",
     "platform": ["windows"],
     "downloadUrl": "/software/pages/Adobe(all)/adobe.html"
   },
   {
     "id": 2,
     "name": "7zip",
-    "icon": "unknown",
-    "category": "brows",
-    "version": "unknown",
+    "icon": "/software/pages/7zip_list/7zip_icon.ico",
+    "category": "解压软件",
+    "version": "列表库",
     "desc": "unknown",
-    "size": "unknown",
-    "platform": ["windows", "mac", "linux"],
+    "size": "＜20MiB",
+    "platform": ["windows", "", "linux"],
     "badges": ["unknown"],
     "downloadUrl": "/software/pages/7zip_list/7zip.html"
   }

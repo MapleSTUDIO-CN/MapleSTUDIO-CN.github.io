@@ -447,6 +447,18 @@
             }
         }
     </style>
+
+    <!-- ✅ 提前恢复主题，避免闪烁（关键修改） -->
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body>
 
@@ -735,9 +747,9 @@
         const themeBtn = document.getElementById('themeBtn');
         const html = document.documentElement;
 
+        // 修改后的 initTheme：不再重复设置 data-theme（已在 head 中设置），仅更新按钮图标
         function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            html.setAttribute('data-theme', savedTheme);
+            const savedTheme = html.getAttribute('data-theme') || localStorage.getItem('theme') || 'dark';
             updateThemeIcon(savedTheme);
         }
 
@@ -759,16 +771,20 @@
         }
 
         // ========================
-        // 初始化
+        // 初始化（直接执行，不再等待 load 事件）
         // ========================
-        window.addEventListener('load', () => {
-            cacheDefaultTexts();
-            initTheme();
-            document.getElementById('menu').classList.remove('open');
+        // 缓存默认文本
+        cacheDefaultTexts();
 
-            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
-            applyLanguage(savedLang);
-        });
+        // 设置主题图标
+        initTheme();
+
+        // 确保菜单初始关闭
+        document.getElementById('menu').classList.remove('open');
+
+        // 应用保存的语言
+        const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
+        applyLanguage(savedLang);
     </script>
 </body>
 </html>

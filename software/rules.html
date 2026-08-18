@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>上传规则 - 软件库</title>
     <link rel="icon" href="/Pictures/logo_main.webp" type="image/x-icon">
+
+    <!-- ✅ 主题防闪烁脚本（默认白色主题） -->
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -157,6 +174,19 @@
     </style>
 </head>
 <body>
+    <!-- ✅ 立即更新主题按钮图标（默认白色主题） -->
+    <script>
+        (function() {
+            try {
+                var theme = document.documentElement.getAttribute('data-theme') || 'light';
+                var btn = document.getElementById('themeBtn');
+                if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+            } catch (e) {
+                // 忽略
+            }
+        })();
+    </script>
+
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" aria-label="菜单">☰</button>
         <a href="https://mlms.qzz.io/software/index" class="top-title">
@@ -441,16 +471,22 @@
 
             const themeBtn = document.getElementById('themeBtn');
             const html = document.documentElement;
+            
+            // 修改后的 initTheme：不再重复设置 data-theme（已在 head 中设置），仅更新按钮图标
             function initTheme() {
-                const saved = localStorage.getItem('theme') || 'dark';
-                html.setAttribute('data-theme', saved);
+                const saved = html.getAttribute('data-theme') || localStorage.getItem('theme') || 'light';
                 themeBtn.textContent = saved === 'light' ? '☀️' : '🌙';
             }
+            
             function toggleTheme() {
                 const cur = html.getAttribute('data-theme');
                 const next = cur === 'light' ? 'dark' : 'light';
                 html.setAttribute('data-theme', next);
-                localStorage.setItem('theme', next);
+                try {
+                    localStorage.setItem('theme', next);
+                } catch (e) {
+                    // 忽略存储错误
+                }
                 themeBtn.textContent = next === 'light' ? '☀️' : '🌙';
             }
             themeBtn.addEventListener('click', toggleTheme);

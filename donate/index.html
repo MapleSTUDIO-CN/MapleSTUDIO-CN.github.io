@@ -6,12 +6,20 @@
     <title data-translate-key="page-title">支持枫树 · 扫码捐赠 & 广告支持</title>
     <link rel="icon" href="../Pictures/logo.jpg">
 
-    <!-- 主题防闪烁脚本 -->
+    <!-- 主题防闪烁脚本（增强版） -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light' || savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', savedTheme);
+            try {
+                var savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                } else {
+                    // 如果没有保存的主题或值非法，保持默认 dark
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {
+                // 隐私模式或存储不可用，保持默认 dark
+                document.documentElement.setAttribute('data-theme', 'dark');
             }
         })();
     </script>
@@ -457,6 +465,19 @@
     </style>
 </head>
 <body>
+    <!-- 立即更新主题按钮图标（避免底部脚本执行前图标闪烁） -->
+    <script>
+        (function() {
+            try {
+                var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+                var btn = document.getElementById('themeBtn');
+                if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+            } catch (e) {
+                // 忽略
+            }
+        })();
+    </script>
+
     <div class="top-bar">
         <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
         <a href="../index.html" class="top-title" data-translate-key="top-title">返回总览</a>
@@ -699,13 +720,16 @@
 
         function applyTheme(theme) {
             htmlEl.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+            try {
+                localStorage.setItem('theme', theme);
+            } catch (e) {
+                // 忽略存储错误
+            }
             updateThemeIcon(theme);
         }
 
-        (function initThemeIconNow() {
-            updateThemeIcon(getCurrentTheme());
-        })();
+        // 立即更新图标（已在 body 顶部执行过，这里再次确保）
+        updateThemeIcon(getCurrentTheme());
 
         themeBtn.addEventListener('click', () => {
             const newTheme = getCurrentTheme() === 'light' ? 'dark' : 'light';
@@ -755,6 +779,7 @@
                 }, 5000);
             }
         }
+
         cacheDefaultTexts();
         const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
         applyLanguage(savedLang);

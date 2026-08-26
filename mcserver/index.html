@@ -359,6 +359,11 @@
             color: #7c3aed;
             border-color: #ddd6fe;
         }
+        .badge-latest {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+        }
 
         .mod-section {
             margin-bottom: 20px;
@@ -712,7 +717,7 @@
                 </div>
                 <!-- 乐果 -->
                 <div class="download-card">
-                    <h4>和乐果下载<]/h4>
+                    <h4>和乐果下载</h4>
                     <p>备用高速下载通道。</p>
                     <a href="https://yun.heleguo.cn/s/maGsY" target="_blank" class="btn btn-outline btn-block">打开和乐果</a>
                 </div>
@@ -1024,6 +1029,35 @@
             toggleBtn.innerHTML = isOpen ? '收起完整列表 <span style="font-size:0.8rem;">‹</span>' : '展开完整列表 <span style="font-size:0.8rem;">›</span>';
         });
 
+        // ----- 语义化版本解析与比较（仅支持 x.y.z 和可选预发布后缀）-----
+        function parseVersion(tag) {
+            const clean = tag.replace(/^v/, '');
+            const parts = clean.split('-');
+            const main = parts[0].split('.').map(Number);
+            const prerelease = parts[1] || '';
+            return {
+                major: main[0] || 0,
+                minor: main[1] || 0,
+                patch: main[2] || 0,
+                prerelease: prerelease,
+                // 比较函数，返回负数表示 a < b
+                compare: function(other) {
+                    for (let key of ['major', 'minor', 'patch']) {
+                        if (this[key] !== other[key]) {
+                            return this[key] - other[key];
+                        }
+                    }
+                    // 数字相同，正式版（无prerelease）大于测试版
+                    if (this.prerelease && !other.prerelease) return -1;
+                    if (!this.prerelease && other.prerelease) return 1;
+                    if (this.prerelease && other.prerelease) {
+                        return this.prerelease.localeCompare(other.prerelease);
+                    }
+                    return 0;
+                }
+            };
+        }
+
         // GitHub API 通用获取 release 函数
         async function fetchGitHubReleases(apiUrl) {
             const response = await fetch(apiUrl, {
@@ -1142,7 +1176,7 @@
             }
         });
 
-        // 整合包 GitHub 下载（显示所有版本，支持 .7z 和 .zip，正确识别 beta）
+        // ----- 整合包 GitHub 下载（自定义排序 + 标记最新）-----
         document.getElementById('btn-modpack-github').addEventListener('click', async function() {
             const btn = this;
             const spinner = document.getElementById('modpack-github-spinner');
@@ -1159,28 +1193,62 @@
                 const releases = await fetchGitHubReleases('https://api.github.com/repos/MapleSTUDIO-CN/Minecraft_MapleSTUDIO_mrpack/releases');
                 if (releases.length === 0) throw new Error('没有找到任何 Release');
 
-                let html = '';
-                let foundAny = false;
-
-                releases.forEach(release => {
+                // 先过滤出包含 .7z 或 .zip 资产的 release
+                const validReleases = releases.filter(release => {
                     const assets = release.assets || [];
-                    const validAssets = assets.filter(a => {
+                    return assets.some(a => {
                         const name = a.name.toLowerCase();
                         return name.endsWith('.7z') || name.endsWith('.zip');
                     });
-                    if (validAssets.length === 0) return;
+                });
 
-                    foundAny = true;
-                    const isBeta = release.tag_name.toLowerCase().includes('beta') || release.prerelease;
+                if (validReleases.length === 0) {
+                    infoDiv.innerHTML = '<p style="color:var(--warning);">未找到任何 .7z 或 .zip 资产，请手动访问仓库。</p>';
+                    showToast('未找到有效资产', 'error');
+                    return;
+                }
+
+                // 区分正式版（prerelease === false）和测试版（prerelease === true）
+                const stable = validReleases.filter(r => !r.prerelease);
+                const beta = validReleases.filter(r => r.prerelease);
+
+                // 按版本号降序排序（使用 parseVersion 比较）
+                const sortByVersionDesc = (a, b) => {
+                    const va = parseVersion(a.tag_name);
+                    const vb = parseVersion(b.tag_name);
+                    return vb.compare(va); // 降序
+                };
+                stable.sort(sortByVersionDesc);
+                beta.sort(sortByVersionDesc);
+
+                // 合并：正式版在前，测试版在后
+                const sorted = [...stable, ...beta];
+
+                // 构建 HTML
+                let html = '<div class="release-assets">';
+                sorted.forEach((release, index) => {
+                    const assets = release.assets.filter(a => {
+                        const name = a.name.toLowerCase();
+                        return name.endsWith('.7z') || name.endsWith('.zip');
+                    });
+                    if (assets.length === 0) return;
+
+                    const isBeta = release.prerelease;
                     const badgeClass = isBeta ? 'badge-highlight' : 'badge-primary';
                     const badgeText = isBeta ? 'Beta / 测试版' : '正式版';
+
+                    // 是否为最新的正式版（即 stable 列表中的第一个）
+                    const isLatestStable = !isBeta && stable.length > 0 && release.tag_name === stable[0].tag_name;
 
                     html += `<div class="release-item">`;
                     html += `<div class="release-tag">`;
                     html += `<span>${release.tag_name}</span>`;
                     html += `<span class="badge ${badgeClass}">${badgeText}</span>`;
+                    if (isLatestStable) {
+                        html += `<span class="badge badge-latest">🌟 最新</span>`;
+                    }
                     html += `</div>`;
-                    validAssets.forEach(asset => {
+                    assets.forEach(asset => {
                         html += `
                             <div class="asset-item">
                                 <span>${asset.name}</span>
@@ -1190,13 +1258,10 @@
                     });
                     html += `</div>`;
                 });
+                html += '</div>';
 
-                if (!foundAny) {
-                    infoDiv.innerHTML = '<p style="color:var(--warning);">未找到任何 .7z 或 .zip 资产，请手动访问仓库。</p>';
-                } else {
-                    infoDiv.innerHTML = `<div class="release-assets">${html}</div>`;
-                    showToast('整合包版本获取成功');
-                }
+                infoDiv.innerHTML = html;
+                showToast('整合包版本获取成功（已按正式版→测试版排序）');
             } catch (error) {
                 console.error('加载整合包 Release 失败:', error);
                 infoDiv.innerHTML = `<p style="color:var(--danger);">获取失败：${error.message}。请稍后重试或手动访问 <a href="https://github.com/MapleSTUDIO-CN/Minecraft_MapleSTUDIO_mrpack/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>`;

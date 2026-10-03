@@ -256,9 +256,13 @@
         .info-item .value.copyable {
             cursor: pointer;
             transition: var(--transition);
+            user-select: all;
         }
         .info-item .value.copyable:hover {
             color: var(--primary);
+        }
+        .info-item .value.copyable:active {
+            color: var(--primary-hover);
         }
 
         .btn {
@@ -417,6 +421,96 @@
             max-height: 500px;
         }
 
+        /* ===== 备用地址表格 ===== */
+        .backup-table {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: #fff;
+        }
+        .backup-row {
+            display: grid;
+            grid-template-columns: 0.85fr 1.6fr 0.95fr 0.75fr;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+            transition: background var(--transition);
+        }
+        .backup-row:last-child {
+            border-bottom: none;
+        }
+        .backup-row:not(.header-row):hover {
+            background: #fafbfc;
+        }
+        .backup-row.header-row {
+            background: #f8fafc;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .backup-addr {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            word-break: break-all;
+            transition: var(--transition);
+            user-select: all;
+        }
+        .backup-addr:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+        .backup-collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backup-collapse.open {
+            max-height: 800px;
+        }
+        .backup-tip {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        .latency-badge {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 10px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px solid #e8ecf1;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .latency-badge.good {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+        }
+        .latency-badge.fair {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+        .latency-badge.poor {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+        .latency-badge.testing {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: #d0d5f0;
+        }
+
         .download-card {
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
@@ -545,6 +639,7 @@
             max-width: 400px;
             animation: toastIn 0.35s ease;
             transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            word-break: break-all;
         }
         .toast.success {
             border-left: 3px solid var(--success);
@@ -562,6 +657,74 @@
         @keyframes toastOut {
             from { opacity: 1; transform: translateX(0); }
             to { opacity: 0; transform: translateX(60px); }
+        }
+
+        /* ===== 公告弹窗 ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show {
+            display: flex;
+            animation: overlayIn 0.25s ease;
+        }
+        @keyframes overlayIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: var(--radius);
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            animation: modalIn 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-title {
+            padding: 20px 24px 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            letter-spacing: -0.01em;
+        }
+        .modal-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
+            background: linear-gradient(180deg, var(--primary) 0%, #7c8dfb 100%);
+        }
+        .modal-body {
+            padding: 14px 24px 6px;
+            color: var(--text-secondary);
+            font-size: 0.93rem;
+            line-height: 1.75;
+        }
+        .modal-actions {
+            padding: 18px 24px 22px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .modal-actions .btn {
+            min-width: 92px;
         }
 
         @media (max-width: 640px) {
@@ -605,6 +768,28 @@
                 width: 36px;
                 height: 36px;
             }
+            .backup-row {
+                grid-template-columns: 0.85fr 1.45fr 0.9fr 0.8fr;
+                gap: 5px;
+                padding: 9px 9px;
+                font-size: 0.74rem;
+            }
+            .backup-row.header-row {
+                font-size: 0.66rem;
+            }
+            .backup-addr {
+                font-size: 0.72rem;
+            }
+            .latency-badge {
+                font-size: 0.68rem;
+                padding: 2px 6px;
+            }
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+            .modal-actions .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -643,7 +828,7 @@
             <div class="info-grid">
                 <div class="info-item">
                     <div class="label">服务器地址（戳我复制）</div>
-                    <div class="value copyable" id="server-address" title="点击复制">maple.9666.fun:40516</div>
+                    <div class="value copyable" data-copy="9666.uno:40516" title="点击复制">9666.uno:40516</div>
                 </div>
                 <div class="info-item">
                     <div class="label">游戏版本</div>
@@ -663,7 +848,78 @@
                 </div>
                 <div class="info-item">
                     <div class="label">QQ群</div>
-                    <div class="value copyable" id="qq-group" title="点击复制">614526615</div>
+                    <div class="value copyable" data-copy="614526615" title="点击复制">614526615</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 备用地址 -->
+            <div class="mod-section" style="margin-bottom:0;">
+                <h3>备用线路</h3>
+                <p class="backup-tip">当主地址无法访问时，可尝试以下其它 IP 进入，端口统一为 <strong>40516</strong>（点击地址即可复制，延迟为客户端本地测速结果，仅供参考）。</p>
+
+                <div class="backup-table">
+                    <div class="backup-row header-row">
+                        <span>线路</span>
+                        <span>服务器地址</span>
+                        <span>带宽</span>
+                        <span>延迟</span>
+                    </div>
+                    <div class="backup-row">
+                        <span>主线路</span>
+                        <span class="backup-addr" data-copy="9666.uno:40516" title="点击复制">9666.uno:40516</span>
+                        <span>—</span>
+                        <span><span class="latency-badge" data-host="9666.uno" data-port="40516">等待</span></span>
+                    </div>
+
+                    <div class="backup-collapse" id="backup-collapse">
+                        <div class="backup-row">
+                            <span>中国电信</span>
+                            <span class="backup-addr" data-copy="43.248.77.232:40516" title="点击复制">43.248.77.232:40516</span>
+                            <span>无限速</span>
+                            <span><span class="latency-badge" data-host="43.248.77.232" data-port="40516">等待</span></span>
+                        </div>
+                        <div class="backup-row">
+                            <span>中国电信</span>
+                            <span class="backup-addr" data-copy="43.248.77.236:40516" title="点击复制">43.248.77.236:40516</span>
+                            <span>无限速</span>
+                            <span><span class="latency-badge" data-host="43.248.77.236" data-port="40516">等待</span></span>
+                        </div>
+                        <div class="backup-row">
+                            <span>中国电信</span>
+                            <span class="backup-addr" data-copy="222.186.148.93:40516" title="点击复制">222.186.148.93:40516</span>
+                            <span>无限速</span>
+                            <span><span class="latency-badge" data-host="222.186.148.93" data-port="40516">等待</span></span>
+                        </div>
+                        <div class="backup-row">
+                            <span>中国移动</span>
+                            <span class="backup-addr" data-copy="223.112.227.130:40516" title="点击复制">223.112.227.130:40516</span>
+                            <span>无限速</span>
+                            <span><span class="latency-badge" data-host="223.112.227.130" data-port="40516">等待</span></span>
+                        </div>
+                        <div class="backup-row">
+                            <span>三线BGP</span>
+                            <span class="backup-addr" data-copy="103.85.84.40:40516" title="点击复制">103.85.84.40:40516</span>
+                            <span>共享100M</span>
+                            <span><span class="latency-badge" data-host="103.85.84.40" data-port="40516">等待</span></span>
+                        </div>
+                        <div class="backup-row">
+                            <span>腾讯云BGP</span>
+                            <span class="backup-addr" data-copy="119.45.28.241:40516" title="点击复制">119.45.28.241:40516</span>
+                            <span>共享峰值200M</span>
+                            <span><span class="latency-badge" data-host="119.45.28.241" data-port="40516">等待</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px;">
+                    <button class="collapse-btn" id="toggle-backup">
+                        展开备用线路 <span style="font-size:0.8rem;">›</span>
+                    </button>
+                    <button class="collapse-btn" id="btn-retest" title="重新测速">
+                        ⟳ 重新测速
+                    </button>
                 </div>
             </div>
         </div>
@@ -848,66 +1104,94 @@
 <!-- Toast 容器 -->
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- 公告弹窗 -->
+<div class="modal-overlay" id="announcement-modal" role="dialog" aria-modal="true" aria-labelledby="announcement-title">
+    <div class="modal-box">
+        <div class="modal-title" id="announcement-title">公告</div>
+        <div class="modal-body">
+            服务器地址由于流量过载不得已更改，请使用新地址加入服务器，半年内仍会有一次地址变更，但当前展示的地址无另行通知仍然有效。
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" id="modal-dismiss">不再显示</button>
+            <button class="btn btn-primary" id="modal-ok">确定</button>
+        </div>
+    </div>
+</div>
+
 <script>
     (function() {
-        // 复制功能
-        function copyToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
-            }
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-9999px';
-            textarea.style.top = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                return Promise.resolve(true);
-            } catch (e) {
-                document.body.removeChild(textarea);
-                return Promise.resolve(false);
-            }
+        'use strict';
+
+        /* ============ 工具函数：Cookie ============ */
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.*+?^${}()|[\]\\])/g, '\\$1') + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+        function setCookie(name, value, days) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/; SameSite=Lax';
         }
 
-        // 移除 toast 并触发其他 toast 上移动画（FLIP 动画）
+        /* ============ 复制功能（先同步 execCommand，再回退到异步 Clipboard API） ============ */
+        function copyToClipboard(text) {
+            // 优先使用同步 execCommand：处于用户手势上下文内，成功率最高
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.top = '0';
+                ta.style.left = '-9999px';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                if (typeof ta.setSelectionRange === 'function') {
+                    ta.setSelectionRange(0, text.length);
+                }
+                const ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                if (ok) {
+                    return Promise.resolve(true);
+                }
+            } catch (e) {
+                // 忽略，继续尝试 Clipboard API
+            }
+
+            // 回退：异步 Clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(text).then(function() {
+                    return true;
+                }).catch(function() {
+                    return false;
+                });
+            }
+
+            return Promise.resolve(false);
+        }
+
+        /* ============ Toast（带 FLIP 上移动画） ============ */
         function removeToastWithAnimation(toast) {
             const container = document.getElementById('toastContainer');
-            const otherToasts = Array.from(container.children).filter(child => child !== toast);
+            const otherToasts = Array.from(container.children).filter(function(child) { return child !== toast; });
             if (otherToasts.length === 0) {
                 toast.remove();
                 return;
             }
-
-            // 记录旧位置
-            const oldPositions = otherToasts.map(t => t.getBoundingClientRect().top);
-
-            // 移除当前 toast
+            const oldPositions = otherToasts.map(function(t) { return t.getBoundingClientRect().top; });
             toast.remove();
-
-            // 强制重排以获取新位置
-            const newPositions = otherToasts.map(t => t.getBoundingClientRect().top);
-
-            // 计算位移差值并应用反向 transform
-            otherToasts.forEach((t, index) => {
+            const newPositions = otherToasts.map(function(t) { return t.getBoundingClientRect().top; });
+            otherToasts.forEach(function(t, index) {
                 const deltaY = newPositions[index] - oldPositions[index];
                 if (deltaY !== 0) {
                     t.style.transition = 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)';
-                    t.style.transform = `translateY(${deltaY}px)`;
+                    t.style.transform = 'translateY(' + deltaY + 'px)';
                 }
             });
-
-            // 下一帧将 transform 归零，触发过渡
-            requestAnimationFrame(() => {
-                otherToasts.forEach(t => {
-                    t.style.transform = 'translateY(0)';
-                });
-                // 过渡结束后清理样式
-                setTimeout(() => {
-                    otherToasts.forEach(t => {
+            requestAnimationFrame(function() {
+                otherToasts.forEach(function(t) { t.style.transform = 'translateY(0)'; });
+                setTimeout(function() {
+                    otherToasts.forEach(function(t) {
                         t.style.transition = '';
                         t.style.transform = '';
                     });
@@ -915,25 +1199,64 @@
             });
         }
 
-        function showToast(message, type = 'success') {
+        function showToast(message, type) {
+            type = type || 'success';
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
+            toast.className = 'toast ' + type;
             toast.textContent = message;
             container.appendChild(toast);
 
-            // 2.4秒后开始移除
-            setTimeout(() => {
-                // 先播放退场动画（toastOut）
+            setTimeout(function() {
                 toast.classList.add('removing');
-                // 等退场动画结束后再从DOM移除并触发其他 toast 上移
-                setTimeout(() => {
+                setTimeout(function() {
                     removeToastWithAnimation(toast);
                 }, 300);
             }, 2400);
         }
 
-        // 服务器状态检测
+        /* ============ 公告弹窗 ============ */
+        (function initAnnouncement() {
+            const COOKIE_KEY = 'maple_announcement_hide';
+            const modal = document.getElementById('announcement-modal');
+            const okBtn = document.getElementById('modal-ok');
+            const dismissBtn = document.getElementById('modal-dismiss');
+
+            if (getCookie(COOKIE_KEY) === '1') {
+                return; // 用户已选择不再显示
+            }
+
+            // 延迟一点再弹出，避免与首屏渲染打架
+            setTimeout(function() {
+                modal.classList.add('show');
+            }, 350);
+
+            function close() {
+                modal.classList.remove('show');
+            }
+
+            okBtn.addEventListener('click', function() {
+                close();
+            });
+
+            dismissBtn.addEventListener('click', function() {
+                setCookie(COOKIE_KEY, '1', 365);
+                close();
+                showToast('已设置不再显示此公告', 'success');
+            });
+
+            // 点击遮罩关闭（等同于确定）
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    close();
+                }
+            });
+        })();
+
+        /* ============ 服务器状态检测 ============ */
+        const SERVER_HOST = '9666.uno';
+        const SERVER_PORT = '40516';
+
         async function checkServerStatus() {
             const dot = document.getElementById('status-dot');
             const text = document.getElementById('status-text');
@@ -945,14 +1268,15 @@
 
             dot.className = 'status-dot';
             text.textContent = '检测中...';
+            text.style.color = '';
             playersEl.textContent = '-';
             versionEl.textContent = '1.20.1';
             latencyEl.textContent = '-';
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
-                const response = await fetch('https://api.mcsrvstat.us/3/maple.9666.fun:40516', {
+                const timeoutId = setTimeout(function() { controller.abort(); }, 8000);
+                const response = await fetch('https://api.mcsrvstat.us/3/' + SERVER_HOST + ':' + SERVER_PORT, {
                     signal: controller.signal
                 });
                 clearTimeout(timeoutId);
@@ -965,9 +1289,9 @@
                     text.style.color = '#10b981';
                     pill.style.borderColor = '#10b981';
 
-                    const onlinePlayers = data.players?.online ?? 0;
-                    const maxPlayers = data.players?.max ?? '?';
-                    playersEl.textContent = `${onlinePlayers}/${maxPlayers}`;
+                    const onlinePlayers = data.players && typeof data.players.online === 'number' ? data.players.online : 0;
+                    const maxPlayers = data.players && data.players.max ? data.players.max : '?';
+                    playersEl.textContent = onlinePlayers + '/' + maxPlayers;
 
                     versionEl.textContent = data.version || '1.20.1';
 
@@ -979,8 +1303,7 @@
                     } else if (data.debug && typeof data.debug.latency === 'number') {
                         latencyMs = data.debug.latency + ' ms';
                     } else {
-                        const elapsed = Math.round(performance.now() - startTime);
-                        latencyMs = elapsed + ' ms';
+                        latencyMs = Math.round(performance.now() - startTime) + ' ms';
                     }
                     latencyEl.textContent = latencyMs;
                 } else {
@@ -1004,34 +1327,155 @@
             }
         }
 
-        // 初始化状态检测
         checkServerStatus();
         setInterval(checkServerStatus, 60000);
 
-        // 复制地址和QQ
-        document.getElementById('server-address').addEventListener('click', function() {
-            copyToClipboard('maple.9666.fun:40516').then(success => {
-                showToast(success ? '地址已复制' : '复制失败', success ? 'success' : 'error');
-            });
-        });
-        document.getElementById('qq-group').addEventListener('click', function() {
-            copyToClipboard('614526615').then(success => {
-                showToast(success ? 'QQ群号已复制' : '复制失败', success ? 'success' : 'error');
+        /* ============ 统一复制绑定 ============ */
+        document.querySelectorAll('[data-copy]').forEach(function(el) {
+            el.addEventListener('click', function() {
+                const value = el.getAttribute('data-copy');
+                copyToClipboard(value).then(function(success) {
+                    if (success) {
+                        showToast('已复制：' + value, 'success');
+                    } else {
+                        showToast('复制失败，请手动复制：' + value, 'error');
+                    }
+                });
             });
         });
 
-        // 机械动力附属模组折叠
+        /* ============ 机械动力附属模组折叠 ============ */
         const toggleBtn = document.getElementById('toggle-create-addons');
         const collapseContent = document.getElementById('create-addons-full');
         toggleBtn.addEventListener('click', function() {
             const isOpen = collapseContent.classList.toggle('open');
             toggleBtn.classList.toggle('active', isOpen);
-            toggleBtn.innerHTML = isOpen ? '收起完整列表 <span style="font-size:0.8rem;">‹</span>' : '展开完整列表 <span style="font-size:0.8rem;">›</span>';
+            toggleBtn.innerHTML = isOpen
+                ? '收起完整列表 <span style="font-size:0.8rem;">‹</span>'
+                : '展开完整列表 <span style="font-size:0.8rem;">›</span>';
         });
 
-        // ----- 语义化版本解析与比较（仅支持 x.y.z 和可选预发布后缀）-----
+        /* ============ 备用线路折叠 ============ */
+        const toggleBackupBtn = document.getElementById('toggle-backup');
+        const backupCollapse = document.getElementById('backup-collapse');
+        toggleBackupBtn.addEventListener('click', function() {
+            const isOpen = backupCollapse.classList.toggle('open');
+            toggleBackupBtn.classList.toggle('active', isOpen);
+            toggleBackupBtn.innerHTML = isOpen
+                ? '收起备用线路 <span style="font-size:0.8rem;">‹</span>'
+                : '展开备用线路 <span style="font-size:0.8rem;">›</span>';
+        });
+
+        /* ============ 备用线路延迟测速（纯前端，不使用外部 API） ============ */
+        const LATENCY_TIMEOUT = 3500;
+
+        function classifyLatency(ms) {
+            if (ms <= 0 || ms == null) return '';
+            if (ms < 100) return 'good';
+            if (ms < 250) return 'fair';
+            return 'poor';
+        }
+
+        /**
+         * 纯前端"测速"：
+         * 通过 fetch 访问 http://host:port/ 并测量往返耗时。
+         * - 若服务器返回了 HTTP 响应（即使是错误码），fetch 会 resolve，得到较准确的 RTT
+         * - 若连接被拒绝 / RST，fetch 会快速 reject，此时耗时同样近似一次 RTT
+         * - 若超时无响应，判定为"超时"
+         * 注意：浏览器无法真正 ping MC 服务器，本测速仅作网络连通性参考。
+         */
+        function measureLatency(host, port) {
+            return new Promise(function(resolve) {
+                const url = 'http://' + host + ':' + port + '/';
+                const controller = new AbortController();
+                let aborted = false;
+                const timer = setTimeout(function() {
+                    aborted = true;
+                    try { controller.abort(); } catch (e) {}
+                }, LATENCY_TIMEOUT);
+
+                const start = performance.now();
+                let done = false;
+
+                function finish(result) {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(timer);
+                    resolve(result);
+                }
+
+                fetch(url, {
+                    mode: 'no-cors',
+                    cache: 'no-store',
+                    redirect: 'manual',
+                    signal: controller.signal,
+                    credentials: 'omit'
+                }).then(function() {
+                    const ms = Math.round(performance.now() - start);
+                    finish(ms);
+                }).catch(function(err) {
+                    const elapsed = Math.round(performance.now() - start);
+                    if (aborted || (err && err.name === 'AbortError')) {
+                        finish(null); // 超时
+                    } else if (elapsed < LATENCY_TIMEOUT) {
+                        // 网络层快速失败（如连接被拒绝），仍可作为 RTT 参考
+                        finish(elapsed);
+                    } else {
+                        finish(null);
+                    }
+                });
+            });
+        }
+
+        let testing = false;
+        async function runAllLatencyTests() {
+            if (testing) return;
+            testing = true;
+
+            const badges = document.querySelectorAll('.latency-badge');
+            // 重置状态
+            badges.forEach(function(b) {
+                b.className = 'latency-badge testing';
+                b.textContent = '测速中…';
+            });
+
+            const tasks = Array.from(badges).map(function(badge) {
+                const host = badge.getAttribute('data-host');
+                const port = badge.getAttribute('data-port');
+                if (!host || !port) {
+                    badge.className = 'latency-badge';
+                    badge.textContent = '—';
+                    return Promise.resolve();
+                }
+                return measureLatency(host, port).then(function(ms) {
+                    if (ms === null) {
+                        badge.className = 'latency-badge poor';
+                        badge.textContent = '超时';
+                    } else {
+                        const cls = classifyLatency(ms);
+                        badge.className = 'latency-badge ' + cls;
+                        badge.textContent = ms + ' ms';
+                    }
+                });
+            });
+
+            await Promise.all(tasks);
+            testing = false;
+        }
+
+        document.getElementById('btn-retest').addEventListener('click', function() {
+            runAllLatencyTests();
+            showToast('正在重新测速…', 'success');
+        });
+
+        // 页面加载后稍晚开始测速（让弹窗和首屏先渲染）
+        setTimeout(function() {
+            runAllLatencyTests();
+        }, 800);
+
+        /* ============ 版本解析 ============ */
         function parseVersion(tag) {
-            const clean = tag.replace(/^v/, '');
+            const clean = String(tag).replace(/^v/, '');
             const parts = clean.split('-');
             const main = parts[0].split('.').map(Number);
             const prerelease = parts[1] || '';
@@ -1040,14 +1484,12 @@
                 minor: main[1] || 0,
                 patch: main[2] || 0,
                 prerelease: prerelease,
-                // 比较函数，返回负数表示 a < b
                 compare: function(other) {
-                    for (let key of ['major', 'minor', 'patch']) {
-                        if (this[key] !== other[key]) {
-                            return this[key] - other[key];
-                        }
+                    const keys = ['major', 'minor', 'patch'];
+                    for (let i = 0; i < keys.length; i++) {
+                        const k = keys[i];
+                        if (this[k] !== other[k]) return this[k] - other[k];
                     }
-                    // 数字相同，正式版（无prerelease）大于测试版
                     if (this.prerelease && !other.prerelease) return -1;
                     if (!this.prerelease && other.prerelease) return 1;
                     if (this.prerelease && other.prerelease) {
@@ -1058,7 +1500,6 @@
             };
         }
 
-        // GitHub API 通用获取 release 函数
         async function fetchGitHubReleases(apiUrl) {
             const response = await fetch(apiUrl, {
                 headers: {
@@ -1070,7 +1511,7 @@
             return await response.json();
         }
 
-        // FCL 启动器下载
+        /* ============ FCL 启动器 ============ */
         document.getElementById('btn-fcl-github').addEventListener('click', async function() {
             const btn = this;
             const spinner = document.getElementById('fcl-github-spinner');
@@ -1088,7 +1529,7 @@
                 if (releases.length === 0) throw new Error('没有找到任何 Release');
                 const latest = releases[0];
                 const assets = latest.assets || [];
-                const apkAssets = assets.filter(a => a.name.toLowerCase().endsWith('.apk'));
+                const apkAssets = assets.filter(function(a) { return a.name.toLowerCase().endsWith('.apk'); });
                 const displayAssets = apkAssets.length > 0 ? apkAssets : assets;
 
                 if (displayAssets.length === 0) {
@@ -1096,22 +1537,17 @@
                     return;
                 }
 
-                let html = `<p style="margin-bottom:6px;"><strong>最新版本：</strong>${latest.tag_name} <span class="badge" style="background:#f1f5f9;">${latest.prerelease ? '预发布' : '正式版'}</span></p>`;
+                let html = '<p style="margin-bottom:6px;"><strong>最新版本：</strong>' + latest.tag_name + ' <span class="badge" style="background:#f1f5f9;">' + (latest.prerelease ? '预发布' : '正式版') + '</span></p>';
                 html += '<div class="release-assets">';
-                displayAssets.forEach(asset => {
-                    html += `
-                        <div class="asset-item">
-                            <span>${asset.name}</span>
-                            <a href="${asset.browser_download_url}" download>下载</a>
-                        </div>
-                    `;
+                displayAssets.forEach(function(asset) {
+                    html += '<div class="asset-item"><span>' + asset.name + '</span><a href="' + asset.browser_download_url + '" download>下载</a></div>';
                 });
                 html += '</div>';
                 infoDiv.innerHTML = html;
                 showToast('FCL 最新版本获取成功');
             } catch (error) {
                 console.error('加载 FCL Release 失败:', error);
-                infoDiv.innerHTML = `<p style="color:var(--danger);">获取失败：${error.message}。请稍后重试或手动访问 <a href="https://github.com/FCL-Team/FoldCraftLauncher/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>`;
+                infoDiv.innerHTML = '<p style="color:var(--danger);">获取失败：' + error.message + '。请稍后重试或手动访问 <a href="https://github.com/FCL-Team/FoldCraftLauncher/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>';
                 showToast('获取 FCL 失败', 'error');
             } finally {
                 btn.disabled = false;
@@ -1120,15 +1556,15 @@
             }
         });
 
-        // 和乐果备用下载按钮
+        /* ============ 和乐果备用下载 ============ */
         document.getElementById('btn-fcl-lanzou').addEventListener('click', function() {
-            var newWin = window.open('https://yun.heleguo.cn/s/VjGSk', '_blank');
+            const newWin = window.open('https://yun.heleguo.cn/s/VjGSk', '_blank');
             if (!newWin) {
                 showToast('和乐果通道地址暂未提供，请加QQ群 614526615 获取', 'error');
             }
         });
 
-        // HMCL 启动器 GitHub 下载
+        /* ============ HMCL 启动器 ============ */
         document.getElementById('btn-hmcl-github').addEventListener('click', async function() {
             const btn = this;
             const spinner = document.getElementById('hmcl-github-spinner');
@@ -1146,28 +1582,23 @@
                 if (releases.length === 0) throw new Error('没有找到任何 Release');
                 const latest = releases[0];
                 const assets = latest.assets || [];
-                const exeJarAssets = assets.filter(a => {
+                const exeJarAssets = assets.filter(function(a) {
                     const name = a.name.toLowerCase();
                     return name.endsWith('.exe') || name.endsWith('.jar');
                 });
                 const displayAssets = exeJarAssets.length > 0 ? exeJarAssets : assets;
 
-                let html = `<p style="margin-bottom:6px;"><strong>最新版本：</strong>${latest.tag_name} <span class="badge" style="background:#f1f5f9;">${latest.prerelease ? '预发布' : '正式版'}</span></p>`;
+                let html = '<p style="margin-bottom:6px;"><strong>最新版本：</strong>' + latest.tag_name + ' <span class="badge" style="background:#f1f5f9;">' + (latest.prerelease ? '预发布' : '正式版') + '</span></p>';
                 html += '<div class="release-assets">';
-                displayAssets.forEach(asset => {
-                    html += `
-                        <div class="asset-item">
-                            <span>${asset.name}</span>
-                            <a href="${asset.browser_download_url}" download>下载</a>
-                        </div>
-                    `;
+                displayAssets.forEach(function(asset) {
+                    html += '<div class="asset-item"><span>' + asset.name + '</span><a href="' + asset.browser_download_url + '" download>下载</a></div>';
                 });
                 html += '</div>';
                 infoDiv.innerHTML = html;
                 showToast('HMCL 最新版本获取成功');
             } catch (error) {
                 console.error('加载 HMCL Release 失败:', error);
-                infoDiv.innerHTML = `<p style="color:var(--danger);">获取失败：${error.message}。请稍后重试或手动访问 <a href="https://github.com/HMCL-dev/HMCL/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>`;
+                infoDiv.innerHTML = '<p style="color:var(--danger);">获取失败：' + error.message + '。请稍后重试或手动访问 <a href="https://github.com/HMCL-dev/HMCL/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>';
                 showToast('获取 HMCL 失败', 'error');
             } finally {
                 btn.disabled = false;
@@ -1176,7 +1607,7 @@
             }
         });
 
-        // ----- 整合包 GitHub 下载（自定义排序 + 标记最新）-----
+        /* ============ 整合包 GitHub 下载 ============ */
         document.getElementById('btn-modpack-github').addEventListener('click', async function() {
             const btn = this;
             const spinner = document.getElementById('modpack-github-spinner');
@@ -1193,10 +1624,9 @@
                 const releases = await fetchGitHubReleases('https://api.github.com/repos/MapleSTUDIO-CN/Minecraft_MapleSTUDIO_mrpack/releases');
                 if (releases.length === 0) throw new Error('没有找到任何 Release');
 
-                // 先过滤出包含 .7z 或 .zip 资产的 release
-                const validReleases = releases.filter(release => {
+                const validReleases = releases.filter(function(release) {
                     const assets = release.assets || [];
-                    return assets.some(a => {
+                    return assets.some(function(a) {
                         const name = a.name.toLowerCase();
                         return name.endsWith('.7z') || name.endsWith('.zip');
                     });
@@ -1208,26 +1638,22 @@
                     return;
                 }
 
-                // 区分正式版（prerelease === false）和测试版（prerelease === true）
-                const stable = validReleases.filter(r => !r.prerelease);
-                const beta = validReleases.filter(r => r.prerelease);
+                const stable = validReleases.filter(function(r) { return !r.prerelease; });
+                const beta = validReleases.filter(function(r) { return r.prerelease; });
 
-                // 按版本号降序排序（使用 parseVersion 比较）
-                const sortByVersionDesc = (a, b) => {
+                const sortByVersionDesc = function(a, b) {
                     const va = parseVersion(a.tag_name);
                     const vb = parseVersion(b.tag_name);
-                    return vb.compare(va); // 降序
+                    return vb.compare(va);
                 };
                 stable.sort(sortByVersionDesc);
                 beta.sort(sortByVersionDesc);
 
-                // 合并：正式版在前，测试版在后
-                const sorted = [...stable, ...beta];
+                const sorted = stable.concat(beta);
 
-                // 构建 HTML
                 let html = '<div class="release-assets">';
-                sorted.forEach((release, index) => {
-                    const assets = release.assets.filter(a => {
+                sorted.forEach(function(release) {
+                    const assets = release.assets.filter(function(a) {
                         const name = a.name.toLowerCase();
                         return name.endsWith('.7z') || name.endsWith('.zip');
                     });
@@ -1236,27 +1662,20 @@
                     const isBeta = release.prerelease;
                     const badgeClass = isBeta ? 'badge-highlight' : 'badge-primary';
                     const badgeText = isBeta ? 'Beta / 测试版' : '正式版';
-
-                    // 是否为最新的正式版（即 stable 列表中的第一个）
                     const isLatestStable = !isBeta && stable.length > 0 && release.tag_name === stable[0].tag_name;
 
-                    html += `<div class="release-item">`;
-                    html += `<div class="release-tag">`;
-                    html += `<span>${release.tag_name}</span>`;
-                    html += `<span class="badge ${badgeClass}">${badgeText}</span>`;
+                    html += '<div class="release-item">';
+                    html += '<div class="release-tag">';
+                    html += '<span>' + release.tag_name + '</span>';
+                    html += '<span class="badge ' + badgeClass + '">' + badgeText + '</span>';
                     if (isLatestStable) {
-                        html += `<span class="badge badge-latest">🌟 最新</span>`;
+                        html += '<span class="badge badge-latest">🌟 最新</span>';
                     }
-                    html += `</div>`;
-                    assets.forEach(asset => {
-                        html += `
-                            <div class="asset-item">
-                                <span>${asset.name}</span>
-                                <a href="${asset.browser_download_url}" download>下载</a>
-                            </div>
-                        `;
+                    html += '</div>';
+                    assets.forEach(function(asset) {
+                        html += '<div class="asset-item"><span>' + asset.name + '</span><a href="' + asset.browser_download_url + '" download>下载</a></div>';
                     });
-                    html += `</div>`;
+                    html += '</div>';
                 });
                 html += '</div>';
 
@@ -1264,7 +1683,7 @@
                 showToast('整合包版本获取成功（已按正式版→测试版排序）');
             } catch (error) {
                 console.error('加载整合包 Release 失败:', error);
-                infoDiv.innerHTML = `<p style="color:var(--danger);">获取失败：${error.message}。请稍后重试或手动访问 <a href="https://github.com/MapleSTUDIO-CN/Minecraft_MapleSTUDIO_mrpack/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>`;
+                infoDiv.innerHTML = '<p style="color:var(--danger);">获取失败：' + error.message + '。请稍后重试或手动访问 <a href="https://github.com/MapleSTUDIO-CN/Minecraft_MapleSTUDIO_mrpack/releases" target="_blank" style="color:var(--primary);">GitHub Releases</a>。</p>';
                 showToast('获取整合包失败', 'error');
             } finally {
                 btn.disabled = false;

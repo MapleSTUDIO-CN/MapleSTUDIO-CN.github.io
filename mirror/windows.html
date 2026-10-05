@@ -539,6 +539,12 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            cursor: zoom-in;
+            transform-origin: center center;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.3s ease,
+                        border-color 0.3s ease;
+            z-index: 1;
         }
 
         .qr-box img {
@@ -546,6 +552,20 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 悬停放大 */
+        .qr-box:hover {
+            transform: scale(2.2);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+            border-color: var(--accent-blue);
+            border-style: solid;
+            z-index: 100;
+        }
+
+        .qr-box.is-placeholder {
+            cursor: default;
         }
 
         .qr-box.is-placeholder::after {
@@ -567,6 +587,57 @@
             color: var(--footer-color);
             white-space: nowrap;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            transition: color 0.3s ease;
+        }
+
+        .qr-wrap:hover .qr-tip {
+            color: var(--accent-blue);
+        }
+
+        /* 二维码全屏灯箱 */
+        .qr-lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-lightbox.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .qr-lightbox img {
+            width: min(78vw, 78vh);
+            height: min(78vw, 78vh);
+            object-fit: contain;
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 20px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .qr-lightbox.open img {
+            transform: scale(1);
+        }
+
+        .qr-lightbox-hint {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
         }
 
         /* 底部栏 */
@@ -647,6 +718,10 @@
                 width: 60px;
                 height: 60px;
             }
+
+            .qr-box:hover {
+                transform: scale(1.8);
+            }
         }
 
         @media (max-width: 480px) {
@@ -658,6 +733,10 @@
 
             .qr-tip {
                 font-size: 0.62em;
+            }
+
+            .qr-box:hover {
+                transform: scale(1.5);
             }
         }
     </style>
@@ -974,14 +1053,21 @@
                rel="noopener noreferrer"
                data-translate-key="cta-123">没有找到合适的？前往123收录</a>
             <div class="qr-wrap">
-                <div class="qr-box">
-                    <img src="../Pictures/qrcode.png"
+                <div class="qr-box" id="qrBox">
+                    <img src="images/123.webp"
                          alt="123收录二维码"
+                         id="qrImg"
                          onerror="this.style.display='none';this.parentElement.classList.add('is-placeholder');">
                 </div>
                 <div class="qr-tip" data-translate-key="qr-tip">扫码前往 123 收录</div>
             </div>
         </div>
+    </div>
+
+    <!-- 二维码全屏灯箱 -->
+    <div class="qr-lightbox" id="qrLightbox">
+        <img src="images/123.webp" alt="123收录二维码" id="qrLightboxImg">
+        <div class="qr-lightbox-hint" data-translate-key="qr-lightbox-hint">点击任意处关闭</div>
     </div>
 
     <div class="footer">
@@ -1040,6 +1126,7 @@
                 'win11-maintain': 'Windows11（維護中）',
                 'cta-123': '沒有找到合適的？前往123收錄',
                 'qr-tip': '掃碼前往 123 收錄',
+                'qr-lightbox-hint': '點擊任意處關閉',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
                 'footer-powered-prefix': '此站點由 ',
                 'footer-powered-suffix': ' 驅動',
@@ -1086,6 +1173,7 @@
                 'win11-maintain': 'Windows 11 (Maintenance)',
                 'cta-123': 'Not found the right one? Go to 123 Collection',
                 'qr-tip': 'Scan to visit 123',
+                'qr-lightbox-hint': 'Click anywhere to close',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
                 'footer-powered-prefix': 'Powered by ',
                 'footer-powered-suffix': '',
@@ -1132,6 +1220,7 @@
                 'win11-maintain': 'Windows11（メンテナンス中）',
                 'cta-123': '適切なものが見つかりませんか？123コレクションへ',
                 'qr-tip': 'スキャンして123へ',
+                'qr-lightbox-hint': 'クリックして閉じる',
                 'footer-copyright': 'MapleSTUDIO 著作権所有',
                 'footer-powered-prefix': 'このサイトは ',
                 'footer-powered-suffix': ' によって運営',
@@ -1178,6 +1267,7 @@
                 'win11-maintain': 'Windows11 (유지보수 중)',
                 'cta-123': '적합한 것을 찾지 못하셨나요? 123 컬렉션으로',
                 'qr-tip': '스캔하여 123 방문',
+                'qr-lightbox-hint': '클릭하여 닫기',
                 'footer-copyright': 'MapleSTUDIO 저작권 소유',
                 'footer-powered-prefix': '이 사이트는 ',
                 'footer-powered-suffix': ' 에 의해 구동',
@@ -1401,6 +1491,33 @@
             }, 250);
         });
 
+        // ========================
+        // 二维码点击放大（灯箱）
+        // ========================
+        const qrBox = document.getElementById('qrBox');
+        const qrLightbox = document.getElementById('qrLightbox');
+        const qrLightboxImg = document.getElementById('qrLightboxImg');
+        const qrImg = document.getElementById('qrImg');
+
+        qrBox.addEventListener('click', (e) => {
+            // 占位状态（图片未加载成功）不触发
+            if (qrBox.classList.contains('is-placeholder')) return;
+            if (!qrImg || qrImg.style.display === 'none') return;
+            e.stopPropagation();
+            qrLightbox.classList.add('open');
+        });
+
+        qrLightbox.addEventListener('click', () => {
+            qrLightbox.classList.remove('open');
+        });
+
+        // ESC 关闭灯箱
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && qrLightbox.classList.contains('open')) {
+                qrLightbox.classList.remove('open');
+            }
+        });
+
         // 初始化
         window.addEventListener('load', () => {
             cacheDefaultTexts();
@@ -1409,6 +1526,11 @@
             const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
             applyLanguage(savedLang);
             document.getElementById('menu').classList.remove('open');
+
+            // 若二维码图片加载失败，灯箱图也隐藏，避免放大空图
+            qrLightboxImg.addEventListener('error', () => {
+                qrLightboxImg.style.display = 'none';
+            });
         });
     </script>
 </body>

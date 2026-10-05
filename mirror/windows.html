@@ -312,7 +312,7 @@
             flex-wrap: wrap;
             gap: 24px;
             justify-content: center;
-            padding-bottom: 120px;
+            padding-bottom: 130px;
             padding-top: 20px;
         }
 
@@ -473,6 +473,102 @@
             color: white;
         }
 
+        /* 底部 123 收录入口（滚动到底部显示） */
+        .cta-section {
+            flex-basis: 100%;
+            max-width: 700px;
+            margin: 8px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            background: var(--glass-menu);
+            backdrop-filter: blur(var(--menu-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--menu-blur)) saturate(180%);
+            border-radius: 18px;
+            padding: 14px 24px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(24px);
+            animation: ctaFadeIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s forwards;
+        }
+
+        @keyframes ctaFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 24px;
+            background: var(--accent-blue);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.92em;
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 14px rgba(0, 160, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 6px 20px rgba(0, 160, 255, 0.5);
+            background: rgba(0, 160, 255, 0.9);
+        }
+
+        .qr-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .qr-box {
+            width: 68px;
+            height: 68px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px dashed var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .qr-box.is-placeholder::after {
+            content: '二维码\A预留';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.7em;
+            line-height: 1.2;
+            color: var(--footer-color);
+            white-space: pre-line;
+        }
+
+        .qr-tip {
+            font-size: 0.66em;
+            color: var(--footer-color);
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
         /* 底部栏 */
         .footer {
             position: fixed;
@@ -535,6 +631,33 @@
             .translate-btn, .theme-toggle {
                 width: 36px;
                 height: 36px;
+            }
+
+            .cta-section {
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .cta-button {
+                font-size: 0.82em;
+                padding: 10px 16px;
+            }
+
+            .qr-box {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-section {
+                flex-direction: column;
+                gap: 10px;
+                padding: 14px;
+            }
+
+            .qr-tip {
+                font-size: 0.62em;
             }
         }
     </style>
@@ -842,6 +965,23 @@
                 </div>
             </div>
         </div>
+
+        <!-- 底部 123 收录入口（滚动到底部时显示） -->
+        <div class="cta-section">
+            <a class="cta-button"
+               href="https://www.123912.com/s/iKdlVv-VoWph"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-translate-key="cta-123">没有找到合适的？前往123收录</a>
+            <div class="qr-wrap">
+                <div class="qr-box">
+                    <img src="../Pictures/qrcode.png"
+                         alt="123收录二维码"
+                         onerror="this.style.display='none';this.parentElement.classList.add('is-placeholder');">
+                </div>
+                <div class="qr-tip" data-translate-key="qr-tip">扫码前往 123 收录</div>
+            </div>
+        </div>
     </div>
 
     <div class="footer">
@@ -898,6 +1038,8 @@
                 'basic': '基礎版',
                 'pro-unavailable': 'Pro（暫不可用）',
                 'win11-maintain': 'Windows11（維護中）',
+                'cta-123': '沒有找到合適的？前往123收錄',
+                'qr-tip': '掃碼前往 123 收錄',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
                 'footer-powered-prefix': '此站點由 ',
                 'footer-powered-suffix': ' 驅動',
@@ -942,6 +1084,8 @@
                 'basic': 'Basic',
                 'pro-unavailable': 'Pro (Unavailable)',
                 'win11-maintain': 'Windows 11 (Maintenance)',
+                'cta-123': 'Not found the right one? Go to 123 Collection',
+                'qr-tip': 'Scan to visit 123',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
                 'footer-powered-prefix': 'Powered by ',
                 'footer-powered-suffix': '',
@@ -986,6 +1130,8 @@
                 'basic': 'Basic',
                 'pro-unavailable': 'Pro（利用不可）',
                 'win11-maintain': 'Windows11（メンテナンス中）',
+                'cta-123': '適切なものが見つかりませんか？123コレクションへ',
+                'qr-tip': 'スキャンして123へ',
                 'footer-copyright': 'MapleSTUDIO 著作権所有',
                 'footer-powered-prefix': 'このサイトは ',
                 'footer-powered-suffix': ' によって運営',
@@ -1030,6 +1176,8 @@
                 'basic': 'Basic',
                 'pro-unavailable': 'Pro (사용 불가)',
                 'win11-maintain': 'Windows11 (유지보수 중)',
+                'cta-123': '적합한 것을 찾지 못하셨나요? 123 컬렉션으로',
+                'qr-tip': '스캔하여 123 방문',
                 'footer-copyright': 'MapleSTUDIO 저작권 소유',
                 'footer-powered-prefix': '이 사이트는 ',
                 'footer-powered-suffix': ' 에 의해 구동',

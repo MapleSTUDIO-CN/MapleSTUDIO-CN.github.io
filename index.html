@@ -188,9 +188,9 @@
             background-image:
                 linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 var(--bg-image, none);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-size: cover, cover;
+            background-position: center center;
+            background-repeat: no-repeat, no-repeat;
             opacity: 0;
             z-index: -1;
             pointer-events: none;
@@ -931,23 +931,42 @@
         }
     </style>
 
+    <!-- 首屏前置：恢复基调、色彩、导航位置、背景图 -->
     <script>
         (function () {
+            /* ---- 背景图映射表（与设置页卡片 data-value 一一对应） ---- */
+            var BG_IMAGES = {
+                '0': 'Pictures/甘城猫猫.jpg',
+                '1': 'Pictures/星轨.jpg',
+                '2': 'Pictures/原神.jpg',
+                '3': 'Pictures/我的世界.jpg',
+                '4': 'Pictures/崩铁.jpg'
+            };
+            /* 暴露给主脚本，避免两处映射表不同步 */
+            window.__BG_IMAGES = BG_IMAGES;
+
             function readCookie(name) {
                 var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
                 return m ? decodeURIComponent(m[1]) : null;
             }
+
             var base = readCookie('maple_base') || 'dark';
             var color = readCookie('maple_color') || 'blue';
             var navPos = readCookie('maple_nav') || 'top';
             var bg = readCookie('maple_bg');
+
             var root = document.documentElement;
             root.setAttribute('data-base', base);
             root.setAttribute('data-color', color);
             root.setAttribute('data-nav', navPos);
-            if (bg !== null && bg !== '') {
+
+            /* 只有当 cookie 里存的 key 在映射表内，才恢复背景 */
+            if (bg !== null && bg !== '' && BG_IMAGES[bg]) {
                 root.classList.add('has-bg');
-                root.style.setProperty('--bg-image', 'url("picture/no.jpg")');
+                root.style.setProperty(
+                    '--bg-image',
+                    'url("' + encodeURI(BG_IMAGES[bg]) + '")'
+                );
             }
         })();
     </script>
@@ -967,7 +986,7 @@
             <div class="content-container">
                 <div class="glass-layer" id="glassLayer"></div>
                 <div class="content" id="content">
-                    <div class="poem-text" id="poemText">且将新火试新茶，诗酒趁年华。</div>
+                    <div class="poem-text" id="poemText">肯将新火试新茶，诗酒趁年华。</div>
                     <div class="poem-source" id="poemSource">苏轼《望江南·超然台作》</div>
                 </div>
             </div>
@@ -1037,12 +1056,13 @@
                     <button class="swatch" data-color="purple" style="--sw:#8b5cf6" title="闪电紫"></button>
                 </div>
 
+                <!-- 5 个背景槽位：data-value 与 BG_IMAGES 一一对应 -->
                 <div class="bg-row" id="bgRow">
                     <button class="bg-card" data-value="0"><img src="Pictures/甘城猫猫.jpg" alt=""></button>
                     <button class="bg-card" data-value="1"><img src="Pictures/星轨.jpg" alt=""></button>
                     <button class="bg-card" data-value="2"><img src="Pictures/原神.jpg" alt=""></button>
                     <button class="bg-card" data-value="3"><img src="Pictures/我的世界.jpg" alt=""></button>
-                    <button class="bg-card" data-value="2"><img src="Pictures/崩铁.jpg" alt=""></button>
+                    <button class="bg-card" data-value="4"><img src="Pictures/崩铁.jpg" alt=""></button>
                     <button class="bg-card bg-none" data-value="" data-translate-key="bg-none">无</button>
                 </div>
             </div>
@@ -1119,12 +1139,20 @@
         var NAV_POSITIONS = ['top', 'bottom', 'left', 'right'];
         var PANEL_ORDER = ['home', 'modules', 'settings'];
 
+        /* 背景图映射：与设置卡片 data-value 保持一致，同时读取首屏脚本暴露的版本以防不同步 */
+        var BG_IMAGES = window.__BG_IMAGES || {
+            '0': 'Pictures/甘城猫猫.jpg',
+            '1': 'Pictures/星轨.jpg',
+            '2': 'Pictures/原神.jpg',
+            '3': 'Pictures/我的世界.jpg',
+            '4': 'Pictures/崩铁.jpg'
+        };
+
         var DEFAULT_POEM = {
             text: '肯将新火试新茶，诗酒趁年华。',
             source: '苏轼《望江南·超然台作》'
         };
         var POEM_URL = 'poem.json';
-        var BG_IMAGE_URL = 'picture/no.jpg';
 
         var root = document.documentElement;
         var nav = document.getElementById('floatNav');
@@ -1274,12 +1302,36 @@
         var currentBase = 'dark';
         var currentColor = 'blue';
 
+        /* =====================================================
+           背景图：根据 value 从 BG_IMAGES 查找实际路径
+           ===================================================== */
         function clearBackground() {
             root.classList.remove('has-bg');
             root.style.removeProperty('--bg-image');
             cookie.set('maple_bg', '');
             document.querySelectorAll('#bgRow .bg-card').forEach(function (btn) {
                 btn.classList.toggle('active', btn.dataset.value === '');
+            });
+        }
+
+        function applyBackground(value) {
+            /* 统一成字符串，避免 0 / '0' 类型不一致 */
+            var key = (value === '' || value === null || value === undefined) ? '' : String(value);
+            var path = BG_IMAGES[key];
+            var hasBg = !!path;
+
+            if (hasBg) {
+                root.style.setProperty('--bg-image', 'url("' + encodeURI(path) + '")');
+                root.classList.add('has-bg');
+            } else {
+                root.style.removeProperty('--bg-image');
+                root.classList.remove('has-bg');
+            }
+
+            cookie.set('maple_bg', hasBg ? key : '');
+
+            document.querySelectorAll('#bgRow .bg-card').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.value === (hasBg ? key : ''));
             });
         }
 
@@ -1513,21 +1565,6 @@
             cookie.set('maple_notice', visible ? 'on' : 'off');
         }
 
-        function applyBackground(value) {
-            var hasBg = value !== '' && value !== null && value !== undefined;
-            if (hasBg) {
-                root.style.setProperty('--bg-image', 'url("' + BG_IMAGE_URL + '")');
-                root.classList.add('has-bg');
-            } else {
-                root.style.removeProperty('--bg-image');
-                root.classList.remove('has-bg');
-            }
-            cookie.set('maple_bg', hasBg ? value : '');
-            document.querySelectorAll('#bgRow .bg-card').forEach(function (btn) {
-                btn.classList.toggle('active', btn.dataset.value === (hasBg ? value : ''));
-            });
-        }
-
         /* =====================================================================
            诗句
            ===================================================================== */
@@ -1611,7 +1648,6 @@
             if (!fromUser) return;
 
             if (mode === 'fixed') {
-                /* 优先使用上次固定的句子；没有则固定当前显示的句子 */
                 var prevFixed = cookie.get('maple_poem_fixed');
                 var list = poemListCache || [];
 
@@ -1633,7 +1669,6 @@
                     cookie.set('maple_poem_fixed', currentText);
                 }
             } else {
-                /* 切回随机：立刻随机一次，给到即时反馈 */
                 renderRandomPoem();
             }
         }
@@ -1658,7 +1693,6 @@
                         return;
                     }
                 }
-                /* 固定模式但没选定或找不到 → 显示随机（并让用户用下拉选定） */
                 if (cookie.get('maple_visited') === null) {
                     cookie.set('maple_visited', '1');
                 }
@@ -1666,7 +1700,6 @@
                 return;
             }
 
-            /* 随机模式：首次访问显示默认，之后每次随机 */
             var isFirstVisit = cookie.get('maple_visited') === null;
             cookie.set('maple_visited', '1');
 
@@ -1788,14 +1821,12 @@
                 });
             });
 
-            /* 诗句模式按钮 */
             document.querySelectorAll('#poemModeRow .option-btn').forEach(function (b) {
                 b.addEventListener('click', function () {
                     setPoemMode(b.dataset.poemMode, true);
                 });
             });
 
-            /* 诗句下拉选择 */
             if (poemPicker) {
                 poemPicker.addEventListener('change', function () {
                     var text = poemPicker.value;

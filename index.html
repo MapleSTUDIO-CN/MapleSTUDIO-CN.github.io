@@ -1,509 +1,1094 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-base="dark" data-color="blue">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4874836697909333"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>枫叶工作室</title>
-    <!-- 浏览器选项卡图标 -->
     <link rel="icon" href="/Pictures/logo_main.webp" type="image/webp">
     <style>
-        /* 全局重置 */
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         :root {
-            /* 黑夜变量 */
-            --bg-color: #0a0c10;
-            --glass-white: rgba(255, 255, 255, 0.07);
-            --glass-menu: rgba(30, 30, 40, 0.7);
-            --menu-bg: rgba(35, 35, 45, 0.7);
-            --menu-text: rgba(255, 255, 255, 0.9);
-            --accent-blue: rgba(0, 160, 255, 0.6);
-            --border-light: rgba(255, 255, 255, 0.08);
-            --text-primary: #f0f4fa;
-            --text-secondary: rgba(180, 230, 255, 0.95);
-            --topbar-bg: rgba(255, 255, 255, 0.75);
-            --topbar-text: rgba(0, 0, 0, 0.8);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --gradient-start: #1a1f2a;
-            --gradient-end: #0a0c10;
-            --footer-bg: rgba(10, 15, 20, 0.3);
-            --donate-bg: rgba(20, 30, 45, 0.6);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --dur-fast: 0.18s;
+            --dur-med: 0.32s;
+            --dur-slow: 0.5s;
         }
 
-        /* 白天变量 */
-        [data-theme="light"] {
-            --bg-color: #f0f4f8;
-            --glass-white: rgba(255, 255, 255, 0.6);
-            --glass-menu: rgba(240, 242, 250, 0.9);
-            --menu-bg: rgba(245, 245, 250, 0.85);
-            --menu-text: #1e2a3a;
-            --accent-blue: rgba(0, 120, 255, 0.8);
-            --border-light: rgba(0, 0, 0, 0.08);
-            --text-primary: #1a1d29;
-            --text-secondary: rgba(30, 35, 50, 0.9);
-            --topbar-bg: rgba(255, 255, 255, 0.9);
-            --topbar-text: rgba(30, 35, 50, 0.9);
-            --shadow-color: rgba(0, 0, 0, 0.15);
-            --gradient-start: #e8ecf5;
-            --gradient-end: #f5f7fa;
-            --footer-bg: rgba(255, 255, 255, 0.5);
-            --donate-bg: rgba(255, 255, 255, 0.7);
+        /* =====================
+           基础基调
+           ===================== */
+        :root,
+        [data-base="dark"] {
+            --bg: #1e2127;
+            --panel: rgba(40, 44, 52, 0.82);
+            --panel-alt: rgba(50, 56, 66, 0.82);
+            --nav: rgba(33, 37, 43, 0.78);
+            --border: rgba(220, 223, 228, 0.09);
+            --text: #dcdfe4;
+            --text-muted: #8b93a1;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+            --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.42);
+            color-scheme: dark;
+        }
+
+        [data-base="light"] {
+            --bg: #f6f8fa;
+            --panel: rgba(255, 255, 255, 0.82);
+            --panel-alt: rgba(246, 248, 250, 0.86);
+            --nav: rgba(255, 255, 255, 0.78);
+            --border: rgba(208, 215, 222, 0.85);
+            --text: #1f2328;
+            --text-muted: #656d76;
+            --shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+            --shadow-hover: 0 12px 28px rgba(31, 35, 40, 0.12);
+            color-scheme: light;
+        }
+
+        /* =====================
+           主题色彩
+           ===================== */
+        :root,
+        [data-color="blue"] {
+            --accent: #61afef;
+            --accent-text: #16191f;
+            --accent-alt: #98c379;
+        }
+
+        [data-base="light"][data-color="blue"] {
+            --accent: #6db8f5;
+            --accent-text: #0a2030;
+            --accent-alt: #0369a1;
+        }
+
+        [data-color="red"] {
+            --accent: #e5484d;
+            --accent-text: #ffffff;
+            --accent-alt: #f5a97f;
+        }
+
+        [data-base="light"][data-color="red"] {
+            --accent: #d1242f;
+            --accent-text: #ffffff;
+            --accent-alt: #b45309;
+        }
+
+        [data-color="orange"] {
+            --accent: #f97316;
+            --accent-text: #1a0d04;
+            --accent-alt: #fbbf24;
+        }
+
+        [data-base="light"][data-color="orange"] {
+            --accent: #ea580c;
+            --accent-text: #ffffff;
+            --accent-alt: #b45309;
+        }
+
+        [data-color="lemon"] {
+            --accent: #eab308;
+            --accent-text: #1a1709;
+            --accent-alt: #84cc16;
+        }
+
+        [data-base="light"][data-color="lemon"] {
+            --accent: #ca8a04;
+            --accent-text: #ffffff;
+            --accent-alt: #65a30d;
+        }
+
+        [data-color="green"] {
+            --accent: #22c55e;
+            --accent-text: #06130a;
+            --accent-alt: #2dd4bf;
+        }
+
+        [data-base="light"][data-color="green"] {
+            --accent: #16a34a;
+            --accent-text: #ffffff;
+            --accent-alt: #0891b2;
+        }
+
+        [data-color="purple"] {
+            --accent: #8b5cf6;
+            --accent-text: #ffffff;
+            --accent-alt: #ec4899;
+        }
+
+        [data-base="light"][data-color="purple"] {
+            --accent: #7c3aed;
+            --accent-text: #ffffff;
+            --accent-alt: #db2777;
+        }
+
+        /* =====================
+           背景图模式
+           ===================== */
+        html.has-bg,
+        html.has-bg[data-base],
+        html.has-bg[data-color],
+        html.has-bg[data-base][data-color] {
+            --bg: transparent;
+            --panel: rgba(255, 255, 255, 0.08);
+            --panel-alt: rgba(255, 255, 255, 0.05);
+            --nav: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.16);
+            --text: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.72);
+            --accent: #3b82f6;
+            --accent-text: #ffffff;
+            --accent-alt: #60a5fa;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.42);
+        }
+
+        /* =====================
+           基座
+           ===================== */
+        html {
+            scroll-behavior: smooth;
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            position: relative;
+            z-index: 0;
+            isolation: isolate;
             min-height: 100vh;
-            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-primary);
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 24px;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 30% 40%, var(--gradient-start) 0%, var(--gradient-end) 70%);
-            background-attachment: fixed;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            overscroll-behavior: none;
+            transition: padding var(--dur-slow) var(--ease), color var(--dur-med) var(--ease);
         }
 
-        /* 顶部栏 */
-        .top-bar {
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: -2;
+            transition: background-color var(--dur-med) var(--ease);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                var(--bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: -1;
+            pointer-events: none;
+            transition: opacity var(--dur-slow) var(--ease);
+        }
+
+        html.has-bg body::after {
+            opacity: 1;
+        }
+
+        [data-nav="top"] body { padding-top: 108px; }
+        [data-nav="bottom"] body { padding-bottom: 108px; }
+        [data-nav="left"] body { padding-left: 96px; }
+        [data-nav="right"] body { padding-right: 96px; }
+
+        /* =====================
+           浮动导航栏
+           ===================== */
+        .float-nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 64px;
-            background: var(--topbar-bg);
-            backdrop-filter: blur(16px) saturate(200%);
-            -webkit-backdrop-filter: blur(16px) saturate(200%);
             display: flex;
-            align-items: center;
-            padding-left: 24px;
-            padding-right: 24px;
-            box-shadow: 0 4px 20px var(--shadow-color);
+            gap: 4px;
+            padding: 6px;
+            background: var(--nav);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
             z-index: 1000;
-            border-bottom: 1px solid var(--border-light);
-            transition: all 0.4s ease;
+            transform: translate(0, 0);
+            will-change: transform;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition:
+                transform var(--dur-slow) var(--ease),
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                box-shadow var(--dur-med) var(--ease);
         }
 
-        .top-title {
+        .float-nav[data-pos="top"],
+        .float-nav[data-pos="bottom"] {
+            flex-direction: row;
+            width: 65vw;
+            height: auto;
+        }
+
+        .float-nav[data-pos="left"],
+        .float-nav[data-pos="right"] {
+            flex-direction: column;
+            height: 50vh;
+            min-height: 220px;
+            width: auto;
+        }
+
+        .nav-indicator {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--topbar-text);
-            text-decoration: none;
-            letter-spacing: 0.3px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            background: var(--accent);
+            border: 1px solid var(--border);
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform, width, height;
         }
 
-        .top-title:hover {
-            text-decoration: underline;
-            transform: translateX(-50%) scale(1.02);
-            opacity: 1;
+        html.has-bg .nav-indicator {
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+            border-color: rgba(255, 255, 255, 0.35);
         }
 
-        /* 右侧按钮组（翻译 + 主题） */
-        .right-actions {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            gap: 8px;
+        .nav-tab {
             position: relative;
-        }
-
-        /* 翻译按钮 - 动画完全匹配主题切换按钮 */
-        .translate-btn {
-            background: transparent;
-            border: none;
-            color: var(--topbar-text);
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            z-index: 1;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            padding: 0;
-        }
-
-        .translate-btn img {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        .translate-btn:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 主题切换按钮 */
-        .theme-toggle {
-            background: transparent;
             border: none;
-            color: var(--topbar-text);
-            font-size: 1.5rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .theme-toggle:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 语言选择下拉菜单 */
-        .translate-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: var(--glass-menu);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border-radius: 16px;
-            padding: 8px 0;
-            min-width: 150px;
-            box-shadow: 0 18px 40px var(--shadow-color);
-            border: 1px solid var(--border-light);
-            z-index: 1001;
-            opacity: 0;
-            transform: scale(0.9) translateY(-8px);
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: none;
-            transform-origin: top right;
-        }
-
-        .translate-dropdown.open {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: all;
-        }
-
-        .translate-dropdown a {
-            display: block;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 0.95rem;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        .translate-dropdown a:hover {
-            background: var(--accent-blue);
-        }
-
-        /* 菜单按钮 */
-        .menu-button {
+            border-radius: 10px;
             background: transparent;
-            border: none;
-            color: var(--topbar-text);
-            font-size: 1.9rem;
-            line-height: 1;
-            cursor: pointer;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                background 0.2s;
-        }
-
-        .menu-button:hover {
-            background: rgba(0, 0, 0, 0.05);
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .menu-button.active {
-            transform: rotate(180deg);
-            background: rgba(0, 160, 255, 0.1);
-        }
-
-        /* 侧边菜单 */
-        .menu {
-            position: fixed;
-            top: 80px;
-            left: 24px;
-            width: 240px;
-            background: var(--menu-bg);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border-radius: 24px;
-            padding: 8px 0;
-            box-shadow: 0 18px 40px var(--shadow-color);
-            z-index: 999;
-            border: 1px solid var(--border-light);
-            transform-origin: top left;
-            transform: scale(0.7) translateY(-30px);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .menu.open {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .menu a {
-            display: block;
-            color: var(--menu-text);
-            text-decoration: none;
-            padding: 14px 24px;
-            margin: 6px 12px;
-            border-radius: 16px;
-            font-weight: 500;
+            color: var(--text-muted);
+            font-family: inherit;
             font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease),
+                transform var(--dur-fast) var(--ease);
+        }
+
+        .float-nav[data-pos="top"] .nav-tab,
+        .float-nav[data-pos="bottom"] .nav-tab {
+            padding: 14px 0;
+        }
+
+        .float-nav[data-pos="left"] .nav-tab,
+        .float-nav[data-pos="right"] .nav-tab {
+            padding: 16px 20px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 0.25em;
+            font-size: 1rem;
+        }
+
+        html.has-bg .nav-tab {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--panel-alt);
+        }
+
+        html.has-bg .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .nav-tab.active {
             background: transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateX(-16px);
+            color: var(--accent-text);
         }
 
-        .menu.open a {
-            opacity: 1;
-            transform: translateX(0);
+        html.has-bg .nav-tab.active {
+            color: #ffffff;
         }
 
-        /* 菜单项延迟 */
-        .menu a:nth-child(1) {
-            transition-delay: 0.05s;
-        }
-        .menu a:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-        .menu a:nth-child(3) {
-            transition-delay: 0.15s;
-        }
-        .menu a:nth-child(4) {
-            transition-delay: 0.2s;
-        }
-        .menu a:nth-child(5) {
-            transition-delay: 0.25s;
-        }
-        .menu a:nth-child(6) {
-            transition-delay: 0.3s;
+        .nav-tab:active {
+            transform: scale(0.96);
         }
 
-        .menu a:hover {
-            background: rgba(0, 160, 255, 0.2);
-            transform: translateX(6px);
-            color: #fff;
-            box-shadow: 0 0 12px var(--accent-blue);
+        /* =====================
+           舞台与面板
+           ===================== */
+        .stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
         }
 
-        /* 3D容器 */
+        .panel {
+            display: none;
+            width: 100%;
+            max-width: 860px;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            will-change: transform, opacity;
+        }
+
+        .panel.active {
+            display: flex;
+        }
+
+        .panel.slide-in-right {
+            animation: slideInFromRight var(--dur-slow) var(--ease) both;
+        }
+
+        .panel.slide-in-left {
+            animation: slideInFromLeft var(--dur-slow) var(--ease) both;
+        }
+
+        @keyframes slideInFromRight {
+            from { opacity: 0; transform: translateX(56px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-56px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .panel-title {
+            align-self: flex-start;
+            padding-left: 4px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text);
+        }
+
+        /* =====================
+           3D 裸眼容器
+           ===================== */
         .content-container {
             position: relative;
-            perspective: 500px;
-            margin: 20px;
+            perspective: 600px;
             display: inline-block;
+            max-width: 100%;
         }
 
-        /* 玻璃层 */
         .glass-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--glass-white);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            inset: 0;
+            background: var(--panel);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            box-shadow: 0 20px 40px var(--shadow-color),
-                inset 0 1px 1px rgba(128, 128, 128, 0.1);
-            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
             transform-style: preserve-3d;
-            transition: all 0.4s ease;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                box-shadow var(--dur-med) var(--ease);
         }
 
-        /* 文字层 */
         .content {
             position: relative;
+            padding: 34px 44px;
             text-align: center;
-            font-size: 2.2rem;
-            margin: 30px 40px;
-            padding: 30px 40px;
-            color: var(--text-secondary);
-            text-shadow: 0 4px 20px var(--shadow-color);
-            font-weight: 500;
-            letter-spacing: 1px;
             transform-style: preserve-3d;
-            transition: transform 0.5s ease-out, color 0.4s ease;
-            cursor: pointer;
-            line-height: 1.4;
+            user-select: none;
+            color: var(--text);
+            transition: color var(--dur-med) var(--ease);
         }
 
-        /* 捐献按钮 */
-        .donate-button {
-            position: fixed;
-            bottom: 130px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 14px 38px;
-            background: var(--donate-bg);
-            backdrop-filter: blur(16px) saturate(200%);
-            -webkit-backdrop-filter: blur(16px) saturate(200%);
-            border-radius: 12px;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 1.2rem;
+        .poem-text {
+            font-size: 1.9rem;
             font-weight: 500;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 10px 25px var(--shadow-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 500;
+            letter-spacing: 2px;
+            line-height: 1.6;
+        }
+
+        .poem-source {
+            margin-top: 16px;
+            font-size: 0.92rem;
+            font-weight: 400;
+            letter-spacing: 0.6px;
+            line-height: 1.4;
+            color: var(--text-muted);
+            transition: color var(--dur-med) var(--ease);
+        }
+
+        html.has-bg .content {
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+        }
+
+        html.has-bg .poem-source {
+            color: rgba(255, 255, 255, 0.72);
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* =====================
+           公告栏
+           ===================== */
+        .notice-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 12px 10px 20px;
+            max-width: 100%;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-size: 0.88rem;
+            overflow: hidden;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                opacity var(--dur-med) var(--ease),
+                transform var(--dur-med) var(--ease),
+                max-height var(--dur-med) var(--ease),
+                padding var(--dur-med) var(--ease),
+                margin var(--dur-med) var(--ease);
+        }
+
+        .notice-bar.hidden {
+            opacity: 0;
+            transform: translateY(-8px);
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: -24px;
+            border-width: 0;
+            pointer-events: none;
+        }
+
+        .notice-link {
+            color: var(--text);
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color var(--dur-fast) var(--ease);
+        }
+
+        .notice-link:hover {
+            color: var(--accent-alt);
+            text-decoration: underline;
+        }
+
+        .notice-close {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.82rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition:
+                background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+        }
+
+        .notice-close:hover {
+            background: var(--panel-alt);
+            color: var(--text);
+            border-color: var(--accent-alt);
+        }
+
+        /* =====================
+           模块网格
+           ===================== */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 18px;
+            width: 100%;
+        }
+
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 24px 22px 22px;
+            min-height: 172px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            color: var(--text);
+            text-decoration: none;
+            text-align: left;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease),
+                transform var(--dur-fast) var(--ease),
+                box-shadow var(--dur-fast) var(--ease);
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-card-title {
+            font-size: 1.08rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+            color: var(--text);
+        }
+
+        .module-card-desc {
+            font-size: 0.83rem;
+            line-height: 1.68;
+            color: var(--text-muted);
+            flex: 1;
+        }
+
+        html.has-bg .module-card-desc {
+            color: rgba(255, 255, 255, 0.76);
+        }
+
+        /* =====================
+           设置
+           ===================== */
+        .setting-block {
+            width: 100%;
+            padding: 20px 24px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                box-shadow var(--dur-med) var(--ease);
+        }
+
+        .setting-block h3 {
+            margin-bottom: 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: var(--text-muted);
+        }
+
+        .sub-label {
+            margin-top: 4px;
+            margin-bottom: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
             letter-spacing: 0.5px;
         }
 
-        .donate-button:hover {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
-            transform: translateX(-50%) scale(1.05) translateY(-3px);
-            box-shadow: 0 18px 30px var(--shadow-color);
+        .sub-label + .option-row,
+        .sub-label + .swatch-row {
+            margin-bottom: 6px;
         }
 
-        /* 底部信息 */
-        .footer {
-            position: fixed;
-            bottom: 25px;
-            left: 0;
+        .swatch-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .swatch {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: var(--sw);
+            cursor: pointer;
+            transition:
+                transform var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease),
+                box-shadow var(--dur-fast) var(--ease);
+        }
+
+        .swatch:hover {
+            transform: scale(1.08);
+        }
+
+        .swatch.active {
+            border-color: var(--text);
+            box-shadow: 0 0 0 2px var(--panel);
+        }
+
+        .option-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .option-btn {
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--panel-alt);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                transform var(--dur-fast) var(--ease);
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .option-btn.active {
+            background: var(--accent);
+            color: var(--accent-text);
+            border-color: transparent;
+        }
+
+        .option-btn:active {
+            transform: scale(0.97);
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: var(--text);
+        }
+
+        .toggle input {
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+            width: 42px;
+            height: 24px;
+            border-radius: 12px;
+            background: var(--panel-alt);
+            border: 1px solid var(--border);
+            outline: none;
+            cursor: pointer;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease);
+        }
+
+        .toggle input::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition:
+                transform var(--dur-med) var(--ease),
+                background-color var(--dur-med) var(--ease);
+        }
+
+        .toggle input:checked {
+            background: var(--accent);
+            border-color: transparent;
+        }
+
+        .toggle input:checked::after {
+            transform: translateX(18px);
+            background: var(--accent-text);
+        }
+
+        .bg-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .bg-card {
+            position: relative;
+            width: 100px;
+            height: 64px;
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: var(--panel-alt);
+            overflow: hidden;
+            cursor: pointer;
+            transition:
+                transform var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+        }
+
+        .bg-card img {
+            display: block;
             width: 100%;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            opacity: 0.7;
-            text-shadow: 0 2px 5px var(--shadow-color);
-            z-index: 500;
-            background: var(--footer-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 12px 0 8px;
-            border-top: 1px solid var(--border-light);
-            transition: all 0.4s ease;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .footer p {
-            margin: 4px 0;
+        .bg-card:hover {
+            transform: translateY(-2px);
         }
+
+        .bg-card.active {
+            border-color: var(--accent);
+        }
+
+        .bg-card.bg-none {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .bg-card.bg-none.active {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        /* 诗句选择器 */
+        .poem-picker-wrap {
+            margin-top: 14px;
+            display: none;
+            animation: pickerIn 0.32s var(--ease) both;
+        }
+
+        .poem-picker-wrap.visible {
+            display: block;
+        }
+
+        @keyframes pickerIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .poem-select {
+            width: 100%;
+            padding: 10px 36px 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background-color: var(--panel-alt);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b93a1' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            transition:
+                border-color var(--dur-fast) var(--ease),
+                background-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease);
+        }
+
+        .poem-select:hover,
+        .poem-select:focus {
+            border-color: var(--accent);
+        }
+
+        .poem-select option {
+            background: var(--panel-alt);
+            color: var(--text);
+        }
+
+        /* =====================
+           页脚
+           ===================== */
+        .footer {
+            width: 100%;
+            padding: 28px 0 6px;
+            text-align: center;
+            font-size: 0.78rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            transition: color var(--dur-med) var(--ease);
+        }
+
+        .footer p { margin: 2px 0; }
 
         .footer a {
-            color: var(--accent-blue);
+            color: var(--accent-alt);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: opacity var(--dur-fast) var(--ease);
         }
 
         .footer a:hover {
-            opacity: 0.8;
+            opacity: 0.82;
             text-decoration: underline;
         }
 
-        /* 响应式 */
-        @media (max-width: 700px) {
-            .content {
-                font-size: 1.7rem;
-                margin: 20px;
-                padding: 20px;
+        /* =====================
+           响应式
+           ===================== */
+        @media (max-width: 720px) {
+            .module-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 14px;
             }
-            .menu {
-                width: calc(100% - 48px);
-                left: 24px;
-            }
-            .donate-button {
-                bottom: 110px;
-                padding: 12px 30px;
-                font-size: 1rem;
-            }
-            .right-actions {
-                gap: 4px;
+            .module-card {
+                min-height: 158px;
+                padding: 20px 18px;
             }
         }
 
-        @media (max-width: 450px) {
-            .content {
-                font-size: 1.3rem;
+        @media (max-width: 640px) {
+            body { padding: 16px; }
+            [data-nav="top"] body { padding-top: 96px; }
+            [data-nav="bottom"] body { padding-bottom: 96px; }
+            [data-nav="left"] body { padding-left: 84px; }
+            [data-nav="right"] body { padding-right: 84px; }
+
+            .content { padding: 26px 28px; }
+            .poem-text { font-size: 1.35rem; letter-spacing: 1px; }
+            .poem-source { font-size: 0.82rem; margin-top: 12px; }
+
+            .nav-tab { font-size: 0.92rem; }
+            .float-nav[data-pos="top"] .nav-tab,
+            .float-nav[data-pos="bottom"] .nav-tab { padding: 12px 0; }
+
+            .float-nav[data-pos="left"] .nav-tab,
+            .float-nav[data-pos="right"] .nav-tab { padding: 14px 16px; }
+
+            .panel-title { font-size: 1.05rem; }
+        }
+
+        @media (max-width: 520px) {
+            .module-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
+            .module-card {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .content { padding: 22px 20px; }
+            .poem-text { font-size: 1.1rem; }
+            .poem-source { font-size: 0.75rem; }
+            .nav-tab { font-size: 0.85rem; }
         }
     </style>
 
-    <!-- ✅ 提前恢复主题，避免闪烁（关键修改） -->
     <script>
         (function () {
-            try {
-                var theme = localStorage.getItem('theme') || 'dark';
-                document.documentElement.setAttribute('data-theme', theme);
-            } catch (e) {
-                document.documentElement.setAttribute('data-theme', 'dark');
+            function readCookie(name) {
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+                return m ? decodeURIComponent(m[1]) : null;
+            }
+            var base = readCookie('maple_base') || 'dark';
+            var color = readCookie('maple_color') || 'blue';
+            var navPos = readCookie('maple_nav') || 'top';
+            var bg = readCookie('maple_bg');
+            var root = document.documentElement;
+            root.setAttribute('data-base', base);
+            root.setAttribute('data-color', color);
+            root.setAttribute('data-nav', navPos);
+            if (bg !== null && bg !== '') {
+                root.classList.add('has-bg');
+                root.style.setProperty('--bg-image', 'url("picture/no.jpg")');
             }
         })();
     </script>
 </head>
 <body>
 
-    <!-- 顶部栏 -->
-    <div class="top-bar">
-        <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
-        <a href="#" class="top-title" data-translate-key="top-title">枫叶•总览</a>
-        <div class="right-actions">
-            <button class="translate-btn" id="translateBtn" aria-label="翻译">
-                <img src="/Pictures/icon_translate.webp" alt="翻译">
-            </button>
-            <div class="translate-dropdown" id="translateDropdown">
-                <a href="#" data-lang="zh-CN">简体中文</a>
-                <a href="#" data-lang="zh-TW">繁體中文</a>
-                <a href="#" data-lang="en">English</a>
-                <a href="#" data-lang="ja">日本語</a>
-                <a href="#" data-lang="ko">한국어</a>
+    <nav class="float-nav" id="floatNav" data-pos="top">
+        <div class="nav-indicator" id="navIndicator"></div>
+        <button class="nav-tab active" data-panel="home" data-translate-key="nav-home">主页</button>
+        <button class="nav-tab" data-panel="modules" data-translate-key="nav-modules">模块</button>
+        <button class="nav-tab" data-panel="settings" data-translate-key="nav-settings">设置</button>
+    </nav>
+
+    <main class="stage">
+
+        <section class="panel active" id="panel-home" data-panel-name="home">
+            <div class="content-container">
+                <div class="glass-layer" id="glassLayer"></div>
+                <div class="content" id="content">
+                    <div class="poem-text" id="poemText">肯将新火试新茶，诗酒趁年华。</div>
+                    <div class="poem-source" id="poemSource">苏轼《望江南·超然台作》</div>
+                </div>
             </div>
-            <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
-        </div>
-    </div>
 
-    <!-- 侧边菜单 -->
-    <div class="menu" id="menu">
-        <a href="/mirror/index.html" data-translate-key="menu-mirror">镜像站(🚧)</a>
-        <a href="/mcserver/index.html" data-translate-key="menu-mcserver">MC服务器</a>
-        <a href="/mcapks/index.html" data-translate-key="menu-mcapks">MC版本库(🚧)</a>
-        <a href="/software/index.html" data-translate-key="menu-software">软件库</a>
-        <a href="/tools/index.html" data-translate-key="menu-tools">小工具(🚫)</a>
-        <a href="../main/bulletin_board.html" data-translate-key="menu-bulletin">公告栏</a>
-    </div>
+            <div class="notice-bar" id="noticeBar">
+                <a class="notice-link" href="../main/bulletin_board.html" data-translate-key="notice-text">公告栏已更新，点击查看</a>
+                <button class="notice-close" id="noticeClose" data-translate-key="notice-hide">不再显示</button>
+            </div>
+        </section>
 
-    <!-- 3D区域 -->
-    <div class="content-container">
-        <div class="glass-layer" id="glass-layer"></div>
-        <div class="content" id="content" data-translate-key="content-welcome">
-            欢迎来到枫叶工作室的索引站台，请点击左上方菜单开始
-        </div>
-    </div>
+        <section class="panel" id="panel-modules" data-panel-name="modules">
+            <h2 class="panel-title" data-translate-key="modules-title">模块</h2>
+            <div class="module-grid">
 
-    <!-- 捐献按钮 -->
-    <a href="/donate/index.html" class="donate-button" data-translate-key="donate">支持我们的运营</a>
+                <a class="module-card" href="/mirror/index.html">
+                    <span class="module-card-title" data-translate-key="menu-mirror">镜像站</span>
+                    <span class="module-card-desc" data-translate-key="desc-mirror">整理各种官方镜像并提供下载，纯净，高速，无广告</span>
+                </a>
 
-    <!-- 底部信息 -->
-    <div class="footer">
+                <a class="module-card" href="/mcserver/index.html">
+                    <span class="module-card-title" data-translate-key="menu-mcserver">MC服务器</span>
+                    <span class="module-card-desc" data-translate-key="desc-mcserver">欢迎来到我们的生电模组服务器</span>
+                </a>
+
+                <a class="module-card" href="/mcapks/index.html">
+                    <span class="module-card-title" data-translate-key="menu-mcapks">版本库</span>
+                    <span class="module-card-desc" data-translate-key="desc-mcapks">我的世界国际版收录库</span>
+                </a>
+
+                <a class="module-card" href="/software/index.html">
+                    <span class="module-card-title" data-translate-key="menu-software">软件库</span>
+                    <span class="module-card-desc" data-translate-key="desc-software">常用软件收集</span>
+                </a>
+
+                <a class="module-card" href="/tools/index.html">
+                    <span class="module-card-title" data-translate-key="menu-tools">小工具</span>
+                    <span class="module-card-desc" data-translate-key="desc-tools">暂不开放</span>
+                </a>
+
+                <a class="module-card" href="../main/bulletin_board.html">
+                    <span class="module-card-title" data-translate-key="menu-bulletin">公告栏</span>
+                    <span class="module-card-desc" data-translate-key="desc-bulletin">站点公告与更新动态</span>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="panel" id="panel-settings" data-panel-name="settings">
+            <h2 class="panel-title" data-translate-key="settings-title">设置</h2>
+
+            <div class="setting-block">
+                <h3 data-translate-key="setting-theme-bg">主题与背景</h3>
+
+                <div class="sub-label" data-translate-key="sub-base">深浅基调</div>
+                <div class="option-row" id="baseRow">
+                    <button class="option-btn" data-base="dark" data-translate-key="base-dark">深色</button>
+                    <button class="option-btn" data-base="light" data-translate-key="base-light">浅色</button>
+                </div>
+
+                <div class="sub-label" data-translate-key="sub-color">主题色彩</div>
+                <div class="swatch-row" id="colorRow">
+                    <button class="swatch" data-color="red"    style="--sw:#e5484d" title="中国红"></button>
+                    <button class="swatch" data-color="orange" style="--sw:#f97316" title="橘子橙"></button>
+                    <button class="swatch" data-color="lemon"  style="--sw:#eab308" title="柠檬黄"></button>
+                    <button class="swatch" data-color="green"  style="--sw:#22c55e" title="草原绿"></button>
+                    <button class="swatch" data-color="blue"   style="--sw:#61afef" title="天空蓝"></button>
+                    <button class="swatch" data-color="purple" style="--sw:#8b5cf6" title="闪电紫"></button>
+                </div>
+
+                <div class="bg-row" id="bgRow">
+                    <button class="bg-card" data-value="0"><img src="picture/no.jpg" alt=""></button>
+                    <button class="bg-card" data-value="1"><img src="picture/no.jpg" alt=""></button>
+                    <button class="bg-card" data-value="2"><img src="picture/no.jpg" alt=""></button>
+                    <button class="bg-card bg-none" data-value="" data-translate-key="bg-none">无</button>
+                </div>
+            </div>
+
+            <div class="setting-block">
+                <h3 data-translate-key="setting-poem">诗句显示</h3>
+                <div class="sub-label" data-translate-key="sub-poem-mode">显示方式</div>
+                <div class="option-row" id="poemModeRow">
+                    <button class="option-btn" data-poem-mode="random" data-translate-key="poem-random">每次随机</button>
+                    <button class="option-btn" data-poem-mode="fixed" data-translate-key="poem-fixed">固定一句</button>
+                </div>
+                <div class="poem-picker-wrap" id="poemPickerWrap">
+                    <select class="poem-select" id="poemPicker"></select>
+                </div>
+            </div>
+
+            <div class="setting-block">
+                <h3 data-translate-key="setting-lang">语言</h3>
+                <div class="option-row" id="langRow">
+                    <button class="option-btn" data-lang="zh-CN">简体中文</button>
+                    <button class="option-btn" data-lang="zh-TW">繁體中文</button>
+                    <button class="option-btn" data-lang="en">English</button>
+                    <button class="option-btn" data-lang="ja">日本語</button>
+                    <button class="option-btn" data-lang="ko">한국어</button>
+                </div>
+            </div>
+
+            <div class="setting-block">
+                <h3 data-translate-key="setting-nav">浮动栏位置</h3>
+                <div class="option-row" id="navRow">
+                    <button class="option-btn" data-nav="top" data-translate-key="pos-top">顶部</button>
+                    <button class="option-btn" data-nav="bottom" data-translate-key="pos-bottom">底部</button>
+                    <button class="option-btn" data-nav="left" data-translate-key="pos-left">左侧</button>
+                    <button class="option-btn" data-nav="right" data-translate-key="pos-right">右侧</button>
+                </div>
+            </div>
+
+            <div class="setting-block">
+                <h3 data-translate-key="setting-notice">公告栏</h3>
+                <label class="toggle">
+                    <input type="checkbox" id="noticeToggle" checked>
+                    <span data-translate-key="notice-toggle-label">显示公告栏</span>
+                </label>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
         <p><a href="readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
         <p>
             <span data-translate-key="footer-powered-prefix">此站点由 </span>
@@ -511,280 +1096,792 @@
             <span data-translate-key="footer-powered-suffix"> 驱动</span>
         </p>
         <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" data-translate-key="footer-icp">萌ICP备20250732号</a></p>
-    </div>
+    </footer>
 
     <script>
-        // ========================
-        // 多语言本地化数据
-        // ========================
-        const translations = {
+        var cookie = {
+            get: function (name) {
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+                return m ? decodeURIComponent(m[1]) : null;
+            },
+            set: function (name, value, days) {
+                var d = new Date();
+                d.setTime(d.getTime() + (days || 365) * 86400000);
+                document.cookie = name + '=' + encodeURIComponent(value) +
+                    '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+            }
+        };
+
+        var BASES = ['dark', 'light'];
+        var COLORS = ['red', 'orange', 'lemon', 'green', 'blue', 'purple'];
+        var NAV_POSITIONS = ['top', 'bottom', 'left', 'right'];
+        var PANEL_ORDER = ['home', 'modules', 'settings'];
+
+        var DEFAULT_POEM = {
+            text: '肯将新火试新茶，诗酒趁年华。',
+            source: '苏轼《望江南·超然台作》'
+        };
+        var POEM_URL = 'poem.json';
+        var BG_IMAGE_URL = 'picture/no.jpg';
+
+        var root = document.documentElement;
+        var nav = document.getElementById('floatNav');
+        var indicator = document.getElementById('navIndicator');
+        var contentEl = document.getElementById('content');
+        var glassLayer = document.getElementById('glassLayer');
+        var noticeBar = document.getElementById('noticeBar');
+        var noticeClose = document.getElementById('noticeClose');
+        var noticeToggle = document.getElementById('noticeToggle');
+
+        var poemTextEl = document.getElementById('poemText');
+        var poemSourceEl = document.getElementById('poemSource');
+        var poemPicker = document.getElementById('poemPicker');
+        var poemPickerWrap = document.getElementById('poemPickerWrap');
+
+        var translations = {
             'zh-TW': {
-                'top-title': '楓葉•總覽',
-                'menu-mirror': '鏡像站(🚧)',
-                'menu-mcserver': 'MC伺服器',
-                'menu-mcapks': 'MC版本庫(🚧)',
-                'menu-software': '軟體庫',
-                'menu-tools': '小工具(🚫)',
-                'menu-bulletin': '公告欄',
-                'content-welcome': '歡迎來到楓葉工作室的索引站台，請點擊左上方選單開始',
-                'donate': '為我捐獻',
+                'nav-home': '首頁', 'nav-modules': '模組', 'nav-settings': '設定',
+                'modules-title': '模組', 'settings-title': '設定',
+                'setting-theme-bg': '主題與背景', 'setting-lang': '語言',
+                'setting-nav': '浮動欄位置', 'setting-notice': '公告欄',
+                'setting-poem': '詩句顯示', 'sub-poem-mode': '顯示方式',
+                'poem-random': '每次隨機', 'poem-fixed': '固定一句',
+                'sub-base': '深淺基調', 'sub-color': '主題色彩',
+                'base-dark': '深色', 'base-light': '淺色',
+                'notice-text': '公告欄已更新，點擊查看', 'notice-hide': '不再顯示',
+                'notice-toggle-label': '顯示公告欄',
+                'pos-top': '頂部', 'pos-bottom': '底部', 'pos-left': '左側', 'pos-right': '右側',
+                'bg-none': '無',
+                'menu-mirror': '鏡像站', 'menu-mcserver': 'MC伺服器', 'menu-mcapks': '版本庫',
+                'menu-software': '軟體庫', 'menu-tools': '小工具', 'menu-bulletin': '公告欄',
+                'desc-mirror': '整理各種官方鏡像並提供下載，純淨，高速，無廣告',
+                'desc-mcserver': '歡迎來到我們的生電模組伺服器',
+                'desc-mcapks': '我的世界國際版收錄庫',
+                'desc-software': '常用軟體收集',
+                'desc-tools': '暫不開放',
+                'desc-bulletin': '站點公告與更新動態',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
-                'footer-powered-prefix': '此站點由 ',
-                'footer-powered-suffix': ' 驅動',
+                'footer-powered-prefix': '此站點由 ', 'footer-powered-suffix': ' 驅動',
                 'footer-icp': '萌ICP備20250732號'
             },
             'en': {
-                'top-title': 'Maple Leaf • Overview',
-                'menu-mirror': 'Mirror (🚧)',
-                'menu-mcserver': 'MC Server',
-                'menu-mcapks': 'MC Versions (🚧)',
-                'menu-software': 'Software',
-                'menu-tools': 'Tools (🚫)',
-                'menu-bulletin': 'Bulletin',
-                'content-welcome': 'Welcome to Maple Studio\'s index platform. Please click the menu at the top left to start.',
-                'donate': 'Donate',
+                'nav-home': 'Home', 'nav-modules': 'Modules', 'nav-settings': 'Settings',
+                'modules-title': 'Modules', 'settings-title': 'Settings',
+                'setting-theme-bg': 'Theme & Background', 'setting-lang': 'Language',
+                'setting-nav': 'Nav Bar Position', 'setting-notice': 'Notice Bar',
+                'setting-poem': 'Poem Display', 'sub-poem-mode': 'Display Mode',
+                'poem-random': 'Random Each Visit', 'poem-fixed': 'Pin One Line',
+                'sub-base': 'Base Tone', 'sub-color': 'Accent Color',
+                'base-dark': 'Dark', 'base-light': 'Light',
+                'notice-text': 'Announcement updated. Click to view.', 'notice-hide': 'Hide',
+                'notice-toggle-label': 'Show notice bar',
+                'pos-top': 'Top', 'pos-bottom': 'Bottom', 'pos-left': 'Left', 'pos-right': 'Right',
+                'bg-none': 'None',
+                'menu-mirror': 'Mirror', 'menu-mcserver': 'MC Server', 'menu-mcapks': 'Versions',
+                'menu-software': 'Software', 'menu-tools': 'Tools', 'menu-bulletin': 'Bulletin',
+                'desc-mirror': 'Curated official mirrors for download — clean, fast, ad-free.',
+                'desc-mcserver': 'Welcome to our technical-modded Minecraft server.',
+                'desc-mcapks': 'A curated collection of Minecraft international editions.',
+                'desc-software': 'A collection of commonly used software.',
+                'desc-tools': 'Not available yet.',
+                'desc-bulletin': 'Site announcements and updates.',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
-                'footer-powered-prefix': 'Powered by ',
-                'footer-powered-suffix': '',
-                'footer-icp': 'MoeICP Bei 20250732'
+                'footer-powered-prefix': 'Powered by ', 'footer-powered-suffix': '',
+                'footer-icp': 'MoeICP 20250732'
             },
             'ja': {
-                'top-title': 'メープルリーフ • 概要',
-                'menu-mirror': 'ミラーサイト(🚧)',
-                'menu-mcserver': 'MCサーバー',
-                'menu-mcapks': 'MCバージョンライブラリ(🚧)',
-                'menu-software': 'ソフトウェア',
-                'menu-tools': 'ツール(🚫)',
-                'menu-bulletin': '掲示板',
-                'content-welcome': 'Maple Studioのインデックスプラットフォームへようこそ。左上のメニューをクリックして開始してください。',
-                'donate': '寄付する',
+                'nav-home': 'ホーム', 'nav-modules': 'モジュール', 'nav-settings': '設定',
+                'modules-title': 'モジュール', 'settings-title': '設定',
+                'setting-theme-bg': 'テーマと背景', 'setting-lang': '言語',
+                'setting-nav': 'ナビ位置', 'setting-notice': 'お知らせ',
+                'setting-poem': '詩句の表示', 'sub-poem-mode': '表示モード',
+                'poem-random': '毎回ランダム', 'poem-fixed': '一句を固定',
+                'sub-base': 'ベーストーン', 'sub-color': 'アクセントカラー',
+                'base-dark': 'ダーク', 'base-light': 'ライト',
+                'notice-text': 'お知らせが更新されました。クリックして表示', 'notice-hide': '非表示',
+                'notice-toggle-label': 'お知らせバーを表示',
+                'pos-top': '上部', 'pos-bottom': '下部', 'pos-left': '左', 'pos-right': '右',
+                'bg-none': 'なし',
+                'menu-mirror': 'ミラー', 'menu-mcserver': 'MCサーバー', 'menu-mcapks': 'バージョン',
+                'menu-software': 'ソフト', 'menu-tools': 'ツール', 'menu-bulletin': '掲示板',
+                'desc-mirror': '各種公式ミラーを整理して提供。クリーン・高速・広告なし。',
+                'desc-mcserver': '当サーバーの生電MODサーバーへようこそ。',
+                'desc-mcapks': 'Minecraft 国際版の収録ライブラリ。',
+                'desc-software': 'よく使うソフトウェアのコレクション。',
+                'desc-tools': '現在公開していません。',
+                'desc-bulletin': 'サイトのお知らせと更新情報。',
                 'footer-copyright': 'MapleSTUDIO 著作権所有',
-                'footer-powered-prefix': 'このサイトは ',
-                'footer-powered-suffix': ' によって運営されています',
+                'footer-powered-prefix': 'このサイトは ', 'footer-powered-suffix': ' で運営',
                 'footer-icp': '萌ICP備20250732号'
             },
             'ko': {
-                'top-title': '메이플 리프 • 개요',
-                'menu-mirror': '미러 사이트(🚧)',
-                'menu-mcserver': 'MC 서버',
-                'menu-mcapks': 'MC 버전 라이브러리(🚧)',
-                'menu-software': '소프트웨어',
-                'menu-tools': '도구(🚫)',
-                'menu-bulletin': '게시판',
-                'content-welcome': 'Maple Studio의 색인 플랫폼에 오신 것을 환영합니다. 왼쪽 상단 메뉴를 클릭하여 시작하세요.',
-                'donate': '기부하기',
+                'nav-home': '홈', 'nav-modules': '모듈', 'nav-settings': '설정',
+                'modules-title': '모듈', 'settings-title': '설정',
+                'setting-theme-bg': '테마 및 배경', 'setting-lang': '언어',
+                'setting-nav': '내비 위치', 'setting-notice': '공지사항',
+                'setting-poem': '시 표시', 'sub-poem-mode': '표시 방식',
+                'poem-random': '매번 무작위', 'poem-fixed': '한 문장 고정',
+                'sub-base': '베이스 톤', 'sub-color': '액센트 색상',
+                'base-dark': '다크', 'base-light': '라이트',
+                'notice-text': '공지사항이 업데이트되었습니다. 클릭하여 확인', 'notice-hide': '숨기기',
+                'notice-toggle-label': '공지사항 표시',
+                'pos-top': '상단', 'pos-bottom': '하단', 'pos-left': '왼쪽', 'pos-right': '오른쪽',
+                'bg-none': '없음',
+                'menu-mirror': '미러', 'menu-mcserver': 'MC 서버', 'menu-mcapks': '버전',
+                'menu-software': '소프트웨어', 'menu-tools': '도구', 'menu-bulletin': '게시판',
+                'desc-mirror': '다양한 공식 미러를 정리해 제공합니다. 깨끗하고 빠르며 광고 없음.',
+                'desc-mcserver': '저희 생전 모드 서버에 오신 것을 환영합니다.',
+                'desc-mcapks': '마인크래프트 인터내셔널 에디션 수집 라이브러리.',
+                'desc-software': '자주 쓰는 소프트웨어 모음.',
+                'desc-tools': '아직 공개되지 않았습니다.',
+                'desc-bulletin': '사이트 공지 및 업데이트 소식.',
                 'footer-copyright': 'MapleSTUDIO 저작권 소유',
-                'footer-powered-prefix': '이 사이트는 ',
-                'footer-powered-suffix': ' 에 의해 구동됩니다',
+                'footer-powered-prefix': '이 사이트는 ', 'footer-powered-suffix': ' 에서 운영',
                 'footer-icp': '萌ICP备20250732号'
             }
         };
 
-        // 存储所有元素的默认文本（简体中文）
-        const defaultTexts = new Map();
+        var defaultTexts = {};
 
-        // 初始化：记录所有 data-translate-key 元素的当前文本
         function cacheDefaultTexts() {
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.getAttribute('data-translate-key');
-                if (key && !defaultTexts.has(key)) {
-                    defaultTexts.set(key, el.textContent);
+            document.querySelectorAll('[data-translate-key]').forEach(function (el) {
+                var key = el.getAttribute('data-translate-key');
+                if (key && !(key in defaultTexts)) {
+                    defaultTexts[key] = el.textContent;
                 }
             });
         }
 
-        // 应用指定语言
         function applyLanguage(lang) {
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.getAttribute('data-translate-key');
+            document.querySelectorAll('[data-translate-key]').forEach(function (el) {
+                var key = el.getAttribute('data-translate-key');
                 if (!key) return;
-
                 if (lang === 'zh-CN') {
-                    const defaultText = defaultTexts.get(key);
-                    if (defaultText !== undefined) {
-                        el.textContent = defaultText;
-                    }
+                    if (key in defaultTexts) el.textContent = defaultTexts[key];
                 } else {
-                    const langPack = translations[lang];
-                    if (langPack && langPack[key] !== undefined) {
-                        el.textContent = langPack[key];
+                    var pack = translations[lang];
+                    if (pack && key in pack) el.textContent = pack[key];
+                }
+            });
+            document.querySelectorAll('#langRow .option-btn').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            cookie.set('maple_lang', lang);
+        }
+
+        var currentBase = 'dark';
+        var currentColor = 'blue';
+
+        function clearBackground() {
+            root.classList.remove('has-bg');
+            root.style.removeProperty('--bg-image');
+            cookie.set('maple_bg', '');
+            document.querySelectorAll('#bgRow .bg-card').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.value === '');
+            });
+        }
+
+        function applyBase(base, fromUser) {
+            if (BASES.indexOf(base) === -1) base = 'dark';
+            if (fromUser) clearBackground();
+            root.setAttribute('data-base', base);
+            cookie.set('maple_base', base);
+            currentBase = base;
+            document.querySelectorAll('#baseRow .option-btn').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.base === base);
+            });
+        }
+
+        function applyColor(color, fromUser) {
+            if (COLORS.indexOf(color) === -1) color = 'blue';
+            if (fromUser) clearBackground();
+            root.setAttribute('data-color', color);
+            cookie.set('maple_color', color);
+            currentColor = color;
+            document.querySelectorAll('#colorRow .swatch').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.color === color);
+            });
+        }
+
+        var currentNavPos = 'top';
+
+        function isVertical(pos) {
+            return pos === 'left' || pos === 'right';
+        }
+
+        function layoutNav(pos) {
+            var margin = 20;
+            var vw = window.innerWidth;
+            var vh = window.innerHeight;
+
+            nav.setAttribute('data-pos', pos);
+
+            var rect = nav.getBoundingClientRect();
+            var w = rect.width;
+            var h = rect.height;
+
+            var x, y;
+            if (pos === 'top') {
+                x = (vw - w) / 2;
+                y = margin;
+            } else if (pos === 'bottom') {
+                x = (vw - w) / 2;
+                y = vh - h - margin;
+            } else if (pos === 'left') {
+                x = margin;
+                y = (vh - h) / 2;
+            } else {
+                x = vw - w - margin;
+                y = (vh - h) / 2;
+            }
+            nav.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        }
+
+        var indicatorToken = 0;
+        var animEndTimer = null;
+        var pendingRelayout = false;
+
+        function positionIndicator(targetTab, animate) {
+            if (!targetTab) targetTab = nav.querySelector('.nav-tab.active');
+            if (!targetTab) return;
+
+            var myToken = ++indicatorToken;
+            var vertical = isVertical(currentNavPos);
+
+            if (vertical) {
+                indicator.style.left = '-6px';
+                indicator.style.right = '-6px';
+                indicator.style.top = '0px';
+                indicator.style.bottom = 'auto';
+                indicator.style.width = '';
+            } else {
+                indicator.style.top = '-6px';
+                indicator.style.bottom = '-6px';
+                indicator.style.left = '0px';
+                indicator.style.right = 'auto';
+                indicator.style.height = '';
+            }
+
+            var tf = vertical ? 'translateY' : 'translateX';
+            var sizeProp = vertical ? 'height' : 'width';
+
+            function measure() {
+                return {
+                    pos: vertical ? targetTab.offsetTop : targetTab.offsetLeft,
+                    size: vertical ? targetTab.offsetHeight : targetTab.offsetWidth
+                };
+            }
+
+            function paint(p, s) {
+                indicator.style.transform = tf + '(' + p + 'px)';
+                indicator.style[sizeProp] = s + 'px';
+            }
+
+            function run() {
+                if (myToken !== indicatorToken) return;
+
+                var cur = measure();
+                var targetPos = cur.pos;
+                var targetSize = cur.size;
+
+                var prevPos = parseFloat(indicator.dataset.pos);
+                var prevSize = parseFloat(indicator.dataset.size);
+                var hasPrev = !isNaN(prevPos) && !isNaN(prevSize);
+
+                if (!animate || !hasPrev || prevPos === targetPos) {
+                    indicator.style.transition = 'none';
+                    paint(targetPos, targetSize);
+                    indicator.dataset.pos = targetPos;
+                    indicator.dataset.size = targetSize;
+                    indicator.dataset.animating = '';
+                    void indicator.offsetWidth;
+                    indicator.style.transition = '';
+                    return;
+                }
+
+                indicator.dataset.animating = '1';
+
+                var delta = targetPos - prevPos;
+                var stretch = Math.min(Math.abs(delta) * 0.5, 40) + 18;
+                var fromPos, fromSize;
+                if (delta > 0) {
+                    fromPos = prevPos;
+                    fromSize = prevSize + stretch;
+                } else {
+                    fromPos = prevPos - stretch;
+                    fromSize = prevSize + stretch;
+                }
+
+                indicator.style.transition = 'none';
+                paint(fromPos, fromSize);
+                void indicator.offsetWidth;
+
+                indicator.style.transition =
+                    'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),' +
+                    ' ' + sizeProp + ' 0.5s cubic-bezier(0.16, 1, 0.3, 1),' +
+                    ' background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease';
+                paint(targetPos, targetSize);
+
+                indicator.dataset.pos = targetPos;
+                indicator.dataset.size = targetSize;
+
+                clearTimeout(animEndTimer);
+                animEndTimer = setTimeout(function () {
+                    indicator.dataset.animating = '';
+                    if (pendingRelayout) {
+                        pendingRelayout = false;
+                        positionIndicator(nav.querySelector('.nav-tab.active'), false);
+                    }
+                }, 560);
+            }
+
+            if (animate) {
+                requestAnimationFrame(run);
+            } else {
+                run();
+            }
+        }
+
+        function applyNavPosition(pos, animateIndicator) {
+            if (NAV_POSITIONS.indexOf(pos) === -1) pos = 'top';
+            currentNavPos = pos;
+            root.setAttribute('data-nav', pos);
+            cookie.set('maple_nav', pos);
+
+            document.querySelectorAll('#navRow .option-btn').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.nav === pos);
+            });
+
+            requestAnimationFrame(function () {
+                layoutNav(pos);
+                indicator.dataset.pos = '';
+                indicator.dataset.size = '';
+                positionIndicator(nav.querySelector('.nav-tab.active'), animateIndicator === true);
+            });
+        }
+
+        var currentPanel = 'home';
+
+        function showPanel(name, fromUser) {
+            if (PANEL_ORDER.indexOf(name) === -1) name = 'home';
+
+            var oldIndex = PANEL_ORDER.indexOf(currentPanel);
+            var newIndex = PANEL_ORDER.indexOf(name);
+            var changed = oldIndex !== newIndex;
+
+            document.querySelectorAll('.panel').forEach(function (p) {
+                p.classList.remove('active', 'slide-in-right', 'slide-in-left');
+            });
+            document.querySelectorAll('.nav-tab').forEach(function (t) {
+                t.classList.toggle('active', t.dataset.panel === name);
+            });
+
+            var target = document.getElementById('panel-' + name);
+            target.classList.add('active');
+
+            if (fromUser && changed) {
+                var dir = newIndex > oldIndex ? 'right' : 'left';
+                var animClass = dir === 'right' ? 'slide-in-right' : 'slide-in-left';
+                target.classList.add(animClass);
+
+                var finished = false;
+                var cleanup = function () {
+                    if (finished) return;
+                    finished = true;
+                    target.classList.remove('slide-in-right', 'slide-in-left');
+                    target.removeEventListener('animationend', onEnd);
+                };
+                var onEnd = function (e) {
+                    if (e.target !== target) return;
+                    cleanup();
+                };
+                target.addEventListener('animationend', onEnd);
+                setTimeout(cleanup, 560);
+            }
+
+            currentPanel = name;
+
+            var tab = nav.querySelector('.nav-tab[data-panel="' + name + '"]');
+            positionIndicator(tab, fromUser === true);
+        }
+
+        function applyNotice(visible) {
+            noticeBar.classList.toggle('hidden', !visible);
+            noticeToggle.checked = visible;
+            cookie.set('maple_notice', visible ? 'on' : 'off');
+        }
+
+        function applyBackground(value) {
+            var hasBg = value !== '' && value !== null && value !== undefined;
+            if (hasBg) {
+                root.style.setProperty('--bg-image', 'url("' + BG_IMAGE_URL + '")');
+                root.classList.add('has-bg');
+            } else {
+                root.style.removeProperty('--bg-image');
+                root.classList.remove('has-bg');
+            }
+            cookie.set('maple_bg', hasBg ? value : '');
+            document.querySelectorAll('#bgRow .bg-card').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.value === (hasBg ? value : ''));
+            });
+        }
+
+        /* =====================================================================
+           诗句
+           ===================================================================== */
+        var currentPoem = DEFAULT_POEM;
+        var poemListCache = null;
+
+        function normalizePoem(item) {
+            if (typeof item === 'string') return { text: item, source: '' };
+            if (item && typeof item === 'object') {
+                return {
+                    text: item.text || item.content || item.poem || item.line || '',
+                    source: item.source || item.author || item.from || ''
+                };
+            }
+            return { text: '', source: '' };
+        }
+
+        function loadPoems() {
+            if (poemListCache) return Promise.resolve(poemListCache);
+            return fetch(POEM_URL, { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('load fail');
+                    return res.json();
+                })
+                .then(function (data) {
+                    var list = Array.isArray(data) ? data : (data.poems || data.list || []);
+                    poemListCache = list.map(normalizePoem).filter(function (p) { return p.text; });
+                    return poemListCache;
+                })
+                .catch(function () {
+                    poemListCache = [];
+                    return [];
+                });
+        }
+
+        function renderPoemText(poem) {
+            currentPoem = poem || DEFAULT_POEM;
+            poemTextEl.textContent = currentPoem.text || DEFAULT_POEM.text;
+            if (currentPoem.source) {
+                poemSourceEl.textContent = currentPoem.source;
+                poemSourceEl.style.display = '';
+            } else {
+                poemSourceEl.textContent = '';
+                poemSourceEl.style.display = 'none';
+            }
+        }
+
+        function renderRandomPoem() {
+            var list = poemListCache || [];
+            if (!list.length) {
+                renderPoemText(DEFAULT_POEM);
+                return;
+            }
+            var chosen = list[Math.floor(Math.random() * list.length)];
+            renderPoemText(chosen);
+        }
+
+        function fillPoemPicker(list) {
+            if (!poemPicker) return;
+            poemPicker.innerHTML = '';
+            (list || []).forEach(function (poem) {
+                var opt = document.createElement('option');
+                opt.value = poem.text;
+                opt.textContent = poem.source ? (poem.text + ' —— ' + poem.source) : poem.text;
+                poemPicker.appendChild(opt);
+            });
+        }
+
+        function applyPoemModeUI(mode) {
+            document.querySelectorAll('#poemModeRow .option-btn').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.poemMode === mode);
+            });
+            if (poemPickerWrap) {
+                poemPickerWrap.classList.toggle('visible', mode === 'fixed');
+            }
+        }
+
+        function setPoemMode(mode, fromUser) {
+            cookie.set('maple_poem_mode', mode);
+            applyPoemModeUI(mode);
+            if (!fromUser) return;
+
+            if (mode === 'fixed') {
+                /* 优先使用上次固定的句子；没有则固定当前显示的句子 */
+                var prevFixed = cookie.get('maple_poem_fixed');
+                var list = poemListCache || [];
+
+                if (prevFixed) {
+                    var found = null;
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].text === prevFixed) { found = list[i]; break; }
+                    }
+                    if (found) {
+                        if (poemPicker) poemPicker.value = prevFixed;
+                        renderPoemText(found);
+                        return;
                     }
                 }
-            });
 
-            localStorage.setItem('preferredLanguage', lang);
-        }
-
-        // ========================
-        // 3D效果逻辑
-        // ========================
-        const content = document.getElementById('content');
-        const glassLayer = document.getElementById('glass-layer');
-        const resistance = 0.1;
-        const maxTilt = 20;
-        let isDragging = false;
-        let offsetX = 0,
-            offsetY = 0;
-
-        if (matchMedia('(pointer: coarse)').matches) {
-            let startX, startY;
-            content.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX - offsetX;
-                startY = e.touches[0].clientY - offsetY;
-            });
-
-            content.addEventListener('touchmove', (e) => {
-                if (isDragging) {
-                    offsetX = (e.touches[0].clientX - startX) * resistance;
-                    offsetY = (e.touches[0].clientY - startY) * resistance;
-                    offsetX = Math.max(-maxTilt, Math.min(maxTilt, offsetX));
-                    offsetY = Math.max(-maxTilt, Math.min(maxTilt, offsetY));
-                    applyTilt();
+                var currentText = currentPoem ? currentPoem.text : '';
+                if (currentText && poemPicker) {
+                    poemPicker.value = currentText;
+                    cookie.set('maple_poem_fixed', currentText);
                 }
-            });
-
-            content.addEventListener('touchend', () => {
-                isDragging = false;
-                resetPosition();
-            });
+            } else {
+                /* 切回随机：立刻随机一次，给到即时反馈 */
+                renderRandomPoem();
+            }
         }
 
-        if (matchMedia('(pointer: fine)').matches) {
-            document.addEventListener('mousemove', (e) => {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const normX = (e.clientX - centerX) / centerX;
-                const normY = (e.clientY - centerY) / centerY;
-                offsetX = Math.max(-maxTilt, Math.min(maxTilt, normX * maxTilt * resistance));
-                offsetY = Math.max(-maxTilt, Math.min(maxTilt, -normY * maxTilt * resistance));
-                applyTilt();
-            });
+        async function initPoem() {
+            var list = await loadPoems();
+            fillPoemPicker(list);
 
-            document.addEventListener('mouseleave', () => {
-                resetPosition();
-            });
+            var mode = cookie.get('maple_poem_mode') || 'random';
+            applyPoemModeUI(mode);
+
+            if (mode === 'fixed') {
+                var fixedText = cookie.get('maple_poem_fixed');
+                if (fixedText) {
+                    var found = null;
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].text === fixedText) { found = list[i]; break; }
+                    }
+                    if (found) {
+                        if (poemPicker) poemPicker.value = fixedText;
+                        renderPoemText(found);
+                        return;
+                    }
+                }
+                /* 固定模式但没选定或找不到 → 显示随机（并让用户用下拉选定） */
+                if (cookie.get('maple_visited') === null) {
+                    cookie.set('maple_visited', '1');
+                }
+                renderRandomPoem();
+                return;
+            }
+
+            /* 随机模式：首次访问显示默认，之后每次随机 */
+            var isFirstVisit = cookie.get('maple_visited') === null;
+            cookie.set('maple_visited', '1');
+
+            if (isFirstVisit) {
+                renderPoemText(DEFAULT_POEM);
+            } else {
+                renderRandomPoem();
+            }
         }
+
+        /* =====================================================================
+           3D 倾斜
+           ===================================================================== */
+        var MAX_TILT = 18;
+        var RESISTANCE = 0.12;
+        var offsetX = 0;
+        var offsetY = 0;
+        var dragging = false;
 
         function applyTilt() {
-            content.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
-            glassLayer.style.transform =
-                `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
+            var tf = 'perspective(600px) rotateX(' + offsetY + 'deg) rotateY(' + offsetX + 'deg)';
+            contentEl.style.transform = tf;
+            glassLayer.style.transform = tf + ' translateZ(-16px)';
         }
 
-        function resetPosition() {
-            content.style.transition = 'transform 0.5s ease-out';
-            glassLayer.style.transition = 'transform 0.5s ease-out';
-            content.style.transform = 'perspective(500px) rotateX(0) rotateY(0)';
-            glassLayer.style.transform = 'perspective(500px) rotateX(0) rotateY(0) translateZ(-20px)';
-            setTimeout(() => {
-                content.style.transition = 'none';
-                glassLayer.style.transition = 'none';
-            }, 500);
+        function resetTilt() {
+            contentEl.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            glassLayer.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            contentEl.style.transform = 'perspective(600px) rotateX(0) rotateY(0)';
+            glassLayer.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateZ(-16px)';
+            setTimeout(function () {
+                contentEl.style.transition = '';
+                glassLayer.style.transition = '';
+            }, 600);
         }
 
-        // ========================
-        // 菜单控制
-        // ========================
-        function toggleMenu() {
-            const menu = document.getElementById('menu');
-            const btn = document.getElementById('menuBtn');
-            const isOpen = menu.classList.contains('open');
+        function bindTilt() {
+            if (matchMedia('(pointer: fine)').matches) {
+                document.addEventListener('mousemove', function (e) {
+                    var cx = window.innerWidth / 2;
+                    var cy = window.innerHeight / 2;
+                    var nx = (e.clientX - cx) / cx;
+                    var ny = (e.clientY - cy) / cy;
+                    offsetX = Math.max(-MAX_TILT, Math.min(MAX_TILT, nx * MAX_TILT * RESISTANCE));
+                    offsetY = Math.max(-MAX_TILT, Math.min(MAX_TILT, -ny * MAX_TILT * RESISTANCE));
+                    contentEl.style.transition = '';
+                    glassLayer.style.transition = '';
+                    applyTilt();
+                });
+                document.addEventListener('mouseleave', resetTilt);
+            }
 
-            if (isOpen) {
-                menu.classList.remove('open');
-                btn.classList.remove('active');
+            if (matchMedia('(pointer: coarse)').matches) {
+                var sx = 0, sy = 0;
+                contentEl.addEventListener('touchstart', function (e) {
+                    dragging = true;
+                    sx = e.touches[0].clientX - offsetX;
+                    sy = e.touches[0].clientY - offsetY;
+                }, { passive: true });
+                contentEl.addEventListener('touchmove', function (e) {
+                    if (!dragging) return;
+                    offsetX = (e.touches[0].clientX - sx) * RESISTANCE;
+                    offsetY = (e.touches[0].clientY - sy) * RESISTANCE;
+                    offsetX = Math.max(-MAX_TILT, Math.min(MAX_TILT, offsetX));
+                    offsetY = Math.max(-MAX_TILT, Math.min(MAX_TILT, offsetY));
+                    applyTilt();
+                }, { passive: true });
+                contentEl.addEventListener('touchend', function () {
+                    dragging = false;
+                    resetTilt();
+                });
+            }
+        }
+
+        function relayoutImmediate() {
+            nav.style.transition = 'none';
+            void nav.offsetWidth;
+            layoutNav(currentNavPos);
+
+            if (indicator.dataset.animating === '1') {
+                pendingRelayout = true;
             } else {
-                menu.classList.add('open');
-                btn.classList.add('active');
+                positionIndicator(nav.querySelector('.nav-tab.active'), false);
             }
-        }
 
-        // ========================
-        // 翻译按钮逻辑（下拉菜单 + 语言切换）
-        // ========================
-        const translateBtn = document.getElementById('translateBtn');
-        const translateDropdown = document.getElementById('translateDropdown');
-
-        translateBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            translateDropdown.classList.toggle('open');
-        });
-
-        // 语言选择处理
-        translateDropdown.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const lang = this.getAttribute('data-lang');
-                applyLanguage(lang);
-                translateDropdown.classList.remove('open');
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    nav.style.transition = '';
+                });
             });
-        });
+        }
 
-        // 点击外部关闭（侧边菜单 + 翻译下拉）
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('menu');
-            const btn = document.getElementById('menuBtn');
-            const dropdown = document.getElementById('translateDropdown');
-            const transBtn = document.getElementById('translateBtn');
+        var resizeScheduled = false;
+        function scheduleRelayout() {
+            if (resizeScheduled) return;
+            resizeScheduled = true;
+            requestAnimationFrame(function () {
+                resizeScheduled = false;
+                relayoutImmediate();
+            });
+        }
 
-            if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
-                toggleMenu();
+        function bindEvents() {
+            document.querySelectorAll('.nav-tab').forEach(function (t) {
+                t.addEventListener('click', function () {
+                    showPanel(t.dataset.panel, true);
+                });
+            });
+
+            document.querySelectorAll('#baseRow .option-btn').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyBase(b.dataset.base, true);
+                });
+            });
+
+            document.querySelectorAll('#colorRow .swatch').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyColor(b.dataset.color, true);
+                });
+            });
+
+            /* 诗句模式按钮 */
+            document.querySelectorAll('#poemModeRow .option-btn').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    setPoemMode(b.dataset.poemMode, true);
+                });
+            });
+
+            /* 诗句下拉选择 */
+            if (poemPicker) {
+                poemPicker.addEventListener('change', function () {
+                    var text = poemPicker.value;
+                    cookie.set('maple_poem_fixed', text);
+                    var list = poemListCache || [];
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].text === text) {
+                            renderPoemText(list[i]);
+                            break;
+                        }
+                    }
+                });
             }
 
-            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
-                dropdown.classList.remove('open');
+            document.querySelectorAll('#langRow .option-btn').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyLanguage(b.dataset.lang);
+                    requestAnimationFrame(function () {
+                        layoutNav(currentNavPos);
+                        positionIndicator(nav.querySelector('.nav-tab.active'), true);
+                    });
+                });
+            });
+
+            document.querySelectorAll('#navRow .option-btn').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyNavPosition(b.dataset.nav, true);
+                });
+            });
+
+            document.querySelectorAll('#bgRow .bg-card').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyBackground(b.dataset.value);
+                });
+            });
+
+            noticeClose.addEventListener('click', function () {
+                applyNotice(false);
+            });
+
+            noticeToggle.addEventListener('change', function () {
+                applyNotice(noticeToggle.checked);
+            });
+
+            window.addEventListener('resize', scheduleRelayout);
+
+            window.addEventListener('orientationchange', function () {
+                setTimeout(scheduleRelayout, 150);
+                setTimeout(scheduleRelayout, 400);
+            });
+
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', scheduleRelayout);
+                window.visualViewport.addEventListener('scroll', scheduleRelayout);
             }
-        });
-
-        // 阻止冒泡
-        document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
-        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
-
-        // ========================
-        // 主题切换
-        // ========================
-        const themeBtn = document.getElementById('themeBtn');
-        const html = document.documentElement;
-
-        // 修改后的 initTheme：不再重复设置 data-theme（已在 head 中设置），仅更新按钮图标
-        function initTheme() {
-            const savedTheme = html.getAttribute('data-theme') || localStorage.getItem('theme') || 'dark';
-            updateThemeIcon(savedTheme);
         }
 
-        function updateThemeIcon(theme) {
-            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
-        }
+        (function init() {
+            cacheDefaultTexts();
 
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            var base = cookie.get('maple_base') || 'dark';
+            var color = cookie.get('maple_color') || 'blue';
+            var lang = cookie.get('maple_lang') || 'zh-CN';
+            var navPos = cookie.get('maple_nav') || 'top';
+            var bg = cookie.get('maple_bg');
+            var notice = cookie.get('maple_notice') !== 'off';
 
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
+            applyBase(base, false);
+            applyColor(color, false);
+            applyLanguage(lang);
+            applyNotice(notice);
+            applyBackground(bg === null ? '' : bg);
 
-        if (themeBtn) {
-            themeBtn.addEventListener('click', toggleTheme);
-        }
+            bindEvents();
+            bindTilt();
+            initPoem();
 
-        // ========================
-        // 初始化（直接执行，不再等待 load 事件）
-        // ========================
-        // 缓存默认文本
-        cacheDefaultTexts();
+            currentNavPos = navPos;
+            currentPanel = 'home';
 
-        // 设置主题图标
-        initTheme();
-
-        // 确保菜单初始关闭
-        document.getElementById('menu').classList.remove('open');
-
-        // 应用保存的语言
-        const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
-        applyLanguage(savedLang);
+            requestAnimationFrame(function () {
+                layoutNav(navPos);
+                positionIndicator(nav.querySelector('.nav-tab.active'), false);
+                document.querySelectorAll('#navRow .option-btn').forEach(function (btn) {
+                    btn.classList.toggle('active', btn.dataset.nav === navPos);
+                });
+            });
+        })();
     </script>
 </body>
 </html>

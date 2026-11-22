@@ -1,489 +1,642 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-base="dark" data-color="blue">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>枫叶镜像源</title>
+    <link rel="icon" href="/Pictures/logo_main.webp" type="image/webp">
     <style>
-        /* 全局重置 */
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         :root {
-            /* 黑夜变量 */
-            --bg-color: #0a0c10;
-            --glass-white: rgba(255, 255, 255, 0.07);
-            --glass-white-hover: rgba(255, 255, 255, 0.15);
-            --glass-menu: rgba(30, 30, 40, 0.7);
-            --accent-blue: rgba(0, 160, 255, 0.6);
-            --border-light: rgba(255, 255, 255, 0.08);
-            --text-primary: #f0f4fa;
-            --text-secondary: rgba(180, 230, 255, 0.95);
-            --topbar-bg: rgba(255, 255, 255, 0.75);
-            --topbar-text: rgba(0, 0, 0, 0.8);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --gradient-start: #1a1f2a;
-            --gradient-end: #0a0c10;
-            --footer-bg: rgba(10, 15, 20, 0.3);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --dur-fast: 0.18s;
+            --dur-med: 0.32s;
+            --dur-slow: 0.5s;
         }
 
-        /* 白天变量 */
-        [data-theme="light"] {
-            --bg-color: #f0f4f8;
-            --glass-white: rgba(255, 255, 255, 0.6);
-            --glass-white-hover: rgba(255, 255, 255, 0.8);
-            --glass-menu: rgba(240, 242, 250, 0.9);
-            --accent-blue: rgba(0, 120, 255, 0.8);
-            --border-light: rgba(0, 0, 0, 0.08);
-            --text-primary: #1a1d29;
-            --text-secondary: rgba(30, 35, 50, 0.9);
-            --topbar-bg: rgba(255, 255, 255, 0.9);
-            --topbar-text: rgba(30, 35, 50, 0.9);
-            --shadow-color: rgba(0, 0, 0, 0.15);
-            --gradient-start: #e8ecf5;
-            --gradient-end: #f5f7fa;
-            --footer-bg: rgba(255, 255, 255, 0.5);
+        /* =====================
+           基础基调（继承主页）
+           ===================== */
+        :root,
+        [data-base="dark"] {
+            --bg: #1e2127;
+            --panel: rgba(40, 44, 52, 0.82);
+            --panel-alt: rgba(50, 56, 66, 0.82);
+            --nav: rgba(33, 37, 43, 0.78);
+            --border: rgba(220, 223, 228, 0.09);
+            --text: #dcdfe4;
+            --text-muted: #8b93a1;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+            --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.42);
+            color-scheme: dark;
+        }
+
+        [data-base="light"] {
+            --bg: #f6f8fa;
+            --panel: rgba(255, 255, 255, 0.82);
+            --panel-alt: rgba(246, 248, 250, 0.86);
+            --nav: rgba(255, 255, 255, 0.78);
+            --border: rgba(208, 215, 222, 0.85);
+            --text: #1f2328;
+            --text-muted: #656d76;
+            --shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+            --shadow-hover: 0 12px 28px rgba(31, 35, 40, 0.12);
+            color-scheme: light;
+        }
+
+        /* =====================
+           主题色彩（继承主页）
+           ===================== */
+        :root,
+        [data-color="blue"] {
+            --accent: #61afef;
+            --accent-text: #16191f;
+            --accent-alt: #98c379;
+        }
+
+        [data-base="light"][data-color="blue"] {
+            --accent: #6db8f5;
+            --accent-text: #0a2030;
+            --accent-alt: #0369a1;
+        }
+
+        [data-color="red"] {
+            --accent: #e5484d;
+            --accent-text: #ffffff;
+            --accent-alt: #f5a97f;
+        }
+
+        [data-base="light"][data-color="red"] {
+            --accent: #d1242f;
+            --accent-text: #ffffff;
+            --accent-alt: #b45309;
+        }
+
+        [data-color="orange"] {
+            --accent: #f97316;
+            --accent-text: #1a0d04;
+            --accent-alt: #fbbf24;
+        }
+
+        [data-base="light"][data-color="orange"] {
+            --accent: #ea580c;
+            --accent-text: #ffffff;
+            --accent-alt: #b45309;
+        }
+
+        [data-color="lemon"] {
+            --accent: #eab308;
+            --accent-text: #1a1709;
+            --accent-alt: #84cc16;
+        }
+
+        [data-base="light"][data-color="lemon"] {
+            --accent: #ca8a04;
+            --accent-text: #ffffff;
+            --accent-alt: #65a30d;
+        }
+
+        [data-color="green"] {
+            --accent: #22c55e;
+            --accent-text: #06130a;
+            --accent-alt: #2dd4bf;
+        }
+
+        [data-base="light"][data-color="green"] {
+            --accent: #16a34a;
+            --accent-text: #ffffff;
+            --accent-alt: #0891b2;
+        }
+
+        [data-color="purple"] {
+            --accent: #8b5cf6;
+            --accent-text: #ffffff;
+            --accent-alt: #ec4899;
+        }
+
+        [data-base="light"][data-color="purple"] {
+            --accent: #7c3aed;
+            --accent-text: #ffffff;
+            --accent-alt: #db2777;
+        }
+
+        /* =====================
+           背景图模式（继承主页）
+           ===================== */
+        html.has-bg,
+        html.has-bg[data-base],
+        html.has-bg[data-color],
+        html.has-bg[data-base][data-color] {
+            --bg: transparent;
+            --panel: rgba(255, 255, 255, 0.08);
+            --panel-alt: rgba(255, 255, 255, 0.05);
+            --nav: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.16);
+            --text: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.72);
+            --accent: #3b82f6;
+            --accent-text: #ffffff;
+            --accent-alt: #60a5fa;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.42);
+        }
+
+        /* =====================
+           基座
+           ===================== */
+        html {
+            scroll-behavior: smooth;
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            position: relative;
+            z-index: 0;
+            isolation: isolate;
             min-height: 100vh;
-            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-primary);
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 24px;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 30% 40%, var(--gradient-start) 0%, var(--gradient-end) 70%);
-            background-attachment: fixed;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            overscroll-behavior: none;
+            transition: padding var(--dur-slow) var(--ease), color var(--dur-med) var(--ease);
         }
 
-        /* 顶部栏 */
-        .top-bar {
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: -2;
+            transition: background-color var(--dur-med) var(--ease);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                var(--bg-image, none);
+            background-size: cover, cover;
+            background-position: center center;
+            background-repeat: no-repeat, no-repeat;
+            opacity: 0;
+            z-index: -1;
+            pointer-events: none;
+            transition: opacity var(--dur-slow) var(--ease);
+        }
+
+        html.has-bg body::after {
+            opacity: 1;
+        }
+
+        [data-nav="top"] body { padding-top: 108px; }
+        [data-nav="bottom"] body { padding-bottom: 108px; }
+        [data-nav="left"] body { padding-left: 96px; }
+        [data-nav="right"] body { padding-right: 96px; }
+
+        /* =====================
+           浮动导航栏
+           ===================== */
+        .float-nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 64px;
-            background: var(--topbar-bg);
-            backdrop-filter: blur(16px) saturate(200%);
-            -webkit-backdrop-filter: blur(16px) saturate(200%);
             display: flex;
-            align-items: center;
-            padding-left: 24px;
-            padding-right: 24px;
-            box-shadow: 0 4px 20px var(--shadow-color);
+            gap: 4px;
+            padding: 6px;
+            background: var(--nav);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
             z-index: 1000;
-            border-bottom: 1px solid var(--border-light);
-            transition: all 0.4s ease;
+            transform: translate(0, 0);
+            will-change: transform;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition:
+                transform var(--dur-slow) var(--ease),
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                box-shadow var(--dur-med) var(--ease);
         }
 
-        .top-title {
+        .float-nav[data-pos="top"],
+        .float-nav[data-pos="bottom"] {
+            flex-direction: row;
+            width: 65vw;
+            height: auto;
+        }
+
+        .float-nav[data-pos="left"],
+        .float-nav[data-pos="right"] {
+            flex-direction: column;
+            height: 50vh;
+            min-height: 220px;
+            width: auto;
+        }
+
+        .nav-indicator {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--topbar-text);
-            text-decoration: none;
-            letter-spacing: 0.3px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            background: var(--accent);
+            border: 1px solid var(--border);
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform, width, height;
         }
 
-        .top-title:hover {
-            text-decoration: underline;
-            transform: translateX(-50%) scale(1.02);
-            opacity: 1;
+        html.has-bg .nav-indicator {
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+            border-color: rgba(255, 255, 255, 0.35);
         }
 
-        /* 右侧按钮组 */
-        .right-actions {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            gap: 8px;
+        .nav-tab {
             position: relative;
-        }
-
-        /* 翻译按钮 */
-        .translate-btn {
-            background: transparent;
-            border: none;
-            color: var(--topbar-text);
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            z-index: 1;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            padding: 0;
-        }
-
-        .translate-btn img {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        .translate-btn:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 主题切换 */
-        .theme-toggle {
-            background: transparent;
             border: none;
-            color: var(--topbar-text);
-            font-size: 1.5rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .theme-toggle:hover {
-            background: rgba(128, 128, 128, 0.15);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* 语言下拉 */
-        .translate-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: var(--glass-menu);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border-radius: 16px;
-            padding: 8px 0;
-            min-width: 150px;
-            box-shadow: 0 18px 40px var(--shadow-color);
-            border: 1px solid var(--border-light);
-            z-index: 1001;
-            opacity: 0;
-            transform: scale(0.9) translateY(-8px);
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: none;
-            transform-origin: top right;
-        }
-
-        .translate-dropdown.open {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: all;
-        }
-
-        .translate-dropdown a {
-            display: block;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 0.95rem;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        .translate-dropdown a:hover {
-            background: var(--accent-blue);
-        }
-
-        /* 菜单按钮 */
-        .menu-button {
+            border-radius: 10px;
             background: transparent;
-            border: none;
-            color: var(--topbar-text);
-            font-size: 1.9rem;
-            line-height: 1;
-            cursor: pointer;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                background 0.2s;
-        }
-
-        .menu-button:hover {
-            background: rgba(128, 128, 128, 0.1);
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .menu-button.active {
-            transform: rotate(180deg);
-            background: rgba(0, 160, 255, 0.1);
-        }
-
-        /* 侧边菜单 */
-        .menu {
-            position: fixed;
-            top: 80px;
-            left: 24px;
-            width: 240px;
-            background: var(--glass-menu);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border-radius: 24px;
-            padding: 8px 0;
-            box-shadow: 0 18px 40px var(--shadow-color);
-            z-index: 999;
-            border: 1px solid var(--border-light);
-            transform-origin: top left;
-            transform: scale(0.7) translateY(-30px);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                background-color 0.4s ease;
-        }
-
-        .menu.open {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .menu a {
-            display: block;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 14px 24px;
-            margin: 6px 12px;
-            border-radius: 16px;
-            font-weight: 500;
+            color: var(--text-muted);
+            font-family: inherit;
             font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            white-space: nowrap;
+            text-decoration: none;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease),
+                transform var(--dur-fast) var(--ease);
+        }
+
+        .float-nav[data-pos="top"] .nav-tab,
+        .float-nav[data-pos="bottom"] .nav-tab {
+            padding: 14px 0;
+        }
+
+        .float-nav[data-pos="left"] .nav-tab,
+        .float-nav[data-pos="right"] .nav-tab {
+            padding: 16px 20px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 0.25em;
+            font-size: 1rem;
+        }
+
+        html.has-bg .nav-tab {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--panel-alt);
+        }
+
+        html.has-bg .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .nav-tab.active {
             background: transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateX(-16px);
+            color: var(--accent-text);
         }
 
-        .menu.open a {
-            opacity: 1;
-            transform: translateX(0);
+        html.has-bg .nav-tab.active {
+            color: #ffffff;
         }
 
-        /* 菜单项延迟 */
-        .menu a:nth-child(1) {
-            transition-delay: 0.05s;
-        }
-        .menu a:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-        .menu a:nth-child(3) {
-            transition-delay: 0.15s;
-        }
-        .menu a:nth-child(4) {
-            transition-delay: 0.2s;
-        }
-        .menu a:nth-child(5) {
-            transition-delay: 0.25s;
+        .nav-tab:active {
+            transform: scale(0.96);
         }
 
-        .menu a:hover {
-            background: var(--accent-blue);
-            transform: translateX(6px);
-            color: var(--text-primary);
-            box-shadow: 0 0 12px var(--accent-blue);
+        /* =====================
+           舞台与面板
+           ===================== */
+        .stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
         }
 
-        /* 3D容器 */
+        .panel {
+            display: none;
+            width: 100%;
+            max-width: 860px;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            will-change: transform, opacity;
+        }
+
+        .panel.active {
+            display: flex;
+        }
+
+        /* =====================
+           3D 裸眼容器
+           ===================== */
         .content-container {
             position: relative;
-            perspective: 500px;
-            margin: 20px;
+            perspective: 600px;
             display: inline-block;
+            max-width: 100%;
         }
 
-        /* 玻璃层 */
         .glass-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--glass-white);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            inset: 0;
+            background: var(--panel);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            box-shadow: 0 20px 40px var(--shadow-color),
-                inset 0 1px 1px rgba(128, 128, 128, 0.1);
-            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
             transform-style: preserve-3d;
-            transition: all 0.4s ease;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                box-shadow var(--dur-med) var(--ease);
         }
 
-        /* 文字层 */
         .content {
             position: relative;
+            padding: 34px 44px;
             text-align: center;
-            font-size: 2.2rem;
-            margin: 30px 40px;
-            padding: 30px 40px;
-            color: var(--text-secondary);
-            text-shadow: 0 4px 20px var(--shadow-color);
+            font-size: 1.45rem;
             font-weight: 500;
             letter-spacing: 1px;
+            line-height: 1.7;
+            color: var(--text);
             transform-style: preserve-3d;
-            transition: transform 0.5s ease-out, color 0.4s ease;
-            cursor: pointer;
-            line-height: 1.4;
+            user-select: none;
+            transition: color var(--dur-med) var(--ease);
         }
 
-        /* 底部信息 */
-        .footer {
-            position: fixed;
-            bottom: 25px;
-            left: 0;
+        html.has-bg .content {
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+        }
+
+        /* =====================
+           模块网格
+           ===================== */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 18px;
             width: 100%;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            opacity: 0.7;
-            text-shadow: 0 2px 5px var(--shadow-color);
-            z-index: 500;
-            background: var(--footer-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 12px 0 8px;
-            border-top: 1px solid var(--border-light);
-            transition: all 0.4s ease;
         }
 
-        .footer p {
-            margin: 4px 0;
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 24px 22px 22px;
+            min-height: 172px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            color: var(--text);
+            text-decoration: none;
+            text-align: left;
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition:
+                background-color var(--dur-med) var(--ease),
+                border-color var(--dur-med) var(--ease),
+                color var(--dur-med) var(--ease),
+                transform var(--dur-fast) var(--ease),
+                box-shadow var(--dur-fast) var(--ease);
         }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-card-title {
+            font-size: 1.08rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+            color: var(--text);
+        }
+
+        .module-card-desc {
+            font-size: 0.83rem;
+            line-height: 1.68;
+            color: var(--text-muted);
+            flex: 1;
+        }
+
+        html.has-bg .module-card-desc {
+            color: rgba(255, 255, 255, 0.76);
+        }
+
+        /* =====================
+           页脚
+           ===================== */
+        .footer {
+            width: 100%;
+            padding: 28px 0 6px;
+            text-align: center;
+            font-size: 0.78rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            transition: color var(--dur-med) var(--ease);
+        }
+
+        .footer p { margin: 2px 0; }
 
         .footer a {
-            color: var(--accent-blue);
+            color: var(--accent-alt);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: opacity var(--dur-fast) var(--ease);
         }
 
         .footer a:hover {
-            opacity: 0.8;
+            opacity: 0.82;
             text-decoration: underline;
         }
 
-        /* 弹跳动画 */
-        @keyframes bounce {
-            0% {
-                transform: scale(1);
+        /* =====================
+           响应式
+           ===================== */
+        @media (max-width: 720px) {
+            .module-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 14px;
             }
-            35% {
-                transform: scale(1.04);
-            }
-            60% {
-                transform: scale(0.98);
-            }
-            85% {
-                transform: scale(1.01);
-            }
-            100% {
-                transform: scale(1);
+            .module-card {
+                min-height: 158px;
+                padding: 20px 18px;
             }
         }
 
-        .bounce-effect {
-            animation: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        @media (max-width: 640px) {
+            body { padding: 16px; }
+            [data-nav="top"] body { padding-top: 96px; }
+            [data-nav="bottom"] body { padding-bottom: 96px; }
+            [data-nav="left"] body { padding-left: 84px; }
+            [data-nav="right"] body { padding-right: 84px; }
+
+            .content { padding: 26px 28px; font-size: 1.15rem; letter-spacing: 0.5px; }
+
+            .nav-tab { font-size: 0.92rem; }
+            .float-nav[data-pos="top"] .nav-tab,
+            .float-nav[data-pos="bottom"] .nav-tab { padding: 12px 0; }
+
+            .float-nav[data-pos="left"] .nav-tab,
+            .float-nav[data-pos="right"] .nav-tab { padding: 14px 16px; }
         }
 
-        /* 响应式 */
-        @media (max-width: 700px) {
-            .content {
-                font-size: 1.7rem;
-                margin: 20px;
-                padding: 20px;
+        @media (max-width: 520px) {
+            .module-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
-            .menu {
-                width: calc(100% - 48px);
-                left: 24px;
-            }
-            .right-actions {
-                gap: 4px;
+            .module-card {
+                min-height: 0;
             }
         }
 
-        @media (max-width: 450px) {
-            .content {
-                font-size: 1.3rem;
-            }
-        }
-
-        .main-content {
-            display: none;
+        @media (max-width: 400px) {
+            .content { padding: 22px 20px; font-size: 1rem; }
+            .nav-tab { font-size: 0.85rem; }
         }
     </style>
-    <!-- 立即执行主题初始化，防止闪烁 -->
+
+    <!-- 首屏前置：从主页 cookie 继承基调 / 色彩 / 导航位置 / 背景 / 语言 -->
     <script>
-        (function() {
-            var theme = localStorage.getItem('theme');
-            if (!theme) {
-                var match = document.cookie.match(/(?:^|;\s*)theme=([^;]+)/);
-                if (match) theme = match[1];
+        (function () {
+            var BG_IMAGES = {
+                '0': 'Pictures/甘城猫猫.jpg',
+                '1': 'Pictures/星轨.jpg',
+                '2': 'Pictures/原神.jpg',
+                '3': 'Pictures/我的世界.jpg',
+                '4': 'Pictures/崩铁.jpg'
+            };
+            window.__BG_IMAGES = BG_IMAGES;
+
+            function readCookie(name) {
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+                return m ? decodeURIComponent(m[1]) : null;
             }
-            if (theme !== 'light' && theme !== 'dark') {
-                theme = 'dark';
+
+            var base = readCookie('maple_base') || 'dark';
+            var color = readCookie('maple_color') || 'blue';
+            var navPos = readCookie('maple_nav') || 'top';
+            var lang = readCookie('maple_lang') || 'zh-CN';
+            var bg = readCookie('maple_bg');
+
+            var root = document.documentElement;
+            root.setAttribute('data-base', base);
+            root.setAttribute('data-color', color);
+            root.setAttribute('data-nav', navPos);
+            root.setAttribute('lang', lang);
+
+            if (bg !== null && bg !== '' && BG_IMAGES[bg]) {
+                root.classList.add('has-bg');
+                root.style.setProperty(
+                    '--bg-image',
+                    'url("../' + encodeURI(BG_IMAGES[bg]) + '")'
+                );
             }
-            document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
 </head>
 <body>
-    <!-- 顶部栏 -->
-    <div class="top-bar">
-        <button class="menu-button" id="menuBtn" onclick="toggleMenu()">☰</button>
-        <a href="../index.html" class="top-title" data-translate-key="top-title">返回总览</a>
-        <div class="right-actions">
-            <button class="translate-btn" id="translateBtn" aria-label="翻译">
-                <img src="/Pictures/icon_translate.webp" alt="翻译">
-            </button>
-            <div class="translate-dropdown" id="translateDropdown">
-                <a href="#" data-lang="zh-CN">简体中文</a>
-                <a href="#" data-lang="zh-TW">繁體中文</a>
-                <a href="#" data-lang="en">English</a>
-                <a href="#" data-lang="ja">日本語</a>
-                <a href="#" data-lang="ko">한국어</a>
+
+    <!-- 浮动栏：镜像源（唯一面板）+ 返回总览（跳转） -->
+    <nav class="float-nav" id="floatNav" data-pos="top">
+        <div class="nav-indicator" id="navIndicator"></div>
+        <button class="nav-tab active" data-panel="mirror" data-translate-key="nav-mirror">镜像源</button>
+        <a class="nav-tab" href="../index.html" data-translate-key="nav-back">返回总览</a>
+    </nav>
+
+    <main class="stage">
+
+        <section class="panel active" id="panel-mirror" data-panel-name="mirror">
+            <div class="content-container">
+                <div class="glass-layer" id="glassLayer"></div>
+                <div class="content" id="content" data-translate-key="content-message">
+                    本站旨在收集、整理各种官方镜像并提供下载
+                </div>
             </div>
-            <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
-        </div>
-    </div>
 
-    <!-- 侧边菜单 -->
-    <div class="menu" id="menu">
-        <a href="windows.html" data-translate-key="menu-windows">Windows源（维护中）</a>
-        <a href="linux.html" data-translate-key="menu-linux">Linux源（不可用）</a>
-        <a href="macos.html" data-translate-key="menu-macos">MacOS源（不可用）</a>
-        <a href="others.html" data-translate-key="menu-others">杂项（不可用）</a>
-        <a href="board.html" data-translate-key="menu-board">公告板</a>
-    </div>
+            <div class="module-grid">
 
-    <!-- 3D区域 -->
-    <div class="content-container">
-        <div class="glass-layer" id="glass-layer"></div>
-        <div class="content" id="content" data-translate-key="content-message">
-            本站旨在收集，整理各种官方镜像并提供下载，可点击左上角展开下载选项，点击顶部栏返回
-        </div>
-    </div>
+                <a class="module-card" href="windows.html">
+                    <span class="module-card-title" data-translate-key="menu-windows">Windows 源</span>
+                    <span class="module-card-desc" data-translate-key="desc-windows">官方系统镜像归档，维护中</span>
+                </a>
 
-    <!-- 底部信息 -->
-    <div class="footer">
+                <a class="module-card" href="linux.html">
+                    <span class="module-card-title" data-translate-key="menu-linux">Linux 源</span>
+                    <span class="module-card-desc" data-translate-key="desc-linux">主流发行版镜像，暂不可用</span>
+                </a>
+
+                <a class="module-card" href="macos.html">
+                    <span class="module-card-title" data-translate-key="menu-macos">MacOS 源</span>
+                    <span class="module-card-desc" data-translate-key="desc-macos">系统安装镜像归档，暂不可用</span>
+                </a>
+
+                <a class="module-card" href="others.html">
+                    <span class="module-card-title" data-translate-key="menu-others">杂项</span>
+                    <span class="module-card-desc" data-translate-key="desc-others">其他镜像与工具，暂不可用</span>
+                </a>
+
+                <a class="module-card" href="board.html">
+                    <span class="module-card-title" data-translate-key="menu-board">公告板</span>
+                    <span class="module-card-desc" data-translate-key="desc-board">镜像站的公告与更新动态</span>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
         <p><a href="../readme.html" data-translate-key="footer-copyright">MapleSTUDIO 版权所有</a></p>
         <p>
             <span data-translate-key="footer-powered-prefix">此站点由 </span>
@@ -491,284 +644,381 @@
             <span data-translate-key="footer-powered-suffix"> 驱动</span>
         </p>
         <p><a href="https://icp.gov.moe/?keyword=20250732" target="_blank" data-translate-key="footer-icp">萌ICP备20250732号</a></p>
-    </div>
+    </footer>
 
     <script>
-        // ========================
-        // 多语言本地化数据
-        // ========================
-        const translations = {
+        var cookie = {
+            get: function (name) {
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+                return m ? decodeURIComponent(m[1]) : null;
+            },
+            set: function (name, value, days) {
+                var d = new Date();
+                d.setTime(d.getTime() + (days || 365) * 86400000);
+                document.cookie = name + '=' + encodeURIComponent(value) +
+                    '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+            }
+        };
+
+        var root = document.documentElement;
+        var nav = document.getElementById('floatNav');
+        var indicator = document.getElementById('navIndicator');
+        var contentEl = document.getElementById('content');
+        var glassLayer = document.getElementById('glassLayer');
+
+        var translations = {
             'zh-TW': {
-                'top-title': '返回總覽',
-                'menu-windows': 'Windows源（維護中）',
-                'menu-linux': 'Linux源（不可用）',
-                'menu-macos': 'MacOS源（不可用）',
-                'menu-others': '雜項（不可用）',
-                'menu-board': '公告欄',
-                'content-message': '本站旨在收集、整理各種官方鏡像並提供下載，可點擊左上角展開下載選項，點擊頂部欄返回。',
+                'nav-mirror': '鏡像源', 'nav-back': '返回總覽',
+                'content-message': '本站旨在收集、整理各種官方鏡像並提供下載',
+                'menu-windows': 'Windows 源', 'menu-linux': 'Linux 源', 'menu-macos': 'MacOS 源',
+                'menu-others': '雜項', 'menu-board': '公告欄',
+                'desc-windows': '官方系統鏡像歸檔，維護中',
+                'desc-linux': '主流發行版鏡像，暫不可用',
+                'desc-macos': '系統安裝鏡像歸檔，暫不可用',
+                'desc-others': '其他鏡像與工具，暫不可用',
+                'desc-board': '鏡像站的公告與更新動態',
                 'footer-copyright': 'MapleSTUDIO 版權所有',
-                'footer-powered-prefix': '此站點由 ',
-                'footer-powered-suffix': ' 驅動',
+                'footer-powered-prefix': '此站點由 ', 'footer-powered-suffix': ' 驅動',
                 'footer-icp': '萌ICP備20250732號'
             },
             'en': {
-                'top-title': 'Back to Overview',
-                'menu-windows': 'Windows (Under Maintenance)',
-                'menu-linux': 'Linux (Unavailable)',
-                'menu-macos': 'MacOS (Unavailable)',
-                'menu-others': 'Others (Unavailable)',
-                'menu-board': 'Bulletin Board',
-                'content-message': 'This site collects and organizes various official images for download. Click the top-left menu to expand download options, and click the top bar to go back.',
+                'nav-mirror': 'Mirrors', 'nav-back': 'Overview',
+                'content-message': 'This site collects and organizes official images for download.',
+                'menu-windows': 'Windows Mirrors', 'menu-linux': 'Linux Mirrors', 'menu-macos': 'MacOS Mirrors',
+                'menu-others': 'Others', 'menu-board': 'Bulletin',
+                'desc-windows': 'Official system images archive — under maintenance.',
+                'desc-linux': 'Popular distribution images — currently unavailable.',
+                'desc-macos': 'System installation images archive — currently unavailable.',
+                'desc-others': 'Other images and tools — currently unavailable.',
+                'desc-board': 'Mirror site announcements and updates.',
                 'footer-copyright': 'MapleSTUDIO All Rights Reserved',
-                'footer-powered-prefix': 'Powered by ',
-                'footer-powered-suffix': '',
-                'footer-icp': 'MoeICP-20250732'
+                'footer-powered-prefix': 'Powered by ', 'footer-powered-suffix': '',
+                'footer-icp': 'MoeICP 20250732'
             },
             'ja': {
-                'top-title': '概要に戻る',
-                'menu-windows': 'Windows（メンテナンス中）',
-                'menu-linux': 'Linux（利用不可）',
-                'menu-macos': 'MacOS（利用不可）',
-                'menu-others': 'その他（利用不可）',
-                'menu-board': '掲示板',
-                'content-message': '当サイトでは、各種公式イメージを収集・整理し、ダウンロードを提供しています。左上のメニューからダウンロードオプションを展開し、トップバーで戻ることができます。',
-                'footer-copyright': 'MapleSTUDIO 全著作権所有',
-                'footer-powered-prefix': '提供: ',
-                'footer-powered-suffix': '',
-                'footer-icp': '萌ICP备20250732号'
+                'nav-mirror': 'ミラー', 'nav-back': '概要',
+                'content-message': '当サイトは各種公式イメージを収集・整理して提供しています。',
+                'menu-windows': 'Windows ミラー', 'menu-linux': 'Linux ミラー', 'menu-macos': 'MacOS ミラー',
+                'menu-others': 'その他', 'menu-board': '掲示板',
+                'desc-windows': '公式システムイメージのアーカイブ。メンテナンス中。',
+                'desc-linux': '主要ディストリビューションのイメージ。現在利用不可。',
+                'desc-macos': 'システムインストールイメージのアーカイブ。現在利用不可。',
+                'desc-others': 'その他のイメージとツール。現在利用不可。',
+                'desc-board': 'ミラーサイトのお知らせと更新情報。',
+                'footer-copyright': 'MapleSTUDIO 著作権所有',
+                'footer-powered-prefix': 'このサイトは ', 'footer-powered-suffix': ' で運営',
+                'footer-icp': '萌ICP備20250732号'
             },
             'ko': {
-                'top-title': '개요로 돌아가기',
-                'menu-windows': 'Windows (유지보수 중)',
-                'menu-linux': 'Linux (사용 불가)',
-                'menu-macos': 'MacOS (사용 불가)',
-                'menu-others': '기타 (사용 불가)',
-                'menu-board': '게시판',
-                'content-message': '이 사이트는 다양한 공식 이미지를 수집 및 정리하여 다운로드를 제공합니다. 왼쪽 상단 메뉴를 클릭하여 다운로드 옵션을 확장하고, 상단 바를 클릭하여 돌아갈 수 있습니다.',
-                'footer-copyright': 'MapleSTUDIO All Rights Reserved',
-                'footer-powered-prefix': '제공: ',
-                'footer-powered-suffix': '',
+                'nav-mirror': '미러', 'nav-back': '개요',
+                'content-message': '이 사이트는 다양한 공식 이미지를 수집·정리하여 다운로드를 제공합니다.',
+                'menu-windows': 'Windows 미러', 'menu-linux': 'Linux 미러', 'menu-macos': 'MacOS 미러',
+                'menu-others': '기타', 'menu-board': '게시판',
+                'desc-windows': '공식 시스템 이미지 아카이브. 유지보수 중.',
+                'desc-linux': '주요 배포판 이미지. 현재 사용 불가.',
+                'desc-macos': '시스템 설치 이미지 아카이브. 현재 사용 불가.',
+                'desc-others': '기타 이미지 및 도구. 현재 사용 불가.',
+                'desc-board': '미러 사이트 공지 및 업데이트 소식.',
+                'footer-copyright': 'MapleSTUDIO 저작권 소유',
+                'footer-powered-prefix': '이 사이트는 ', 'footer-powered-suffix': ' 에서 운영',
                 'footer-icp': '萌ICP备20250732号'
             }
         };
 
-        const defaultTexts = new Map();
+        var defaultTexts = {};
 
-        // 缓存所有翻译元素的默认文本
         function cacheDefaultTexts() {
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.getAttribute('data-translate-key');
-                if (key && !defaultTexts.has(key)) {
-                    defaultTexts.set(key, el.textContent);
+            document.querySelectorAll('[data-translate-key]').forEach(function (el) {
+                var key = el.getAttribute('data-translate-key');
+                if (key && !(key in defaultTexts)) {
+                    defaultTexts[key] = el.textContent;
                 }
             });
         }
 
-        // 应用语言
+        /* 语言：只继承主页 cookie，不提供本地切换入口 */
         function applyLanguage(lang) {
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.getAttribute('data-translate-key');
+            document.querySelectorAll('[data-translate-key]').forEach(function (el) {
+                var key = el.getAttribute('data-translate-key');
                 if (!key) return;
-
                 if (lang === 'zh-CN') {
-                    const defaultText = defaultTexts.get(key);
-                    if (defaultText !== undefined) {
-                        el.textContent = defaultText;
-                    }
+                    if (key in defaultTexts) el.textContent = defaultTexts[key];
                 } else {
-                    const langPack = translations[lang];
-                    if (langPack && langPack[key] !== undefined) {
-                        el.textContent = langPack[key];
+                    var pack = translations[lang];
+                    if (pack && key in pack) el.textContent = pack[key];
+                }
+            });
+            root.setAttribute('lang', lang);
+        }
+
+        var currentNavPos = 'top';
+
+        function isVertical(pos) {
+            return pos === 'left' || pos === 'right';
+        }
+
+        function layoutNav(pos) {
+            var margin = 20;
+            var vw = window.innerWidth;
+            var vh = window.innerHeight;
+
+            nav.setAttribute('data-pos', pos);
+
+            var rect = nav.getBoundingClientRect();
+            var w = rect.width;
+            var h = rect.height;
+
+            var x, y;
+            if (pos === 'top') {
+                x = (vw - w) / 2;
+                y = margin;
+            } else if (pos === 'bottom') {
+                x = (vw - w) / 2;
+                y = vh - h - margin;
+            } else if (pos === 'left') {
+                x = margin;
+                y = (vh - h) / 2;
+            } else {
+                x = vw - w - margin;
+                y = (vh - h) / 2;
+            }
+            nav.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        }
+
+        var indicatorToken = 0;
+        var animEndTimer = null;
+        var pendingRelayout = false;
+
+        function positionIndicator(targetTab, animate) {
+            if (!targetTab) targetTab = nav.querySelector('.nav-tab.active');
+            if (!targetTab) return;
+
+            var myToken = ++indicatorToken;
+            var vertical = isVertical(currentNavPos);
+
+            if (vertical) {
+                indicator.style.left = '-6px';
+                indicator.style.right = '-6px';
+                indicator.style.top = '0px';
+                indicator.style.bottom = 'auto';
+                indicator.style.width = '';
+            } else {
+                indicator.style.top = '-6px';
+                indicator.style.bottom = '-6px';
+                indicator.style.left = '0px';
+                indicator.style.right = 'auto';
+                indicator.style.height = '';
+            }
+
+            var tf = vertical ? 'translateY' : 'translateX';
+            var sizeProp = vertical ? 'height' : 'width';
+
+            function measure() {
+                return {
+                    pos: vertical ? targetTab.offsetTop : targetTab.offsetLeft,
+                    size: vertical ? targetTab.offsetHeight : targetTab.offsetWidth
+                };
+            }
+
+            function paint(p, s) {
+                indicator.style.transform = tf + '(' + p + 'px)';
+                indicator.style[sizeProp] = s + 'px';
+            }
+
+            function run() {
+                if (myToken !== indicatorToken) return;
+
+                var cur = measure();
+                var targetPos = cur.pos;
+                var targetSize = cur.size;
+
+                var prevPos = parseFloat(indicator.dataset.pos);
+                var prevSize = parseFloat(indicator.dataset.size);
+                var hasPrev = !isNaN(prevPos) && !isNaN(prevSize);
+
+                if (!animate || !hasPrev || prevPos === targetPos) {
+                    indicator.style.transition = 'none';
+                    paint(targetPos, targetSize);
+                    indicator.dataset.pos = targetPos;
+                    indicator.dataset.size = targetSize;
+                    indicator.dataset.animating = '';
+                    void indicator.offsetWidth;
+                    indicator.style.transition = '';
+                    return;
+                }
+
+                indicator.dataset.animating = '1';
+
+                var delta = targetPos - prevPos;
+                var stretch = Math.min(Math.abs(delta) * 0.5, 40) + 18;
+                var fromPos, fromSize;
+                if (delta > 0) {
+                    fromPos = prevPos;
+                    fromSize = prevSize + stretch;
+                } else {
+                    fromPos = prevPos - stretch;
+                    fromSize = prevSize + stretch;
+                }
+
+                indicator.style.transition = 'none';
+                paint(fromPos, fromSize);
+                void indicator.offsetWidth;
+
+                indicator.style.transition =
+                    'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),' +
+                    ' ' + sizeProp + ' 0.5s cubic-bezier(0.16, 1, 0.3, 1),' +
+                    ' background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease';
+                paint(targetPos, targetSize);
+
+                indicator.dataset.pos = targetPos;
+                indicator.dataset.size = targetSize;
+
+                clearTimeout(animEndTimer);
+                animEndTimer = setTimeout(function () {
+                    indicator.dataset.animating = '';
+                    if (pendingRelayout) {
+                        pendingRelayout = false;
+                        positionIndicator(nav.querySelector('.nav-tab.active'), false);
                     }
-                }
-            });
+                }, 560);
+            }
 
-            // 更新HTML lang属性
-            document.documentElement.lang = lang;
-
-            // 保存语言偏好
-            localStorage.setItem('preferredLanguage', lang);
+            if (animate) {
+                requestAnimationFrame(run);
+            } else {
+                run();
+            }
         }
 
-        // ========================
-        // 3D效果逻辑
-        // ========================
-        const content = document.getElementById('content');
-        const glassLayer = document.getElementById('glass-layer');
-        const resistance = 0.1;
-        const maxTilt = 20;
-        let isDragging = false;
-        let offsetX = 0,
-            offsetY = 0;
-
-        if (matchMedia('(pointer: coarse)').matches) {
-            let startX, startY;
-            content.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX - offsetX;
-                startY = e.touches[0].clientY - offsetY;
-            });
-
-            content.addEventListener('touchmove', (e) => {
-                if (isDragging) {
-                    offsetX = (e.touches[0].clientX - startX) * resistance;
-                    offsetY = (e.touches[0].clientY - startY) * resistance;
-                    offsetX = Math.max(-maxTilt, Math.min(maxTilt, offsetX));
-                    offsetY = Math.max(-maxTilt, Math.min(maxTilt, offsetY));
-                    applyTilt();
-                }
-            });
-
-            content.addEventListener('touchend', () => {
-                isDragging = false;
-                resetPosition();
-            });
-        }
-
-        if (matchMedia('(pointer: fine)').matches) {
-            document.addEventListener('mousemove', (e) => {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const normX = (e.clientX - centerX) / centerX;
-                const normY = (e.clientY - centerY) / centerY;
-                offsetX = Math.max(-maxTilt, Math.min(maxTilt, normX * maxTilt * resistance));
-                offsetY = Math.max(-maxTilt, Math.min(maxTilt, -normY * maxTilt * resistance));
-                applyTilt();
-            });
-
-            document.addEventListener('mouseleave', () => {
-                resetPosition();
-            });
-        }
+        /* =====================
+           3D 倾斜
+           ===================== */
+        var MAX_TILT = 18;
+        var RESISTANCE = 0.12;
+        var offsetX = 0;
+        var offsetY = 0;
+        var dragging = false;
 
         function applyTilt() {
-            content.style.transform = `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
-            glassLayer.style.transform =
-                `perspective(500px) rotateX(${offsetY}deg) rotateY(${offsetX}deg) translateZ(-20px)`;
+            var tf = 'perspective(600px) rotateX(' + offsetY + 'deg) rotateY(' + offsetX + 'deg)';
+            contentEl.style.transform = tf;
+            glassLayer.style.transform = tf + ' translateZ(-16px)';
         }
 
-        function resetPosition() {
-            content.style.transition = 'transform 0.5s ease-out';
-            glassLayer.style.transition = 'transform 0.5s ease-out';
-            content.style.transform = 'perspective(500px) rotateX(0) rotateY(0)';
-            glassLayer.style.transform = 'perspective(500px) rotateX(0) rotateY(0) translateZ(-20px)';
-            setTimeout(() => {
-                content.style.transition = 'none';
-                glassLayer.style.transition = 'none';
-            }, 500);
+        function resetTilt() {
+            contentEl.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            glassLayer.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            contentEl.style.transform = 'perspective(600px) rotateX(0) rotateY(0)';
+            glassLayer.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateZ(-16px)';
+            setTimeout(function () {
+                contentEl.style.transition = '';
+                glassLayer.style.transition = '';
+            }, 600);
         }
 
-        // 菜单控制
-        function toggleMenu() {
-            const menu = document.getElementById('menu');
-            const btn = document.getElementById('menuBtn');
-            const isOpen = menu.classList.contains('open');
+        function bindTilt() {
+            if (matchMedia('(pointer: fine)').matches) {
+                document.addEventListener('mousemove', function (e) {
+                    var cx = window.innerWidth / 2;
+                    var cy = window.innerHeight / 2;
+                    var nx = (e.clientX - cx) / cx;
+                    var ny = (e.clientY - cy) / cy;
+                    offsetX = Math.max(-MAX_TILT, Math.min(MAX_TILT, nx * MAX_TILT * RESISTANCE));
+                    offsetY = Math.max(-MAX_TILT, Math.min(MAX_TILT, -ny * MAX_TILT * RESISTANCE));
+                    contentEl.style.transition = '';
+                    glassLayer.style.transition = '';
+                    applyTilt();
+                });
+                document.addEventListener('mouseleave', resetTilt);
+            }
 
-            if (isOpen) {
-                menu.classList.remove('open');
-                btn.classList.remove('active');
+            if (matchMedia('(pointer: coarse)').matches) {
+                var sx = 0, sy = 0;
+                contentEl.addEventListener('touchstart', function (e) {
+                    dragging = true;
+                    sx = e.touches[0].clientX - offsetX;
+                    sy = e.touches[0].clientY - offsetY;
+                }, { passive: true });
+                contentEl.addEventListener('touchmove', function (e) {
+                    if (!dragging) return;
+                    offsetX = (e.touches[0].clientX - sx) * RESISTANCE;
+                    offsetY = (e.touches[0].clientY - sy) * RESISTANCE;
+                    offsetX = Math.max(-MAX_TILT, Math.min(MAX_TILT, offsetX));
+                    offsetY = Math.max(-MAX_TILT, Math.min(MAX_TILT, offsetY));
+                    applyTilt();
+                }, { passive: true });
+                contentEl.addEventListener('touchend', function () {
+                    dragging = false;
+                    resetTilt();
+                });
+            }
+        }
+
+        /* =====================
+           resize 重排
+           ===================== */
+        function relayoutImmediate() {
+            nav.style.transition = 'none';
+            void nav.offsetWidth;
+            layoutNav(currentNavPos);
+
+            if (indicator.dataset.animating === '1') {
+                pendingRelayout = true;
             } else {
-                menu.classList.add('open');
-                btn.classList.add('active');
+                positionIndicator(nav.querySelector('.nav-tab.active'), false);
             }
-        }
 
-        // ========================
-        // 翻译按钮逻辑
-        // ========================
-        const translateBtn = document.getElementById('translateBtn');
-        const translateDropdown = document.getElementById('translateDropdown');
-
-        translateBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            translateDropdown.classList.toggle('open');
-            this.classList.add('bounce-effect');
-            setTimeout(() => this.classList.remove('bounce-effect'), 500);
-        });
-
-        translateDropdown.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const lang = this.getAttribute('data-lang');
-                applyLanguage(lang);
-                translateDropdown.classList.remove('open');
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    nav.style.transition = '';
+                });
             });
-        });
+        }
 
-        // 点击外部关闭（菜单和翻译下拉）
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('menu');
-            const btn = document.getElementById('menuBtn');
-            const dropdown = document.getElementById('translateDropdown');
-            const transBtn = document.getElementById('translateBtn');
+        var resizeScheduled = false;
+        function scheduleRelayout() {
+            if (resizeScheduled) return;
+            resizeScheduled = true;
+            requestAnimationFrame(function () {
+                resizeScheduled = false;
+                relayoutImmediate();
+            });
+        }
 
-            if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
-                toggleMenu();
+        function bindEvents() {
+            window.addEventListener('resize', scheduleRelayout);
+
+            window.addEventListener('orientationchange', function () {
+                setTimeout(scheduleRelayout, 150);
+                setTimeout(scheduleRelayout, 400);
+            });
+
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', scheduleRelayout);
+                window.visualViewport.addEventListener('scroll', scheduleRelayout);
             }
-
-            if (dropdown && transBtn && !dropdown.contains(e.target) && !transBtn.contains(e.target)) {
-                dropdown.classList.remove('open');
-            }
-        });
-
-        // 阻止冒泡
-        document.getElementById('menu').addEventListener('click', (e) => e.stopPropagation());
-        document.getElementById('translateDropdown').addEventListener('click', (e) => e.stopPropagation());
-
-        // ========================
-        // 主题切换
-        // ========================
-        const themeBtn = document.getElementById('themeBtn');
-        const html = document.documentElement;
-
-        function getStoredTheme() {
-            let theme = localStorage.getItem('theme');
-            if (!theme) {
-                const match = document.cookie.match(/(?:^|;\s*)theme=([^;]+)/);
-                if (match) theme = match[1];
-            }
-            return (theme === 'light' || theme === 'dark') ? theme : 'dark';
         }
 
-        function setStoredTheme(theme) {
-            localStorage.setItem('theme', theme);
-            // 同时写入cookie，有效期一年
-            document.cookie = 'theme=' + theme + ';path=/;max-age=31536000';
-        }
-
-        function initTheme() {
-            const savedTheme = getStoredTheme();
-            html.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
-        }
-
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-            html.setAttribute('data-theme', newTheme);
-            setStoredTheme(newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        if (themeBtn) {
-            themeBtn.addEventListener('click', toggleTheme);
-        }
-
-        // ========================
-        // 初始化
-        // ========================
-        window.addEventListener('load', () => {
+        /* =====================
+           初始化
+           ===================== */
+        (function init() {
             cacheDefaultTexts();
-            initTheme();
-            document.getElementById('menu').classList.remove('open');
-            const savedLang = localStorage.getItem('preferredLanguage') || 'zh-CN';
-            applyLanguage(savedLang);
-        });
+
+            /* 语言：只继承，不切换 */
+            var lang = cookie.get('maple_lang') || 'zh-CN';
+            applyLanguage(lang);
+
+            bindEvents();
+            bindTilt();
+
+            currentNavPos = root.getAttribute('data-nav') || 'top';
+
+            requestAnimationFrame(function () {
+                layoutNav(currentNavPos);
+                positionIndicator(nav.querySelector('.nav-tab.active'), false);
+            });
+        })();
     </script>
 </body>
 </html>
